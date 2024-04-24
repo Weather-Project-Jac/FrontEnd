@@ -28,7 +28,7 @@ function ResponsiveAppBar() {
           <Link onClick={() => {
             if (window.location.pathname !== "/") window.location.href = "/"
           }} style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logo} style={{ width: "100px" }} />
+            <img src={logo} style={{ width: "100px", filter: "drop-shadow(4px 4px rgba(0, 0, 0, 0.25)" }} />
           </Link>
 
           {/* TextField is for mobile */}
@@ -49,7 +49,8 @@ function ResponsiveAppBar() {
                 borderRadius: "150px",
                 border: '#176087 2px solid',
                 color: 'white',
-                paddingRight: '0px'
+                paddingRight: '0px',
+                boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
               },
               endAdornment: (
                 <div>
@@ -83,7 +84,8 @@ function ResponsiveAppBar() {
                     borderRadius: "150px",
                     border: '#176087 2px solid',
                     color: 'white',
-                    paddingRight: '0px'
+                    paddingRight: '0px',
+                    boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
                   },
                   endAdornment: (
                     <div>
@@ -102,10 +104,11 @@ function ResponsiveAppBar() {
             </div>
           </Box>
 
-          <Box sx={{ flexGrow: 0, mr: 5 }}>
+          <Box sx={{
+            flexGrow: 0, mr: 5
+          }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-
                 {isLogged ? (
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 ) : (
@@ -115,6 +118,7 @@ function ResponsiveAppBar() {
                     color: 'white',
                     display: 'flex',
                     justifyContent: 'center',
+                    boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
                   }}>
                     <Avatar alt="Remy Sharp" src={user} style={{
                       width: '30px',
