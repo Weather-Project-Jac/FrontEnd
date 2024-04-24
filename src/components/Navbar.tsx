@@ -107,64 +107,72 @@ function ResponsiveAppBar() {
           <Box sx={{
             flexGrow: 0, mr: 5
           }}>
+
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {isLogged ? (
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                ) : (
-                  <div style={{
-                    borderRadius: "150px",
-                    border: '#176087 2px solid',
-                    color: 'white',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
-                  }}>
-                    <Avatar alt="Remy Sharp" src={user} style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '50%',
-                      margin: '7px 10px 7px'
-                    }} />
-                    <span
-                      style={{
+                {
+                  isLogged ?
+                    (
+                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    ) :
+                    (
+                      <div style={{
+                        borderRadius: "150px",
+                        border: '#176087 2px solid',
                         color: 'white',
-                        fontFamily: 'Cascadia Code, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 'bold',
                         display: 'flex',
                         justifyContent: 'center',
-                        alignItems: 'center',
-                        marginRight: '10px'
+                        boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
                       }}>
-                      Login
-                    </span>
-                  </div>
-                )}
+                        <Avatar alt="Remy Sharp" src={user} style={{
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '50%',
+                          margin: '7px 10px 7px'
+                        }} />
+                        <span
+                          style={{
+                            color: 'white',
+                            fontFamily: 'Cascadia Code, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: '10px'
+                          }}>
+                          Login
+                        </span>
+                      </div>
+                    )}
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {
+              isLogged &&
+              (<Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>)
+            }
+
           </Box>
         </Toolbar>
       </Container>
