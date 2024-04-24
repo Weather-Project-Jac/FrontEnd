@@ -39,15 +39,15 @@ function HomePage() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Box component='img' 
-                  sx={{
-                    display: 'block',
-              height: 233,
-              width: '100%', // Make the image box span the full width
-              maxHeight: { xs: 233, md: 167 },
-              maxWidth: { xs: 350, md: 250 },
-              margin: 'auto',
-                  }} src="https://placehold.co/400" />
+                  <Box component='img'
+                    sx={{
+                      display: 'block',
+                      height: 233,
+                      width: '100%', // Make the image box span the full width
+                      maxHeight: { xs: 233, md: 167 },
+                      maxWidth: { xs: 350, md: 250 },
+                      margin: 'auto',
+                    }} src="https://placehold.co/400" />
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body1" gutterBottom align="center">
