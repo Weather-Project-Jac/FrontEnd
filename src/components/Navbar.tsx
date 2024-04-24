@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Avatar, Tooltip, TextField, InputAdornment, Link } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Tooltip, TextField, InputAdornment, Link, Avatar } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { UserStore } from '../store/store'
 import logo from '../assets/Logo.png';
@@ -17,6 +17,8 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const isLogged = UserStore((state) => state.isLogged)
 
   return (
     <AppBar position="static" style={{ backgroundColor: "#132E32" }}>
@@ -104,7 +106,7 @@ function ResponsiveAppBar() {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 
-                {/* {isLogged ? (
+                {isLogged ? (
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 ) : (
                   <div style={{
@@ -134,7 +136,7 @@ function ResponsiveAppBar() {
                       Login
                     </span>
                   </div>
-                )} */}
+                )}
               </IconButton>
             </Tooltip>
             <Menu
