@@ -31,31 +31,34 @@ function ResponsiveAppBar() {
           <TextField
             autoComplete='off'
             className="test"
-            label="Cerca localita'"
+            placeholder="Cerca localita'"
             size="small"
             sx={{
               "& fieldset": { border: 'none' },
               display: { xs: 'flex', md: 'none' },
-              marginRight: 1,
               textAlign: 'center',
+              paddingRight: '10px'
             }}
             InputProps={{
               style: {
+                fontSize: '14px',
                 borderRadius: "150px",
                 border: '#176087 2px solid',
                 color: 'white',
+                paddingRight: '0px'
               },
               endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon style={{ color: 'white' }} />
-                </InputAdornment>
+                <div style={{ backgroundColor: "#176087" }}>
+                  <InputAdornment position="end">
+                    <IconButton
+                      style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
+                      aria-label="toggle password visibility"
+                    >
+                      <SearchIcon style={{ color: 'white' }} />
+                    </IconButton>
+                  </InputAdornment>
+                </div>
               )
-            }}
-            InputLabelProps={{
-              style: {
-                color: 'white',
-                outline: 'none',
-              }
             }}
           />
 
@@ -63,12 +66,10 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <TextField
-
                 autoComplete='off'
                 className="test"
-                label="Cerca localita'"
+                placeholder="Cerca localita'"
                 size="small"
-                variant="outlined"
                 sx={{
                   "& fieldset": { border: 'none' },
                   width: '50%',
@@ -78,22 +79,25 @@ function ResponsiveAppBar() {
                     borderRadius: "150px",
                     border: '#176087 2px solid',
                     color: 'white',
+                    paddingRight: '0px'
                   },
                   endAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon style={{ color: 'white', }} />
-                    </InputAdornment>
+                    <div style={{ backgroundColor: "#176087" }}>
+                      <InputAdornment position="end">
+                        <IconButton
+                          style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
+                          aria-label="toggle password visibility"
+                        >
+                          <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
+                        </IconButton>
+                      </InputAdornment>
+                    </div>
                   )
-                }}
-                InputLabelProps={{
-                  style: {
-                    color: 'white',
-                    outline: 'none',
-                  }
                 }}
               />
             </div>
           </Box>
+
           <Box sx={{ flexGrow: 0, mr: 5 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
