@@ -52,7 +52,7 @@ function ResponsiveAppBar() {
                 paddingRight: '0px'
               },
               endAdornment: (
-                <div style={{ backgroundColor: "#176087" }}>
+                <div>
                   <InputAdornment position="end">
                     <IconButton
                       style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
@@ -86,7 +86,7 @@ function ResponsiveAppBar() {
                     paddingRight: '0px'
                   },
                   endAdornment: (
-                    <div style={{ backgroundColor: "#176087" }}>
+                    <div>
                       <InputAdornment position="end">
                         <IconButton
                           style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
