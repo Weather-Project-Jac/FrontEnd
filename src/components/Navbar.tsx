@@ -27,7 +27,7 @@ function ResponsiveAppBar() {
 
           <Link onClick={() => {
             if (window.location.pathname !== "/") window.location.href = "/"
-          }} style={{ display: 'flex', alignItems: 'center' }}>
+          }} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <img src={logo} style={{ width: "100px", filter: "drop-shadow(4px 4px rgba(0, 0, 0, 0.25)" }} />
           </Link>
 
