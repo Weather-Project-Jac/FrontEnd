@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Avatar, Tooltip, TextField, InputAdornment, Link } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { UserStore } from '../store/store'
 import logo from '../assets/Logo.png';
 import user from '../assets/user.png';
 
