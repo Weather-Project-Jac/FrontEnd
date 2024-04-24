@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Avatar, Tooltip, TextField, InputAdornment, Link } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import logo from '../assets/Logo.png';
+import user from '../assets/user.png';
 
 const settings = ['Profile', 'Favourites', 'Logout'];
 
@@ -101,7 +102,38 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0, mr: 5 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+
+                {/* {isLogged ? (
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                ) : (
+                  <div style={{
+                    borderRadius: "150px",
+                    border: '#176087 2px solid',
+                    color: 'white',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}>
+                    <Avatar alt="Remy Sharp" src={user} style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '50%',
+                      margin: '7px 10px 7px'
+                    }} />
+                    <span
+                      style={{
+                        color: 'white',
+                        fontFamily: 'Cascadia Code, sans-serif',
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: '10px'
+                      }}>
+                      Login
+                    </span>
+                  </div>
+                )} */}
               </IconButton>
             </Tooltip>
             <Menu
