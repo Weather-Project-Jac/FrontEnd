@@ -99,8 +99,10 @@ function AuthPage() {
             flexItem
             style={{
               backgroundColor: "white",
+              marginTop: "10px",
               marginLeft: "10px",
               marginRight: "10px",
+              height: "600px",
             }}
           />
           <Grid item xs={12} sm={5.5}>
@@ -120,6 +122,26 @@ function AuthPage() {
                     <Typography>Email</Typography>
                     <TextField
                       type="email"
+                      required
+                      fullWidth
+                      size="small"
+                      InputProps={{
+                        style: {
+                          borderRadius: "15px",
+                          border: "white 2px solid",
+                          color: "white",
+                        },
+                      }}
+                      sx={{
+                        "& fieldset": { border: "none" },
+                        marginBottom: "20px",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Typography>Username</Typography>
+                    <TextField
+                      type="username"
                       required
                       fullWidth
                       size="small"
