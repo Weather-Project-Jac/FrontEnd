@@ -13,7 +13,8 @@ import {
   Avatar,
   ListItemText,
 } from "@mui/material";
-import icons from "../assets/icons/index.js";
+import icons from '../assets/icons/index.ts';
+import { CenterFocusStrong } from "@mui/icons-material";
 
 function HomePage() {
   return (
@@ -44,34 +45,37 @@ function HomePage() {
                     component='img'
                     sx={{
                       display: 'block',
-                      width: '100%',
-                      maxHeight: 350,
+                      width: '55%',
                       margin: 'auto',
                     }}
-                    src={icons} />
+                    src={icons.thunderstorm} />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="body1" gutterBottom align="center">
-                    Description
+                  <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={300} fontSize={70} marginBottom={0}>
+                    Clear
                   </Typography>
-                  <Typography variant="body1" gutterBottom align="center">
-                    Temperature
+                  <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900} fontSize={60}>
+                    24°
                   </Typography>
                 </Grid>
                 <Grid item xs={12} textAlign='center'>
                   <Grid container spacing={2}>
-                    <Grid item xs={6} md={6}>
-                      122
-                    </Grid>
-                    <Grid item xs={6} md={6}>
-                      2
-                    </Grid>
-                    <Grid item xs={6} md={6}>
-                      3
-                    </Grid>
-                    <Grid item xs={6} md={6}>
-                      4
-                    </Grid>
+                    {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item) => (
+                      <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"space-between"} alignItems={"center"}>
+                        <Box
+                          component='img'
+                          src={icons[item.toString()]}
+                          sx={{
+                            maxWidth: 50,
+                            marginLeft: "25%",
+                          }}
+                        />
+                        <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900}
+                          fontSize={20} marginBottom={0} marginRight={"25%"}>
+                          30%
+                        </Typography>
+                      </Grid>
+                    ))}
                   </Grid>
                 </Grid>
               </Grid>
