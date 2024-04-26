@@ -5,10 +5,12 @@ interface User {
   email: string;
   username: string;
   avatar: string;
+  lastSearchedCities: string[];
   setIsLogged: () => void;
   setEmail: () => void;
   setUsername: () => void;
   setAvatar: () => void;
+  setLastSearchedCities: () => void;
 }
 
 export const UserStore = create<User>((set) => ({
@@ -16,6 +18,7 @@ export const UserStore = create<User>((set) => ({
   email: "",
   username: "",
   avatar: "",
+  lastSearchedCities: [],
   setIsLogged: () => {
     set((state) => ({ isLogged: !state.isLogged }));
   },
@@ -28,4 +31,7 @@ export const UserStore = create<User>((set) => ({
   setAvatar: () => {
     set((state) => ({ avatar: state.avatar }));
   },
+  setLastSearchedCities: () => {
+    set((state) => ({ lastSearchedCities: state.lastSearchedCities }));
+  }
 }));

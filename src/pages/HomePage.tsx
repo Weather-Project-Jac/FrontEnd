@@ -1,18 +1,20 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper } from '@mui/material';
 //import { Link } from 'react-router-dom';
+import { UserStore } from '../store/store.ts';
+import axios from "axios"
 
 const HomePage: React.FC = () => {
-    const latestCities = ["City 1", "City 2", "City 3", "City 4", "City 5"];
+    const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
-    const currentDate = new Date().toDateString();
-    const currentPosition = "Your current position";
+    const currentDate = new Date();
+    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string } | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleResize = () => {
             if (footerRef.current) {
-                const footerHeight = footerRef.current.offsetHeight + 10;
+                const footerHeight: number = footerRef.current.offsetHeight + 10;
                 document.body.style.paddingBottom = `${footerHeight}px`;
             }
         };
@@ -25,6 +27,37 @@ const HomePage: React.FC = () => {
         };
     }, []);
 
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+            console.log("Geolocation not supported");
+        }
+    }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city])
+
+
+
+    async function success(position: GeolocationPosition) {
+        const latitude: number = position.coords.latitude;
+        const longitude: number = position.coords.longitude;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+        const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+
+        try {
+            const response = await axios.get(GEOCODING);
+            const cityName = response.data?.name || response.data?.address?.town;
+            setCurrentPosition({ latitude, longitude, city: cityName });
+        } catch (error) {
+            console.error('There was a problem with the request:', error);
+        }
+    }
+
+    function error() {
+        console.log("Unable to retrieve your location");
+    }
+
     return (
         <div style={{ color: 'white', paddingTop: 20, textAlign: 'center' }}>
             <Container maxWidth="md">
@@ -32,35 +65,40 @@ const HomePage: React.FC = () => {
                     Welcome to Our Weather App!
                 </Typography>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                         <Typography variant="h6" gutterBottom>
-                            Today's Date: {currentDate}
+                            {currentDate.toLocaleDateString()}
                         </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={9}>
                         <Typography variant="h6" gutterBottom>
-                            Your Current Position: {currentPosition}
+                            Your Current Position: {currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}
                         </Typography>
+
                     </Grid>
                 </Grid>
-                <Typography variant="h6" gutterBottom style={{ marginTop: 20 }}>
-                    Latest Searched Cities By You:
-                </Typography>
-                <Grid container spacing={2}>
-                    {latestCities.map((city, index) => (
-                        <Grid item xs={12} key={index}>
-                            {/* <Link to={`/weather/${city}`} style={{ textDecoration: 'none' }}> */}
-                            <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer' }}>
-                                <CardContent>
-                                    <Typography variant="body1">
-                                        {city}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                            {/* </Link> */}
+                {lastSearchedCities.length > 0 && (
+                    <>
+                        <Typography variant="h6" gutterBottom style={{ marginTop: 20 }}>
+                            Latest Searched Cities By You:
+                        </Typography>
+                        <Grid container spacing={2}>
+                            {lastSearchedCities.map((city, index) => (
+                                <Grid item xs={12} key={index}>
+                                    {/* <Link to={`/weather/${city}`} style={{ textDecoration: 'none' }}> */}
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer' }}>
+                                        <CardContent>
+                                            <Typography variant="body1">
+                                                {city}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                    {/* </Link> */}
+                                </Grid>
+                            ))}
                         </Grid>
-                    ))}
-                </Grid>
+                    </>
+                )}
             </Container>
             <Paper
                 ref={footerRef}
@@ -80,11 +118,11 @@ const HomePage: React.FC = () => {
                             flexGrow: 1,
                             justifyContent: "center",
                             display: "flex",
-                            my: 1
+                            my: 0.1
                         }}
                     >
                         <div>
-                            <img src="/Logo.png" width={50} height={50} alt="Logo" />
+                            <img src="/Logo.png" width={45} height={45} alt="Logo" />
                         </div>
                     </Box>
 
@@ -93,7 +131,7 @@ const HomePage: React.FC = () => {
                             flexGrow: 1,
                             justifyContent: "center",
                             display: "flex",
-                            mb: 2,
+                            mb: .5,
                         }}
                     >
                         <Typography variant="caption" color="white">
