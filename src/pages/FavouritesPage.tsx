@@ -87,8 +87,8 @@ function HomePage() {
                                             maxHeight: { xs: 233, md: 167 },
                                             maxWidth: { xs: 350, md: 250 },
                                             margin: 'auto',
-                                        }} src="https://placehold.co/400" />                                    
-                                        <Typography variant="body1" color="white" sx={{ fontWeight: 'bold' }}>
+                                        }} src="https://placehold.co/400" />
+                                    <Typography variant="body1" color="white" sx={{ fontWeight: 'bold' }}>
                                         24°
                                     </Typography>
                                     <Typography variant="caption" color="white">
