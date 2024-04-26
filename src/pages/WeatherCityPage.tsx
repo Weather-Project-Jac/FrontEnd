@@ -13,39 +13,42 @@ import {
   Avatar,
   ListItemText,
 } from "@mui/material";
+import icons from "../assets/icons/index.js";
 
 function HomePage() {
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
         container
-        justifyContent="center"
+        justifyContent="space-around"
         spacing={4}
         alignContent="center"
-        style={{ marginTop: 0, marginBottom: 30}}
+        style={{ marginTop: 0, marginBottom: 30 }}
       >
         <Grid item xs={12} sm={5}>
           <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
             <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={7} marginTop={2}>
+              <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"}>
+                <Grid item marginTop={2} marginLeft={2}>
                   <Typography variant="h4" gutterBottom align="left">
-                    Left Title
+                    Locality
                   </Typography>
                 </Grid>
-                <Grid item xs={5} marginTop={2}>
+                <Grid item marginTop={2} marginRight={2}>
                   <Typography variant="h6" gutterBottom align="right">
-                    Right Title
+                    Time
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <Box component='img'
+                  <Box
+                    component='img'
                     sx={{
-                      display: 'block',                   
+                      display: 'block',
                       width: '100%',
                       maxHeight: 350,
                       margin: 'auto',
-                    }} src="https://placehold.co/400" />
+                    }}
+                    src={icons} />
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body1" gutterBottom align="center">
@@ -76,8 +79,8 @@ function HomePage() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} justifyContent="center" alignItems="center">
-          <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%',  display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Grid item xs={12} sm={7} justifyContent="center" alignItems="center">
+          <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent >
               <List>
                 <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)', marginBottom: '8px' }}>
@@ -164,7 +167,7 @@ function HomePage() {
                     </Typography>
                   </ListItemSecondaryAction>
                 </ListItem>
-                <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)'}}>
+                <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }}>
                   <ListItemAvatar>
                     <Avatar alt="Paper 1 Image" src="paper1-image-url.jpg" />
                   </ListItemAvatar>
@@ -183,7 +186,7 @@ function HomePage() {
           </Card>
         </Grid>
       </Grid>
-    </Container>
+    </Container >
   );
 }
 
