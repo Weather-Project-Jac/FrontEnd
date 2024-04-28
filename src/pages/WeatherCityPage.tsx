@@ -14,7 +14,7 @@ import {
   ListItemText,
 } from "@mui/material";
 
-function HomePage() {
+function WeatherCityPage() {
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -187,4 +187,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default WeatherCityPage;

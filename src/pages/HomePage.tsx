@@ -47,15 +47,18 @@ const HomePage: React.FC = () => {
 
         try {
             const response = await axios.get(GEOCODING);
-            const cityName = response.data?.name || response.data?.address?.town;
+            console.log(response)
+            const cityName = response.data?.address?.city || response.data?.address?.town;
             setCurrentPosition({ latitude, longitude, city: cityName });
         } catch (error) {
             console.error('There was a problem with the request:', error);
+            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Unable to retrieve your location" });
         }
     }
 
     function error() {
-        console.log("Unable to retrieve your location");
+        console.error('Unable to retrieve your location');
+        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Unable to retrieve your location" });
     }
 
     return (
@@ -99,6 +102,13 @@ const HomePage: React.FC = () => {
                         </Grid>
                     </>
                 )}
+                {
+                    lastSearchedCities.length === 0 && (
+                        <Typography variant="h3" gutterBottom style={{ marginTop: 50 }}>
+                            Start by looking up a city!
+                        </Typography>
+                    )
+                }
             </Container>
             <Paper
                 ref={footerRef}
