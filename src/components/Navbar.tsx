@@ -42,6 +42,18 @@ function ResponsiveAppBar(): JSX.Element {
     setCity(event.target.value);
   };
 
+  const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (optionsCity.length > 0) {
+        /* render a component to select a city */
+      } else if (optionsCity.length === 0) {
+        /* render a component to show that the city is not found */
+      } else {
+        /* render a component to show that that city doesnt exist */
+      }
+    }
+  };
+
   useEffect(() => {
     if (city.trim().length > 0) {
       const foundExact = CitiesInfo.find(
@@ -78,7 +90,7 @@ function ResponsiveAppBar(): JSX.Element {
 
           {/* Autocomplete is for mobile */}
           <Autocomplete
-options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}            freeSolo
+            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}            freeSolo
             disableClearable
             fullWidth
             sx={{
@@ -106,9 +118,12 @@ options={optionsCity.map((option: ICity) => option.name + ", " + option.countryC
                     color: 'white',
                     paddingRight: '0px',
                     boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
-                  }, endAdornment: (
+                  }, 
+                  onKeyDown: onEnterSearch,
+                  endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                         style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                         aria-label="toggle password visibility"
                       >
