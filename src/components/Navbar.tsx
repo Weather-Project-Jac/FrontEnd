@@ -211,9 +211,6 @@ function ResponsiveAppBar(): JSX.Element {
                     <span
                       style={{
                         color: 'white',
-                        fontFamily: 'Cascadia Code, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 'bold',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
