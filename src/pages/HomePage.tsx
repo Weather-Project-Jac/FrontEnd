@@ -22,7 +22,7 @@ function HomePage() {
         justifyContent="center"
         spacing={4}
         alignContent="center"
-        style={{ marginTop: 0, marginBottom: 30}}
+        style={{ marginTop: 0, marginBottom: 30 }}
       >
         <Grid item xs={12} sm={5}>
           <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
@@ -41,7 +41,7 @@ function HomePage() {
                 <Grid item xs={12}>
                   <Box component='img'
                     sx={{
-                      display: 'block',                   
+                      display: 'block',
                       width: '100%',
                       maxHeight: 350,
                       margin: 'auto',
@@ -77,7 +77,7 @@ function HomePage() {
         </Grid>
 
         <Grid item xs={12} sm={6} justifyContent="center" alignItems="center">
-          <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%',  display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent >
               <List>
                 <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)', marginBottom: '8px' }}>
@@ -164,7 +164,7 @@ function HomePage() {
                     </Typography>
                   </ListItemSecondaryAction>
                 </ListItem>
-                <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)'}}>
+                <ListItem alignItems="flex-start" style={{ backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }}>
                   <ListItemAvatar>
                     <Avatar alt="Paper 1 Image" src="paper1-image-url.jpg" />
                   </ListItemAvatar>
