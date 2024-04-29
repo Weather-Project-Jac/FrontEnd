@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from 'react';
 import {
   Typography,
   Container,
@@ -13,18 +13,44 @@ import {
   IconButton,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import CustomAlert from "../components/CustomAlert.tsx";
+
+interface LoginInfo {
+  email: string;
+  password: string;
+  passwordVisible: boolean;
+}
+
+interface RegisterInfo {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  passwordVisible: boolean;
+  confirmPasswordVisible: boolean;
+}
+
+interface AlertInfo {
+  message: string | null;
+  severity: "error" | "success" | "info" | "warning" | null;
+  handleClose: (() => void);
+}
 
 function AuthPage() {
-  const [loginInfo, setLoginInfo] = React.useState({ email: "", password: "", passwordVisible: false });
-  const [registerInfo, setRegisterInfo] = React.useState({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
-  //const [loginError, setLoginError] = React.useState("");
-  //const [registerError, setRegisterError] = React.useState("");
+  const [loginInfo, setLoginInfo] = useState<LoginInfo>({ email: "", password: "", passwordVisible: false });
+  const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
+
+  const [alert, setAlert] = useState<AlertInfo>({
+    message: null,
+    severity: null,
+    handleClose: () => { }
+  });
 
   const submitLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(loginInfo);
-    if(loginInfo.email === "" || loginInfo.password === "") {
-      //setLoginError("Please fill in all fields");
+    if (loginInfo.email === "" || loginInfo.password === "") {
+      setAlert({ message: "Please fill in all fields", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
     }
     /* axios */
@@ -33,20 +59,24 @@ function AuthPage() {
   const submitRegister = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(registerInfo);
-    if(registerInfo.email === "" || registerInfo.username === "" || registerInfo.password === "" || registerInfo.confirmPassword === "") {
-      //setRegisterError("Please fill in all fields");
-      return;
-    }
-    if(registerInfo.password !== registerInfo.confirmPassword) {
-     // setRegisterError("Passwords do not match");
+    if (registerInfo.email === "" || registerInfo.username === "" || registerInfo.password === "" || registerInfo.confirmPassword === "") {
+      setAlert({ message: "Please fill in all fields", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) }); return;
+    };
+    if (registerInfo.password !== registerInfo.confirmPassword) {
+      setAlert({ message: "Passwords do not match", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
     }
     /* axios */
-  };
+  }
 
 
   return (
     <Container maxWidth="md">
+      <CustomAlert
+        message={alert.message}
+        severity={alert.severity}
+        handleClose={alert.handleClose}
+      />
       <Box
         sx={{
           display: "flex",
@@ -113,16 +143,16 @@ function AuthPage() {
                           border: "white 2px solid",
                           color: "white",
                         },
-                        endAdornment:(
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setLoginInfo({ ...loginInfo, passwordVisible: !loginInfo.passwordVisible })}
-                                edge="end"
-                              >
-                                {loginInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-                            </InputAdornment>
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => setLoginInfo({ ...loginInfo, passwordVisible: !loginInfo.passwordVisible })}
+                              edge="end"
+                            >
+                              {loginInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
                         )
                       }}
                       value={loginInfo.password}
@@ -199,7 +229,7 @@ function AuthPage() {
                   <div>
                     <Typography>Username</Typography>
                     <TextField
-                     autoComplete="off"
+                      autoComplete="off"
                       type="text"
                       required
                       fullWidth
@@ -235,16 +265,16 @@ function AuthPage() {
                           border: "white 2px solid",
                           color: "white",
                         },
-                        endAdornment:(
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setRegisterInfo({ ...registerInfo, passwordVisible: !registerInfo.passwordVisible })}
-                                edge="end"
-                              >
-                                {registerInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-                            </InputAdornment>
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => setRegisterInfo({ ...registerInfo, passwordVisible: !registerInfo.passwordVisible })}
+                              edge="end"
+                            >
+                              {registerInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
                         )
                       }}
                       value={registerInfo.password}
@@ -256,7 +286,7 @@ function AuthPage() {
                         marginBottom: "20px",
                       }}
                     />
-                    
+
                   </div>
                   <div>
                     <Typography>Confirm Password</Typography>
@@ -272,7 +302,7 @@ function AuthPage() {
                           border: "white 2px solid",
                           color: "white",
                         },
-                        endAdornment:(
+                        endAdornment: (
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
