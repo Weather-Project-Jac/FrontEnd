@@ -16,9 +16,35 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function AuthPage() {
   const [loginInfo, setLoginInfo] = React.useState({ email: "", password: "", passwordVisible: false });
-  const [registerInfo, setRegisterInfo] = React.useState({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false });
-  const [loginError, setLoginError] = React.useState("");
-  const [registerError, setRegisterError] = React.useState("");
+  const [registerInfo, setRegisterInfo] = React.useState({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
+  //const [loginError, setLoginError] = React.useState("");
+  //const [registerError, setRegisterError] = React.useState("");
+
+  const submitLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(loginInfo);
+    if(loginInfo.email === "" || loginInfo.password === "") {
+      //setLoginError("Please fill in all fields");
+      return;
+    }
+    /* axios */
+  };
+
+  const submitRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(registerInfo);
+    if(registerInfo.email === "" || registerInfo.username === "" || registerInfo.password === "" || registerInfo.confirmPassword === "") {
+      //setRegisterError("Please fill in all fields");
+      return;
+    }
+    if(registerInfo.password !== registerInfo.confirmPassword) {
+     // setRegisterError("Passwords do not match");
+      return;
+    }
+    /* axios */
+  };
+
+
   return (
     <Container maxWidth="md">
       <Box
@@ -111,6 +137,7 @@ function AuthPage() {
                   </div>
                   <Button
                     type="submit"
+                    onClick={submitLogin}
                     variant="contained"
                     style={{ backgroundColor: "white", color: "black", borderRadius: "30px" }}
                     fullWidth
@@ -235,7 +262,7 @@ function AuthPage() {
                     <Typography>Confirm Password</Typography>
                     <TextField
                       autoComplete="off"
-                      type={registerInfo.passwordVisible ? 'text' : 'password'}
+                      type={registerInfo.confirmPasswordVisible ? 'text' : 'password'}
                       required
                       size="small"
                       fullWidth
@@ -249,10 +276,10 @@ function AuthPage() {
                           <InputAdornment position="end">
                             <IconButton
                               aria-label="toggle password visibility"
-                              onClick={() => setRegisterInfo({ ...registerInfo, passwordVisible: !registerInfo.passwordVisible })}
+                              onClick={() => setRegisterInfo({ ...registerInfo, confirmPasswordVisible: !registerInfo.confirmPasswordVisible })}
                               edge="end"
                             >
-                              {registerInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                              {registerInfo.confirmPasswordVisible ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
                           </InputAdornment>
                         )
@@ -269,6 +296,7 @@ function AuthPage() {
                   </div>
                   <Button
                     type="submit"
+                    onClick={submitRegister}
                     variant="contained"
                     style={{ backgroundColor: "white", color: "black", borderRadius: "30px" }}
                     fullWidth
