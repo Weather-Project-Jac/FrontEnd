@@ -2,7 +2,11 @@ import * as React from 'react';
 import ReactDOM from 'react-dom/client'
 import "./index.css"
 import Navbar from "./components/Navbar.tsx";
-import HomePage from "./pages/FavouritesPage.tsx";
+
+import HomePage from "./pages/WeatherCityPage.tsx";
+
+//import HomePage from "./pages/FavouritesPage.tsx";
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
