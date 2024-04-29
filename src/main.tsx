@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom/client'
 import "./index.css"
 import Navbar from "./components/Navbar.tsx";
-import HomePage from "./pages/AuthenticationPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 

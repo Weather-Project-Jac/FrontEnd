@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
         try {
             const response = await axios.get(GEOCODING);
             console.log(response)
-            const cityName = response.data?.address?.city || response.data?.address?.town;
+            const cityName = response.data?.address?.city || response.data?.address?.town || response.data?.address?.county;
             setCurrentPosition({ latitude, longitude, city: cityName });
         } catch (error) {
             console.error('There was a problem with the request:', error);

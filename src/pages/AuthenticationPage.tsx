@@ -9,9 +9,16 @@ import {
   Button,
   TextField,
   Divider,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function AuthPage() {
+  const [loginInfo, setLoginInfo] = React.useState({ email: "", password: "", passwordVisible: false });
+  const [registerInfo, setRegisterInfo] = React.useState({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false });
+  const [loginError, setLoginError] = React.useState("");
+  const [registerError, setRegisterError] = React.useState("");
   return (
     <Container maxWidth="md">
       <Box
@@ -56,6 +63,10 @@ function AuthPage() {
                           color: "white",
                         },
                       }}
+                      value={loginInfo.email}
+                      onChange={(e) =>
+                        setLoginInfo({ ...loginInfo, email: e.target.value })
+                      }
                       sx={{
                         "& fieldset": { border: "none" },
                         marginBottom: "20px",
@@ -65,7 +76,8 @@ function AuthPage() {
                   <div>
                     <Typography>Password</Typography>
                     <TextField
-                      type="password"
+                      autoComplete="off"
+                      type={loginInfo.passwordVisible ? 'text' : 'password'}
                       required
                       size="small"
                       fullWidth
@@ -75,7 +87,22 @@ function AuthPage() {
                           border: "white 2px solid",
                           color: "white",
                         },
+                        endAdornment:(
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setLoginInfo({ ...loginInfo, passwordVisible: !loginInfo.passwordVisible })}
+                                edge="end"
+                              >
+                                {loginInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                        )
                       }}
+                      value={loginInfo.password}
+                      onChange={(e) =>
+                        setLoginInfo({ ...loginInfo, password: e.target.value })
+                      }
                       sx={{
                         "& fieldset": { border: "none" },
                         marginBottom: "20px",
@@ -132,6 +159,10 @@ function AuthPage() {
                           color: "white",
                         },
                       }}
+                      value={registerInfo.email}
+                      onChange={(e) =>
+                        setRegisterInfo({ ...registerInfo, email: e.target.value })
+                      }
                       sx={{
                         "& fieldset": { border: "none" },
                         marginBottom: "20px",
@@ -141,7 +172,8 @@ function AuthPage() {
                   <div>
                     <Typography>Username</Typography>
                     <TextField
-                      type="username"
+                     autoComplete="off"
+                      type="text"
                       required
                       fullWidth
                       size="small"
@@ -152,6 +184,10 @@ function AuthPage() {
                           color: "white",
                         },
                       }}
+                      value={registerInfo.username}
+                      onChange={(e) =>
+                        setRegisterInfo({ ...registerInfo, username: e.target.value })
+                      }
                       sx={{
                         "& fieldset": { border: "none" },
                         marginBottom: "20px",
@@ -161,7 +197,8 @@ function AuthPage() {
                   <div>
                     <Typography>Password</Typography>
                     <TextField
-                      type="password"
+                      autoComplete="off"
+                      type={registerInfo.passwordVisible ? 'text' : 'password'}
                       required
                       size="small"
                       fullWidth
@@ -171,11 +208,63 @@ function AuthPage() {
                           border: "white 2px solid",
                           color: "white",
                         },
+                        endAdornment:(
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setRegisterInfo({ ...registerInfo, passwordVisible: !registerInfo.passwordVisible })}
+                                edge="end"
+                              >
+                                {registerInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                        )
+                      }}
+                      value={registerInfo.password}
+                      onChange={(e) =>
+                        setRegisterInfo({ ...registerInfo, password: e.target.value })
+                      }
+                      sx={{
+                        "& fieldset": { border: "none" },
+                        marginBottom: "20px",
+                      }}
+                    />
+                    
+                  </div>
+                  <div>
+                    <Typography>Confirm Password</Typography>
+                    <TextField
+                      autoComplete="off"
+                      type={registerInfo.passwordVisible ? 'text' : 'password'}
+                      required
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        style: {
+                          borderRadius: "15px",
+                          border: "white 2px solid",
+                          color: "white",
+                        },
+                        endAdornment:(
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => setRegisterInfo({ ...registerInfo, passwordVisible: !registerInfo.passwordVisible })}
+                              edge="end"
+                            >
+                              {registerInfo.passwordVisible ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
                       }}
                       sx={{
                         "& fieldset": { border: "none" },
                         marginBottom: "20px",
                       }}
+                      value={registerInfo.confirmPassword}
+                      onChange={(e) =>
+                        setRegisterInfo({ ...registerInfo, confirmPassword: e.target.value })
+                      }
                     />
                   </div>
                   <Button
