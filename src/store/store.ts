@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface User {
+export interface User {
   isLogged: boolean;
   email: string;
   username: string;
@@ -17,7 +17,7 @@ export const UserStore = create<User>((set) => ({
   isLogged: true,
   email: "",
   username: "",
-  avatar: "",
+  avatar: "https://placehold.co/600x400",
   lastSearchedCities: [],
   setIsLogged: () => {
     set((state) => ({ isLogged: !state.isLogged }));
