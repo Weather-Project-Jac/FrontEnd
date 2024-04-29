@@ -6,7 +6,7 @@ import {
     Card,
     CardContent,
 } from "@mui/material";
-import LeftCard from "./LeftCard";
+import LeftCard from "../components/LeftCard";
 
 function HomePage() {
     return (
