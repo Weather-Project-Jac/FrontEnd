@@ -14,7 +14,7 @@ interface User {
 }
 
 export const UserStore = create<User>((set) => ({
-  isLogged: false,
+  isLogged: true,
   email: "",
   username: "",
   avatar: "",
