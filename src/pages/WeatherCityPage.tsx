@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import LeftCard from "./LeftCard";
 
-function HomePage() {
+function WeatherCityPage() {
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -138,4 +138,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default WeatherCityPage;

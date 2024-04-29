@@ -1,14 +1,34 @@
-import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Tooltip, TextField, InputAdornment, Link, Avatar } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Container,
+  Tooltip,
+  TextField,
+  InputAdornment,
+  Link,
+  Avatar,
+  Autocomplete,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { UserStore } from '../store/store'
+import { UserStore } from '../store/store';
 import logo from '../assets/Logo.png';
 import user from '../assets/user.png';
+import { City, ICity } from 'country-state-city';
 
-const settings = ['Profile', 'Favourites', 'Logout'];
+const settings: string[] = ['Profile', 'Favourites', 'Logout'];
 
-function ResponsiveAppBar() {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+function ResponsiveAppBar(): JSX.Element {
+  const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
+  const [city, setCity] = useState<string>('');
+  const [optionsCity, setOptionsCity] = useState<ICity[]>([]);
+
+  const CitiesInfo: ICity[] = City.getAllCities();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -18,92 +38,150 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const isLogged = UserStore((state) => state.isLogged)
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(event.target.value);
+  };
+
+  const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (optionsCity.length > 0) {
+        /* render a component to select a city */
+      } else if (optionsCity.length === 0) {
+        /* render a component to show that the city is not found */
+      } else {
+        /* render a component to show that that city doesnt exist */
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (city.trim().length > 0) {
+      const foundExact = CitiesInfo.find(
+        (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.trim().toLowerCase()
+      );
+      if (!foundExact) {
+        const citiSearched: ICity[] = CitiesInfo.filter((cityInfo: ICity) =>
+          cityInfo.name.toLowerCase().startsWith(city.trim().toLowerCase())
+        ).slice(0, 5);
+        setOptionsCity(citiSearched);
+      } else {
+        setOptionsCity([foundExact]);
+      }
+    } else {
+      setOptionsCity([]);
+    }
+  }, [city, CitiesInfo]);
+
+  const isLogged: boolean = UserStore((state) => state.isLogged);
 
   return (
-    <AppBar position="static" style={{ backgroundColor: "#132E32" }}>
+    <AppBar position="static" style={{ backgroundColor: '#132E32' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-
-          <Link onClick={() => {
-            if (window.location.pathname !== "/") window.location.href = "/"
-          }} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <img src={logo} style={{ width: "100px", filter: "drop-shadow(4px 4px rgba(0, 0, 0, 0.25)" }} />
+          <Link
+            onClick={() => {
+              if (window.location.pathname !== '/') window.location.href = '/';
+            }}
+            style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+          >
+            <img src={logo} style={{ width: '100px', filter: 'drop-shadow(4px 4px rgba(0, 0, 0, 0.25)' }} alt="logo" />
           </Link>
 
-          {/* TextField is for mobile */}
-          <TextField
-            autoComplete='off'
-            className="test"
-            placeholder="Cerca localita'"
-            size="small"
+
+          {/* Autocomplete is for mobile */}
+          <Autocomplete
+            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}            freeSolo
+            disableClearable
+            fullWidth
             sx={{
-              "& fieldset": { border: 'none' },
-              display: { xs: 'flex', md: 'none' },
-              textAlign: 'center',
-              paddingRight: '10px'
+              display: { xs: 'flex', md: 'none' }
             }}
-            InputProps={{
-              style: {
-                fontSize: '14px',
-                borderRadius: "150px",
-                border: '#176087 2px solid',
-                color: 'white',
-                paddingRight: '0px',
-                boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
-              },
-              endAdornment: (
-                <div>
-                  <InputAdornment position="end">
-                    <IconButton
-                      style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
-                      aria-label="toggle password visibility"
-                    >
-                      <SearchIcon style={{ color: 'white' }} />
-                    </IconButton>
-                  </InputAdornment>
-                </div>
-              )
-            }}
+            noOptionsText=""
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                autoComplete="off"
+                placeholder="Cerca localita'"
+                size="small"
+                sx={{
+                  '& fieldset': { border: 'none' },
+                  textAlign: 'center',
+                  paddingRight: '10px',
+                }}
+                value={city}
+                onChange={onSearchChange}
+                InputProps={{
+                  ...params.InputProps,
+                  style: {
+                    borderRadius: '150px',
+                    border: '#176087 2px solid',
+                    color: 'white',
+                    paddingRight: '0px',
+                    boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
+                  }, 
+                  onKeyDown: onEnterSearch,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
+                        style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
+                        aria-label="toggle password visibility"
+                      >
+                        <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
 
           {/* Box is for pc */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <TextField
-                autoComplete='off'
-                className="test"
-                placeholder="Cerca localita'"
-                size="small"
-                sx={{
-                  "& fieldset": { border: 'none' },
-                  width: '50%',
+              <Autocomplete
+                options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}
+                freeSolo
+                disableClearable
+                style={{
+                  width: "80%",
                 }}
-                InputProps={{
-                  style: {
-                    borderRadius: "150px",
-                    border: '#176087 2px solid',
-                    color: 'white',
-                    paddingRight: '0px',
-                    boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
-                  },
-                  endAdornment: (
-                    <div>
-                      <InputAdornment position="end">
-                        <IconButton
-                          style={{ backgroundColor: "#176087", borderRadius: '0 25px 25px 0' }}
-                          aria-label="toggle password visibility"
-                        >
-                          <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                  )
-                }}
+                noOptionsText=""
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    autoComplete="off"
+                    placeholder="Cerca localita'"
+                    size="small"
+                    sx={{
+                      '& fieldset': { border: 'none' },
+                    }}
+                    value={city}
+                    onChange={onSearchChange}
+                    InputProps={{
+                      ...params.InputProps,
+                      style: {
+                        borderRadius: '150px',
+                        border: '#176087 2px solid',
+                        color: 'white',
+                        paddingRight: '0px',
+                        boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
+                      }, endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
+                            aria-label="toggle password visibility"
+                          >
+                            <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )}
               />
             </div>
           </Box>
-
           <Box sx={{
             flexGrow: 0, mr: 5
           }}>
@@ -176,7 +254,8 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
-    </AppBar >
+    </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
