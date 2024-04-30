@@ -13,12 +13,12 @@ function LeftCard() {
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
                     <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"} marginTop={2}>
-                        <Grid item marginLeft={2} marginTop={2}>
+                        <Grid item marginLeft={2}>
                             <Typography variant="h4" gutterBottom align="left">
                                 Locality
                             </Typography>
                         </Grid>
-                        <Grid item marginTop={2} marginRight={2}>
+                        <Grid item marginRight={2}>
                             <Typography variant="h6" gutterBottom align="right">
                                 Time
                             </Typography>
