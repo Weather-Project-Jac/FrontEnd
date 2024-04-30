@@ -10,7 +10,7 @@ export interface User {
   setEmail: () => void;
   setUsername: () => void;
   setAvatar: () => void;
-  setLastSearchedCities: () => void;
+  addLastSearchedCities: (city: string) => void;
 }
 
 export const UserStore = create<User>((set) => ({
@@ -18,7 +18,14 @@ export const UserStore = create<User>((set) => ({
   email: "",
   username: "",
   avatar: "https://placehold.co/600x400",
-  lastSearchedCities: [],
+  lastSearchedCities: [
+    "Bergamo",
+    "Milano",
+    "Roma",
+    "Napoli",
+    "Trento",
+    "Parigi",
+  ],
   setIsLogged: () => {
     set((state) => ({ isLogged: !state.isLogged }));
   },
@@ -31,7 +38,24 @@ export const UserStore = create<User>((set) => ({
   setAvatar: () => {
     set((state) => ({ avatar: state.avatar }));
   },
-  setLastSearchedCities: () => {
-    set((state) => ({ lastSearchedCities: state.lastSearchedCities }));
-  }
+  addLastSearchedCities: (city: string) => {
+    set((state) => {
+      const updatedCities = [...state.lastSearchedCities];
+      console.log("Before", updatedCities);
+      if (updatedCities.length == 6) {
+        console.log("shifted");
+        updatedCities.shift();
+      }
+      updatedCities.push(city);
+
+      console.log("After", updatedCities);
+
+      return { lastSearchedCities: updatedCities };
+    });
+  },
 }));
+
+// Code for insert a new City
+// const addCity = UserStore((state) => state.addLastSearchedCities);
+//         Call addCity to add a new city to the store
+//         addCity("New York");

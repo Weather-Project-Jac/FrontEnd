@@ -90,7 +90,7 @@ function ResponsiveAppBar(): JSX.Element {
 
           {/* Autocomplete is for mobile */}
           <Autocomplete
-            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}            freeSolo
+            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)} freeSolo
             disableClearable
             fullWidth
             sx={{
@@ -118,7 +118,7 @@ function ResponsiveAppBar(): JSX.Element {
                     color: 'white',
                     paddingRight: '0px',
                     boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
-                  }, 
+                  },
                   onKeyDown: onEnterSearch,
                   endAdornment: (
                     <InputAdornment position="end">
