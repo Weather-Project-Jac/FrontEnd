@@ -19,6 +19,7 @@ function WeatherCityPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const getCity =  location.state?.city || navigate("/");
+  const getCountryCode = location.state?.countryCode || navigate("/");
   const [city, setCity] = React.useState(getCity);
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
@@ -26,13 +27,13 @@ function WeatherCityPage() {
   React.useEffect(() => {
     async function fetchWeather() {
       try {
-        const response = await axios.get(`/weather/${city}`);
+        const response = await axios.get(`/weather/${city}/${getCountryCode}`);
         console.log(response);
         /* setWeather(response.data);
         setLoading(false); */
       } catch (error) {
         console.error(error);
-        navigate("/");
+        //navigate("/");
       }
     }
     fetchWeather();
@@ -51,9 +52,9 @@ function WeatherCityPage() {
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <List sx={{ px: 2 }} >
-              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((item) => (
+              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((item, index) => (
 
-                <ListItem alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
+                <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
                   <Avatar src={icons.thunderstorm} sx={{
                     pr: 2,

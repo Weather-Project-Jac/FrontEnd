@@ -46,7 +46,7 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(event.target.value);
+    setCity(event.target.value.split(',')[0]);
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -55,7 +55,7 @@ function ResponsiveAppBar(): JSX.Element {
       if (optionsCity.length > 1) {
         /* render a component to select a city */
       } else if (optionsCity.length === 1) {
-        navigate(`/weather/${optionsCity[0].name}`, {state: {city: optionsCity[0].name}});
+        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, {state: {city: optionsCity[0].name, countryCode: optionsCity[0].countryCode}});
       } else {
         navigate(`/`);
       }
@@ -104,6 +104,11 @@ function ResponsiveAppBar(): JSX.Element {
               display: { xs: 'flex', md: 'none' }
             }}
             noOptionsText=""
+            onInputChange={(event, value) => {
+              console.log(value)
+              const city = value.split(',')[0];
+              setCity(city);
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -116,7 +121,6 @@ function ResponsiveAppBar(): JSX.Element {
                   paddingRight: '10px',
                 }}
                 value={city}
-                onChange={onSearchChange}
                 InputProps={{
                   ...params.InputProps,
                   style: {
