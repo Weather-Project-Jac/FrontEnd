@@ -20,6 +20,7 @@ import { UserStore } from '../store/store';
 import logo from '../assets/Logo.png';
 import user from '../assets/user.png';
 import { City, ICity } from 'country-state-city';
+import { useNavigate } from 'react-router-dom';
 
 const settings: string[] = ['Profile', 'Favourites', 'Logout'];
 
@@ -27,6 +28,7 @@ function ResponsiveAppBar(): JSX.Element {
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
   const [city, setCity] = useState<string>('');
   const [optionsCity, setOptionsCity] = useState<ICity[]>([]);
+  const navigate = useNavigate();
 
   const CitiesInfo: ICity[] = City.getAllCities();
 
@@ -90,7 +92,8 @@ function ResponsiveAppBar(): JSX.Element {
 
           {/* Autocomplete is for mobile */}
           <Autocomplete
-            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}            freeSolo
+            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}          
+            freeSolo
             disableClearable
             fullWidth
             sx={{
@@ -191,7 +194,7 @@ function ResponsiveAppBar(): JSX.Element {
                 {
                   isLogged ?
                     (
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"  onClick={() => navigate("/profile")}  />
                     ) :
                     (
                       <div style={{
@@ -201,13 +204,13 @@ function ResponsiveAppBar(): JSX.Element {
                         display: 'flex',
                         justifyContent: 'center',
                         boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
-                      }}>
+                      }}  onClick={() => navigate("/auth")} >
                         <Avatar alt="Remy Sharp" src={user} style={{
                           width: '30px',
                           height: '30px',
                           borderRadius: '50%',
                           margin: '7px 10px 7px'
-                        }} />
+                        }}/>
                         <span
                           style={{
                             color: 'white',

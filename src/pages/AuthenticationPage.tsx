@@ -186,7 +186,7 @@ function AuthPage() {
               marginTop: "10px",
               marginLeft: "10px",
               marginRight: "10px",
-              height: "600px",
+              //height: "600px",
             }}
           />
           <Grid item xs={12} sm={5.5}>
