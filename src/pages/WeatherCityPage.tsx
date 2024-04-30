@@ -21,7 +21,7 @@ function WeatherCityPage() {
         justifyContent="space-around"
         spacing={4}
         alignContent="center"
-        style={{ marginTop: 0, marginBottom: 30}}
+        style={{ marginTop: 0, marginBottom: 30 }}
       >
         <LeftCard />
 
@@ -37,8 +37,8 @@ function WeatherCityPage() {
                     pt: 3,
                     width: "10%",
                     height: "10%",
-                    minHeight: "50px",
-                    minWidth: "50px",
+                    // minHeight: "50px",
+                    // minWidth: "50px",
                     marginRight: 0
                   }} />
                   <ListItemText
@@ -63,17 +63,14 @@ function WeatherCityPage() {
                   />
                   <Grid item xs={7} textAlign='center'>
                     <Grid container spacing={2}>
-                      {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item : string) => (
-                        <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"centered"} alignItems={"center"}>
+                      {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item: string) => (
+                        <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"center"} alignItems={"center"}>
                           <Box
                             component='img'
                             src={icons[item]}
                             sx={{
-                              height: "50px",
-                              width: "50px",
-                              minWidth: "25px",
-                              minHeight: "25px",
-                              marginLeft: "10%",
+                              maxWidth: 35,
+                              marginLeft: "25%",
                             }}
                           />
                           <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={500} marginBottom={0} marginLeft="10%">
