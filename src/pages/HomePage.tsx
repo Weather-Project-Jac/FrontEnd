@@ -70,19 +70,6 @@ const HomePage: React.FC = () => {
                 <Typography variant="h4" gutterBottom sx={{ paddingBottom: 5, paddingTop: 2 }}>
                     Welcome to Our Weather App!
                 </Typography>
-                {/* <Grid container >
-                    <Grid item xs={4}>
-                        <Typography variant="h6" gutterBottom>
-                            {currentDate.toLocaleDateString()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Typography variant="h6" gutterBottom>
-                            Your Current Position: {currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}
-                        </Typography>
-
-                    </Grid>
-                </Grid> */}
                 <Grid item sx={{ borderRadius: 5, backgroundColor: '#1d2837', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', paddingY: 2 }} style={{ display: "flex", justifyContent: "space-evenly", flexDirection: isSmallScreen ? "column" : "row" }}>
                     <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
                         <Typography variant="h6">Current Day</Typography>
@@ -110,7 +97,7 @@ const HomePage: React.FC = () => {
                 </Grid>
                 {lastSearchedCities.length > 0 && (
                     <>
-                        <Typography variant="h6" gutterBottom style={{ marginTop: 20 }}>
+                        <Typography variant="h6" gutterBottom style={{ paddingTop: 50 }}>
                             Latest Searched Cities By You:
                         </Typography>
                         <Grid container spacing={2}>
