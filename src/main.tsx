@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import WeatherCityPage from './pages/WeatherCityPage.tsx';
 import AuthPage from './pages/AuthenticationPage.tsx';
-import { useNavigate, useLocation, Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -30,9 +30,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <CssBaseline />
       <BrowserRouter>
         <Routes>
+          
           <Route path="/" element={<><Navbar/><HomePage /></>} />
-          <Route path="/:city" element={<><Navbar/><WeatherCityPage /></>} />
+          <Route path="/weather/:city" element={<><Navbar/><WeatherCityPage /></>} />
           <Route path="/auth" element={<><Navbar/><AuthPage /></>} />
+          <Route path="/profile" element={<><Navbar/><p>PROFILO</p></>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

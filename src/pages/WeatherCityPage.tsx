@@ -1,4 +1,4 @@
-//import * as React from "react";
+import * as React from "react";
 import {
   Typography,
   Container,
@@ -12,8 +12,31 @@ import {
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
+import axios from "../axios/axiosConf.ts";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function WeatherCityPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const getCity =  location.state?.city || navigate("/");
+  const [city, setCity] = React.useState(getCity);
+  const [weather, setWeather] = React.useState({} as any);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function fetchWeather() {
+      try {
+        const response = await axios.get(`/weather/${city}`);
+        console.log(response);
+        /* setWeather(response.data);
+        setLoading(false); */
+      } catch (error) {
+        console.error(error);
+        navigate("/");
+      }
+    }
+    fetchWeather();
+  }, [city]);
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -23,7 +46,7 @@ function WeatherCityPage() {
         alignContent="center"
         style={{ marginTop: 0, marginBottom: 30}}
       >
-        <LeftCard />
+        <LeftCard city={city} WeatherInfo={[]} />
 
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
