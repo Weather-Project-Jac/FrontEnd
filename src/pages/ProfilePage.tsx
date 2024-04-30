@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardContent, Typography, Avatar, Grid, Container, Box } from '@mui/material';
+import { Button, Card, CardContent, Typography, Avatar, Grid, Container, Box, Divider } from '@mui/material';
 import { UserStore } from '../store/store.ts';
 import ChangePassword from '../components/ChangePassword.tsx';
 import AvatarPicker from '../components/ProfileImagePicker.tsx';
@@ -30,65 +30,49 @@ const Profile: React.FC = () => {
                 alignContent="center"
                 style={{ marginTop: 0, marginBottom: 30 }}
             >
-                <Grid item xs={12} sm={5}>
+                <Grid item xs={12} sm={5} >
                     <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
                         <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
-                            <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
-                                <Grid item xs={12} marginTop={2} marginLeft={2}>
+                            <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
+                                <Grid item xs={12} style={{ paddingLeft: 0, paddingTop: 50, paddingBottom: 20 }}>
                                     <Typography variant="h4" gutterBottom align="center">
                                         Profile
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sx={{ paddingBottom: 1 }}>
                                     <Avatar src="/static/images/avatar/2.jpg" sx={{
-                                        width: 200,
-                                        height: 200,
+                                        width: 250,
+                                        height: 250,
                                         margin: 'auto',
-                                        marginBottom: 10
                                     }} />
-                                    {/* <Box
-                                        component='img'
-                                        sx={{
-                                            display: 'block',
-                                            width: '55%',
-                                            margin: 'auto',
-                                        }}
-                                        src={usericon} /> */}
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={300} fontSize={70} marginBottom={0}>
-                                        Clear
+                                <Grid item xs={12} sx={{ paddingBottom: 2 }}>
+                                    <Typography variant="h6" gutterBottom align="left" style={{ paddingLeft: 20, fontSize: 18, color: "#598A42", marginBottom: 0 }}>
+                                        Username
                                     </Typography>
-                                    <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900} fontSize={60}>
-                                        24°
+                                    <Typography variant="body1" gutterBottom align="left" style={{ paddingLeft: 30, fontSize: 25 }}>
+                                        {user.username}
                                     </Typography>
+                                    <Divider variant='middle' sx={{ backgroundColor: 'white' }} />
                                 </Grid>
-                                <Grid item xs={12} textAlign='center'>
-                                    <Grid container spacing={2}>
-                                        {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item) => (
-                                            <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"space-between"} alignItems={"center"}>
-                                                <Box
-                                                    component='img'
-                                                    src={icons[item.toString()]}
-                                                    sx={{
-                                                        maxWidth: 50,
-                                                        marginLeft: "25%",
-                                                    }}
-                                                />
-                                                <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900}
-                                                    fontSize={20} marginBottom={0} marginRight={"25%"}>
-                                                    30%
-                                                </Typography>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
+                                <Grid item xs={12} sx={{ paddingBottom: 2 }}>
+                                    <Typography variant="h6" gutterBottom align="left" style={{ paddingLeft: 20, fontSize: 18, color: "#598A42", marginBottom: 0 }}>
+                                        Email
+                                    </Typography>
+                                    <Typography variant="body1" gutterBottom align="left" style={{ paddingLeft: 30, fontSize: 25, wordWrap: 'break-word' }}>
+                                        {user.email}
+                                    </Typography>
+                                    <Divider variant='middle' sx={{ backgroundColor: 'white' }} />
+                                </Grid>
+                                <Grid container xs={12} justifyContent={'center'} paddingTop={5} paddingBottom={2}>
+                                    <Button style={{ fontSize: 25, color: 'white', backgroundColor: '#176087', padding: '2% 3%' }}>CHANGE PASSWORD</Button>
                                 </Grid>
                             </Grid>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
-        </Container>
+        </Container >
     );
 };
 
