@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Typography, Container, Card, CardContent, Grid, Box, Paper } from '@mui/material';
+import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
 import axios from "axios"
+import icons from '../assets/icons/index.ts';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
@@ -37,7 +38,6 @@ const HomePage: React.FC = () => {
     }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city])
 
 
-
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
@@ -52,48 +52,68 @@ const HomePage: React.FC = () => {
             setCurrentPosition({ latitude, longitude, city: cityName });
         } catch (error) {
             console.error('There was a problem with the request:', error);
-            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Unable to retrieve your location" });
+            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined" });
         }
     }
 
     function error() {
-        console.error('Unable to retrieve your location');
-        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Unable to retrieve your location" });
+        console.error('Undefined');
+        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined" });
     }
 
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     return (
-        <div style={{ color: 'white', paddingTop: 20, textAlign: 'center' }}>
-            <Container maxWidth="md">
-                <Typography variant="h4" gutterBottom>
+        <div style={{ color: "white", textAlign: "center" }}>
+            <Container maxWidth="md" sx={{ display: "flex", justifyContent: "space-evenly", flexDirection: "column" }} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                <Typography variant="h4" gutterBottom sx={{ paddingBottom: 5, paddingTop: 2 }}>
                     Welcome to Our Weather App!
                 </Typography>
-                <Grid container spacing={2}>
-                    <Grid item xs={3}>
-                        <Typography variant="h6" gutterBottom>
-                            {currentDate.toLocaleDateString()}
+                <Grid item sx={{ borderRadius: 5, backgroundColor: '#1d2837', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', paddingY: 2 }} style={{ display: "flex", justifyContent: "space-evenly", flexDirection: isSmallScreen ? "column" : "row" }}>
+                    <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
+                        <Typography variant="h6">Current Day</Typography>
+                        <Typography style={{
+                            fontSize: 30,
+                            fontWeight: 600
+                        }}>{currentDate.toLocaleDateString()}</Typography>
+                    </Grid>
+                    <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
+                        <Typography variant="h6">Current Temperature</Typography>
+                        <Typography style={{
+                            fontSize: 30,
+                            fontWeight: 600
+                        }}>24°C
+                            {/* TODO get current temp */}
                         </Typography>
                     </Grid>
-                    <Grid item xs={9}>
-                        <Typography variant="h6" gutterBottom>
-                            Your Current Position: {currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}
-                        </Typography>
-
+                    <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
+                        <Typography variant="h6">Current Position</Typography>
+                        <Typography style={{
+                            fontSize: 30,
+                            fontWeight: 600
+                        }}>{currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
                     </Grid>
                 </Grid>
                 {lastSearchedCities.length > 0 && (
                     <>
-                        <Typography variant="h6" gutterBottom style={{ marginTop: 20 }}>
+                        <Typography variant="h6" gutterBottom style={{ paddingTop: 50 }}>
                             Latest Searched Cities By You:
                         </Typography>
                         <Grid container spacing={2}>
                             {lastSearchedCities.map((city, index) => (
-                                <Grid item xs={12} key={index}>
+                                <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                                     {/* <Link to={`/weather/${city}`} style={{ textDecoration: 'none' }}> */}
-                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer' }}>
-                                        <CardContent>
-                                            <Typography variant="body1">
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}>
+                                        <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+                                            <Typography variant="h5" >
                                                 {city}
+                                                <Typography variant="body1" sx={{ fontSize: 30 }}>
+                                                    23°C {/* Temperatura */}
+                                                </Typography>
                                             </Typography>
+                                            <img src={icons.thunder} style={{ width: 70 }} />
+
                                         </CardContent>
                                     </Card>
                                     {/* </Link> */}
@@ -114,7 +134,7 @@ const HomePage: React.FC = () => {
                 ref={footerRef}
                 sx={{
                     width: '100%',
-                    backgroundColor: 'rgba(29, 40, 55, 1)',
+                    backgroundColor: '#132E32',
                     position: 'fixed',
                     bottom: 0,
                 }}
@@ -122,35 +142,17 @@ const HomePage: React.FC = () => {
                 square
                 variant="outlined"
             >
-                <Container maxWidth="lg">
-                    <Box
-                        sx={{
-                            flexGrow: 1,
-                            justifyContent: "center",
-                            display: "flex",
-                            my: 0.1
-                        }}
-                    >
-                        <div>
-                            <img src="/Logo.png" width={45} height={45} alt="Logo" />
-                        </div>
-                    </Box>
-
-                    <Box
-                        sx={{
-                            flexGrow: 1,
-                            justifyContent: "center",
-                            display: "flex",
-                            mb: .5,
-                        }}
-                    >
+                <Container sx={{ display: "flex", justifyContent: "center" }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", paddingY: 1 }}>
+                        <img src="/Logo.png" width={45} height={45} alt="Logo" style={{ marginRight: 10 }} />
                         <Typography variant="caption" color="white">
-                            Copyright ©2022. [Made by US] Limited
+                            Copyright ©2024. [Made by US] Limited
                         </Typography>
                     </Box>
                 </Container>
+
             </Paper>
-        </div>
+        </div >
     );
 };
 
