@@ -9,11 +9,17 @@ import {
   ListItem,
   Avatar,
   ListItemText,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
+import { AlignVerticalCenterTwoTone } from "@mui/icons-material";
 
 function WeatherCityPage() {
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -30,23 +36,21 @@ function WeatherCityPage() {
             <List sx={{ px: 2 }} >
               {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((item) => (
 
-                <ListItem alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
+                <ListItem alignItems="center" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
                   <Avatar src={icons.thunderstorm} sx={{
                     pr: 2,
-                    pt: 3,
                     width: "10%",
                     height: "10%",
-                    // minHeight: "50px",
-                    // minWidth: "50px",
-                    marginRight: 0
+                    minHeight: isSmallScreen ? "50px" : "0",
+                    minWidth: isSmallScreen ? "50px" : "0",
+                    marginRight: 0,
                   }} />
                   <ListItemText
 
                     primary={`${item} 13 June`}
                     secondary="Thunderstorm"
                     sx={{
-                      mt: 3,
                       '.MuiListItemText-primary': {
                         color: 'white',
                         fontSize: 20,
@@ -69,7 +73,7 @@ function WeatherCityPage() {
                             component='img'
                             src={icons[item]}
                             sx={{
-                              maxWidth: 35,
+                              maxWidth: isSmallScreen ? 20 : 35,
                               marginLeft: "25%",
                             }}
                           />
