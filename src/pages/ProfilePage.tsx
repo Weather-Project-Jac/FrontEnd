@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Card, CardContent, Typography, Avatar, Grid, Container, Box, Divider } from '@mui/material';
+import { Button, Card, CardContent, Typography, Grid, Container, Divider } from '@mui/material';
 import { UserStore } from '../store/store.ts';
 import ChangePassword from '../components/ChangePassword.tsx';
 import AvatarPicker from '../components/ProfileImagePicker.tsx';
-import icons from "../assets/icons/index.ts";
-import usericon from "../assets/user.png";
 
 const Profile: React.FC = () => {
     const user = UserStore((state) => state);
@@ -30,8 +28,8 @@ const Profile: React.FC = () => {
                 alignContent="center"
                 style={{ marginTop: 0, marginBottom: 30 }}
             >
-                <Grid item xs={12} sm={5} >
-                    <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
+                <Grid item xs={12} sm={6} >
+                    <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%'}}>
                         <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
                             <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
                                 <Grid item xs={12} style={{ paddingLeft: 0, paddingTop: 50, paddingBottom: 20 }}>
@@ -40,11 +38,7 @@ const Profile: React.FC = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} sx={{ paddingBottom: 1 }}>
-                                    <Avatar src="/static/images/avatar/2.jpg" sx={{
-                                        width: 250,
-                                        height: 250,
-                                        margin: 'auto',
-                                    }} />
+                                    <AvatarPicker selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar} />
                                 </Grid>
                                 <Grid item xs={12} sx={{ paddingBottom: 2 }}>
                                     <Typography variant="h6" gutterBottom align="left" style={{ paddingLeft: 20, fontSize: 18, color: "#598A42", marginBottom: 0 }}>

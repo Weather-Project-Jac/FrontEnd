@@ -44,7 +44,11 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
   return (
     <div style={containerStyle}>
       <div style={avatarContainerStyle}>
-        <Avatar src={selectedAvatar} sx={{ width: 100, height: 100 }} />
+        <Avatar src={selectedAvatar} sx={{
+          width: 220,
+          height: 220,
+          margin: 'auto'
+        }} />
         <input
           type="file"
           accept="image/*"

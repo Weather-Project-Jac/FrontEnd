@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
-import { AlignVerticalCenterTwoTone } from "@mui/icons-material";
 
 function WeatherCityPage() {
 
