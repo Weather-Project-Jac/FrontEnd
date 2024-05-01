@@ -9,21 +9,20 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
-import { display } from "@mui/system";
 import icons from "../assets/icons";
-import { UserStore } from "../store/store";
+//import { UserStore } from "../store/store";
 
 function HomePage() {
-    const favouriteCities = UserStore((state) => state.addFavouriteCities);
+/*     const favouriteCities = UserStore((state) => state.addFavouriteCities);
     const removeFavourite = UserStore((state) => state.removeFavouriteCities);
     console.log("Added? ", favouriteCities("Ciao"))
-    console.log("Removed? ", removeFavourite("Ciao"))
+    console.log("Removed? ", removeFavourite("Ciao")) */
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Container maxWidth="xl" >
+        <Container maxWidth='xl' >
             <Grid
                 container
                 justifyContent="space-around"
@@ -35,11 +34,15 @@ function HomePage() {
 
                 <Grid item xs={12} sm={7} style={{ paddingLeft: 0 }}>
                     <Grid container spacing={10} style={{ paddingTop: 50, paddingBottom: 50, paddingLeft: isSmallScreen ? 30 : 80 }} alignItems="center" display={'flex'} >
-                        {[1, 2, 3, 4, 5, 6].map((items) => (
-                            <Grid item xs={12} sm={4} key={items}>
-                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}>
-                                    <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center' }}>
-                                        <Typography gutterBottom variant="h5" component="div" style={{ marginBottom: 0 }}>
+                        {[1, 2, 3, 4, 5, 6].map((item) => (
+                            <Grid item xs={12} sm={4} key={item}>
+                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer'}}>
+                                    <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center'}}>
+                                        <Typography gutterBottom variant="h5" component="div"  sx={{
+                                            textAlign: 'center',
+                                            fontFamily: "Inter, sans-serif",
+                                            fontWeight: 600
+                                        }}>
                                             Locality
                                         </Typography>
                                         <Box

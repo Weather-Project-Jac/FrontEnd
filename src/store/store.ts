@@ -6,14 +6,14 @@ export interface User {
   username: string;
   avatar: string;
   lastSearchedCities: string[];
-  favouriteCities: string[];
+  //favouriteCities: string[];
   setIsLogged: () => void;
   setEmail: () => void;
   setUsername: () => void;
   setAvatar: () => void;
   addLastSearchedCities: (city: string) => void;
-  addFavouriteCities: (newCity: string) => void|boolean;
-  removeFavouriteCities: (removedCity: string) => void|boolean;
+/*   addFavouriteCities: (newCity: string) => void|boolean;
+  removeFavouriteCities: (removedCity: string) => void|boolean; */
 }
 
 export const UserStore = create<User>((set) => ({
@@ -29,7 +29,7 @@ export const UserStore = create<User>((set) => ({
     "Trento",
     "Parigi",
   ],
-  favouriteCities: [],
+  //favouriteCities: [],
   setIsLogged: () => {
     set((state) => ({ isLogged: !state.isLogged }));
   },
@@ -52,7 +52,7 @@ export const UserStore = create<User>((set) => ({
       return { lastSearchedCities: updatedCities };
     });
   },
-  addFavouriteCities: (newCity: string) => {
+  /* addFavouriteCities: (newCity: string) => {
     let status=false;
     set((state) => {
         const updatedFavouriteCities = [...state.favouriteCities];
@@ -82,5 +82,5 @@ export const UserStore = create<User>((set) => ({
         return { favouriteCities: updatedFavouriteCities };
     });
     return status
-  }
+  } */
 }));
