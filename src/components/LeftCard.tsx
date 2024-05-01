@@ -9,7 +9,7 @@ import icons from '../assets/icons/index.ts';
 
 function LeftCard() {
     return (
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={5} style={{ paddingLeft: 0 }}>
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
                     <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"} >
