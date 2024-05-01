@@ -5,6 +5,8 @@ import {
     Box,
     Card,
     CardContent,
+    useTheme,
+    useMediaQuery,
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import { display } from "@mui/system";
@@ -16,6 +18,9 @@ function HomePage() {
     const removeFavourite = UserStore((state) => state.removeFavouriteCities);
     console.log("Added? ", favouriteCities("Ciao"))
     console.log("Removed? ", removeFavourite("Ciao"))
+
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <Container maxWidth="xl" >
@@ -29,12 +34,12 @@ function HomePage() {
                 <LeftCard />
 
                 <Grid item xs={12} sm={7} style={{ paddingLeft: 0 }}>
-                    <Grid container spacing={10} style={{ height: '90vh', paddingTop: 50, paddingBottom: 50, paddingLeft: 130 }} alignItems="center" display={'flex'} >
-                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((items) => (
+                    <Grid container spacing={10} style={{ paddingTop: 50, paddingBottom: 50, paddingLeft: isSmallScreen ? 30 : 80 }} alignItems="center" display={'flex'} >
+                        {[1, 2, 3, 4, 5, 6].map((items) => (
                             <Grid item xs={12} sm={4} key={items}>
-                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}>
+                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}>
                                     <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center' }}>
-                                        <Typography gutterBottom variant="h5" component="div" >
+                                        <Typography gutterBottom variant="h5" component="div" style={{ marginBottom: 0 }}>
                                             Locality
                                         </Typography>
                                         <Box
