@@ -58,7 +58,7 @@ const Profile: React.FC = () => {
                                     </Typography>
                                     <Divider variant='middle' sx={{ backgroundColor: 'white' }} />
                                 </Grid>
-                                <Grid container xs={12} justifyContent={'center'} paddingTop={5} paddingBottom={2}>
+                                <Grid container justifyContent={'center'} paddingTop={5} paddingBottom={2}>
                                     <Button style={{ fontSize: 25, color: 'white', backgroundColor: '#176087', padding: '2% 3%' }}>CHANGE PASSWORD</Button>
                                 </Grid>
                             </Grid>

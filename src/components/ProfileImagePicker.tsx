@@ -1,18 +1,24 @@
-import { Button, Avatar,ChangeEvent  } from '@mui/material';
+import React, { ChangeEvent, CSSProperties, useEffect, useState } from 'react';
+import { Button, Avatar, Modal, Slider } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { ChangeEvent, CSSProperties } from 'react';
-import { UserStore } from '../store/store.ts';
-import AvatarEditor from 'react-avatar-editor';
-import { useRef, useState } from 'react';
-
+import Cropper from 'react-easy-crop';
+import getCroppedImg from './CropImage.tsx';
+import { UserStore } from '../store/store';
 interface AvatarPickerProps {
   setSelectedAvatar: (avatar: string) => void;
   selectedAvatar: string;
 }
 
 const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selectedAvatar }) => {
-  const editorRef = useRef<AvatarEditor | null>(null);
-  const [scale, setScale] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log(croppedImage);
+  }, [croppedImage]);
 
   const containerStyle: CSSProperties = {
     display: 'flex',
@@ -33,189 +39,89 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
     cursor: 'pointer',
   };
 
-  // const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setSelectedAvatar(reader.result as string);
-  //       UserStore.setState({ avatar: selectedAvatar });
-  //       /* axios save */
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    console.log(file)
     if (file) {
-      setSelectedAvatar(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCroppedImage(reader.result as string);
+        setShowModal(true);
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
     }
   };
 
-  const handleCrop = () => {
-    if (editorRef.current) {
-      const canvasScaled = editorRef.current.getImageScaledToCanvas().toDataURL();
-      setSelectedAvatar(canvasScaled);
-      UserStore.setState({ avatar: canvasScaled });
+  const handleSaveAvatar = async () => {
+    try {
+      const croppedAvatar = await getCroppedImg(croppedImage!, croppedAreaPixels, 220, 220);
+      console.log('donee', { croppedImage })
+      setSelectedAvatar(croppedAvatar);
+      UserStore.setState({ avatar: croppedAvatar });
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error cropping image:', error);
     }
   };
 
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels)
+  }
 
   return (
-    // <div style={containerStyle}>
-    //   <div style={avatarContainerStyle}>
-    //     <Avatar src={selectedAvatar} sx={{
-    //       width: 220,
-    //       height: 220,
-    //       margin: 'auto'
-    //     }} />
-    //     <input
-    //       type="file"
-    //       accept="image/*"
-    //       onChange={handleAvatarChange}
-    //       style={{ display: 'none' }}
-    //       id="avatar-upload-input"
-    //     />
-    //     <label htmlFor="avatar-upload-input">
-    //       <EditIcon style={editIconStyle} fontSize="small" />
-    //     </label>
-    //     <Button
-    //       variant="contained"
-    //       color="primary"
-    //       disabled={!selectedAvatar}
-    //       style={{ display: 'none' }}
-    //       id="avatar-upload-button"
-    //     >
-    //       Upload Avatar
-    //     </Button>
-    //   </div>
-    // </div>
-    <div style={containerStyle}>
-      <div style={avatarContainerStyle}>
-        <AvatarEditor
-          ref={editorRef}
-          image={selectedAvatar}
-          width={220}
-          height={220}
-          border={50}
-          color={[255, 255, 255, 0.6]} // RGBA
-          scale={scale}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          style={{ display: 'none' }}
-          id="avatar-upload-input"
-        />
-        <label htmlFor="avatar-upload-input">
-          <EditIcon style={editIconStyle} fontSize="small" />
-        </label>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!selectedAvatar}
-          onClick={handleCrop}
-          style={{ display: 'block' }}
-          id="avatar-upload-button"
-        >
-          Crop Image
-        </Button>
-        <Button onClick={() => setScale(scale + 0.1)}>Zoom In</Button>
-        <Button onClick={() => setScale(scale - 0.1)}>Zoom Out</Button>
+    <>
+      <div style={containerStyle}>
+        <div style={avatarContainerStyle}>
+          <Avatar src={selectedAvatar} sx={{
+            width: 220,
+            height: 220,
+            margin: 'auto'
+          }} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            style={{ display: 'none' }}
+            id="avatar-upload-input"
+          />
+          <label htmlFor="avatar-upload-input">
+            <EditIcon style={editIconStyle} fontSize="small" />
+          </label>
+        </div>
       </div>
-    </div>
+      <Modal open={showModal} onClose={() => setShowModal(false)} style={{ paddingTop: 50 }}>
+        <div style={{ paddingTop: 20, maxWidth: '90%', margin: '0 auto' }}>
+          <h2 style={{ color: 'white', paddingLeft: 50 }}>Crop Image</h2>
+          <div style={{ position: 'relative', width: '100%', height: 700 }}>
+            <Cropper
+              image={croppedImage!}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              cropShape="round"
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+            />
+          </div>
+          <Slider
+            style={{ width: '80%', margin: '0 auto', display: 'flex' }}
+            value={zoom}
+            min={1}
+            max={3}
+            step={0.1}
+            aria-labelledby="Zoom"
+            onChange={(e, zoom) => setZoom(Number(zoom))}
+            classes={{ root: "slider" }}
+          />
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <Button variant="contained" color="primary" onClick={handleSaveAvatar}>Save Avatar</Button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 
 export default AvatarPicker;
-
-// import React, { useRef, useState, ChangeEvent } from 'react';
-// import AvatarEditor from 'react-avatar-editor';
-// import { Button, Avatar } from '@mui/material';
-// import EditIcon from '@mui/icons-material/Edit';
-// import { UserStore } from '../store/store.ts';
-
-// interface AvatarPickerProps {
-//   setSelectedAvatar: (avatar: string) => void;
-//   selectedAvatar: string;
-// }
-
-// const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selectedAvatar }) => {
-//   const editorRef = useRef<AvatarEditor | null>(null);
-//   const [scale, setScale] = useState<number>(1);
-
-//   const containerStyle = {
-//     display: 'flex',
-//     justifyContent: 'center',
-//   };
-
-//   const avatarContainerStyle = {
-//     position: 'relative',
-//     display: 'inline-block',
-//   };
-
-//   const editIconStyle = {
-//     position: 'absolute',
-//     bottom: 0,
-//     right: 0,
-//     transform: 'translate(50%, 50%)',
-//     borderRadius: '50%',
-//     cursor: 'pointer',
-//   };
-
-//   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0];
-//     if (file) {
-//       setSelectedAvatar(URL.createObjectURL(file));
-//     }
-//   };
-
-//   const handleCrop = () => {
-//     if (editorRef.current) {
-//       const canvasScaled = editorRef.current.getImageScaledToCanvas().toDataURL();
-//       setSelectedAvatar(canvasScaled);
-//       UserStore.setState({ avatar: canvasScaled });
-//     }
-//   };
-
-//   return (
-//     <div style={containerStyle}>
-//       <div style={avatarContainerStyle}>
-//         <AvatarEditor
-//           ref={editorRef}
-//           image={selectedAvatar}
-//           width={220}
-//           height={220}
-//           border={50}
-//           color={[255, 255, 255, 0.6]} // RGBA
-//           scale={scale}
-//         />
-//         <input
-//           type="file"
-//           accept="image/*"
-//           onChange={handleFileSelect}
-//           style={{ display: 'none' }}
-//           id="avatar-upload-input"
-//         />
-//         <label htmlFor="avatar-upload-input">
-//           <EditIcon style={editIconStyle} fontSize="small" />
-//         </label>
-//         <Button
-//           variant="contained"
-//           color="primary"
-//           disabled={!selectedAvatar}
-//           onClick={handleCrop}
-//           style={{ display: 'block' }}
-//           id="avatar-upload-button"
-//         >
-//           Crop Image
-//         </Button>
-//         <Button onClick={() => setScale(scale + 0.1)}>Zoom In</Button>
-//         <Button onClick={() => setScale(scale - 0.1)}>Zoom Out</Button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AvatarPicker;

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import userPng from '../assets/userx512.png';
+
 
 export interface User {
   isLogged: boolean;
@@ -20,7 +22,7 @@ export const UserStore = create<User>((set) => ({
   isLogged: true,
   email: "federico.balducci@gmail.com",
   username: "Federico",
-  avatar: "https://placehold.co/600x400",
+  avatar: userPng,
   lastSearchedCities: [
     "Bergamo",
     "Milano",

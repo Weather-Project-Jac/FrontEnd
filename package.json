@@ -17,14 +17,13 @@
     "axios": "^1.6.8",
     "country-state-city": "^3.2.1",
     "react": "^18.2.0",
-    "react-avatar-editor": "^13.0.2",
     "react-dom": "^18.2.0",
+    "react-easy-crop": "^5.0.6",
     "react-router-dom": "^6.23.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
-    "@types/react-avatar-editor": "^13.0.2",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",

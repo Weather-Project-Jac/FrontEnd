@@ -37,6 +37,7 @@ function ResponsiveAppBar(): JSX.Element {
   const CitiesInfo: ICity[] = City.getAllCities();
 
   const isLogged: boolean = UserStore((state) => state.isLogged);
+  const avatar: string = UserStore((state) => state.avatar);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -202,7 +203,7 @@ function ResponsiveAppBar(): JSX.Element {
                 {
                   isLogged ?
                     (
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar alt="Remy Sharp" src={avatar} />
                     ) :
                     (
                       <div style={{
@@ -239,12 +240,14 @@ function ResponsiveAppBar(): JSX.Element {
             {
               isLogged &&
               (<Menu
-                sx={{ mt: '45px',
-                "& .MuiMenu-paper": 
-                { backgroundColor: "white",
-                //border: "1px solid white"  
-              }, 
-              }}
+                sx={{
+                  mt: '45px',
+                  "& .MuiMenu-paper":
+                  {
+                    backgroundColor: "white",
+                    //border: "1px solid white"  
+                  },
+                }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -258,15 +261,15 @@ function ResponsiveAppBar(): JSX.Element {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
-                
+
               >
                 {settings.map((setting: any) => (
                   <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                    <Link 
-                    style={{
-                      textDecoration: "none",
-                      color: "#132E32",
-                    }}
+                    <Link
+                      style={{
+                        textDecoration: "none",
+                        color: "#132E32",
+                      }}
                       onClick={() => { navigate(setting.path) }}
                     >{setting.name}</Link>
                   </MenuItem>
