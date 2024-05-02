@@ -2,10 +2,12 @@ import * as React from 'react';
 import ReactDOM from 'react-dom/client'
 import "./index.css"
 import Navbar from "./components/Navbar.tsx";
+
 import HomePage from "./pages/HomePage.tsx";
 import WeatherCityPage from './pages/WeatherCityPage.tsx';
 import AuthPage from './pages/AuthenticationPage.tsx';
 import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';

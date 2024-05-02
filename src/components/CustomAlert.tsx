@@ -1,13 +1,13 @@
 import { Alert, Snackbar } from '@mui/material';
 import React from 'react';
 
-interface CustomAlertProps {
+export interface CustomAlertProps {
     message: string | null;
     severity: 'error' | 'success' | 'info' | 'warning' | null;
     handleClose: (() => void);
 }
 
-const CustomAlert: React.FC<CustomAlertProps> = ({ message, severity, handleClose }) => {
+export const CustomAlert: React.FC<CustomAlertProps> = ({ message, severity, handleClose }) => {
     if (!message || !severity) return null;
     const open = message !== null && severity !== null;
     return (
@@ -18,5 +18,3 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ message, severity, handleClos
         </Snackbar>
     );
 };
-
-export default CustomAlert;

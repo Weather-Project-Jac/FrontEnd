@@ -9,6 +9,8 @@ import {
   ListItem,
   Avatar,
   ListItemText,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
@@ -16,6 +18,7 @@ import axios from "../axios/axiosConf.ts";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function WeatherCityPage() {
+
   const location = useLocation();
   const navigate = useNavigate();
   const getCity =  location.state?.city || navigate("/");
@@ -38,6 +41,9 @@ function WeatherCityPage() {
     }
     fetchWeather();
   }, [city]);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -45,7 +51,7 @@ function WeatherCityPage() {
         justifyContent="space-around"
         spacing={4}
         alignContent="center"
-        style={{ marginTop: 0, marginBottom: 30}}
+        style={{ marginTop: 0, marginBottom: 30 }}
       >
         <LeftCard city={city} WeatherInfo={[]} />
 
@@ -56,21 +62,20 @@ function WeatherCityPage() {
 
                 <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
+
                   <Avatar src={icons.thunderstorm} sx={{
                     pr: 2,
-                    pt: 3,
                     width: "10%",
                     height: "10%",
-                    minHeight: "50px",
-                    minWidth: "50px",
-                    marginRight: 0
+                    minHeight: isSmallScreen ? "50px" : "0",
+                    minWidth: isSmallScreen ? "50px" : "0",
+                    marginRight: 0,
                   }} />
                   <ListItemText
 
                     primary={`${item} 13 June`}
                     secondary="Thunderstorm"
                     sx={{
-                      mt: 3,
                       '.MuiListItemText-primary': {
                         color: 'white',
                         fontSize: 20,
@@ -87,17 +92,14 @@ function WeatherCityPage() {
                   />
                   <Grid item xs={7} textAlign='center'>
                     <Grid container spacing={2}>
-                      {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item : string) => (
-                        <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"centered"} alignItems={"center"}>
+                      {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item: string) => (
+                        <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"center"} alignItems={"center"}>
                           <Box
                             component='img'
                             src={icons[item]}
                             sx={{
-                              height: "50px",
-                              width: "50px",
-                              minWidth: "25px",
-                              minHeight: "25px",
-                              marginLeft: "10%",
+                              maxWidth: isSmallScreen ? 20 : 35,
+                              marginLeft: "25%",
                             }}
                           />
                           <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={500} marginBottom={0} marginLeft="10%">

@@ -14,26 +14,26 @@ interface LeftCardProps {
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
     return (
-        <Grid item xs={12} sm={5}>
-            <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
+        <Grid item xs={12} sm={5} >
+            <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
-                    <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"} marginTop={2}>
+                    <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"} >
                         <Grid item marginLeft={2} marginTop={2}>
                             <Typography variant="h4" gutterBottom align="left">
                                 {city}
                             </Typography>
                         </Grid>
-                        <Grid item marginTop={2} marginRight={2}>
+                        <Grid item marginRight={2}>
                             <Typography variant="h6" gutterBottom align="right">
                                 {new Date().toLocaleDateString()}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} mt={5}>
+                        <Grid item xs={12}>
                             <Box
                                 component='img'
                                 sx={{
                                     display: 'block',
-                                    width: '75%',
+                                    width: '55%',
                                     margin: 'auto',
                                 }}
                                 src={icons.thunderstorm} />
@@ -49,19 +49,16 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
                         <Grid item xs={12} textAlign='center' >
                             <Grid container spacing={2}>
                                 {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item: string) => (
-                                    <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"centered"} alignItems={"center"}>
+                                    <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"center"} alignItems={"center"}>
                                         <Box
                                             component='img'
                                             src={icons[item]}
                                             sx={{
-                                                height: "50px",
-                                                width: "50px",
-                                                minWidth: "25px",
-                                                minHeight: "25px",
-                                                marginLeft: "20%",
+                                                maxWidth: 50,
+                                                // marginLeft: "25%",
                                             }}
                                         />
-                                        <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900} marginBottom={0} marginLeft="10%">
+                                        <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={500} marginBottom={0} marginLeft="10%">
                                             30%
                                         </Typography>
                                     </Grid>

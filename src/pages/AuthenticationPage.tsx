@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import CustomAlert from "../components/CustomAlert.tsx";
+import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
 
 interface LoginInfo {
   email: string;
@@ -30,17 +30,11 @@ interface RegisterInfo {
   confirmPasswordVisible: boolean;
 }
 
-interface AlertInfo {
-  message: string | null;
-  severity: "error" | "success" | "info" | "warning" | null;
-  handleClose: (() => void);
-}
-
 function AuthPage() {
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ email: "", password: "", passwordVisible: false });
   const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
 
-  const [alert, setAlert] = useState<AlertInfo>({
+  const [alert, setAlert] = useState<CustomAlertProps>({
     message: null,
     severity: null,
     handleClose: () => { }
