@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 
 const settings: object[] = [
   { name: 'Profile', path: '/profile' },
+  { name: 'Favourite', path: '/favourite' },
   { name: 'Logout', path: '/logout' },
 ];
 
@@ -55,7 +56,7 @@ function ResponsiveAppBar(): JSX.Element {
       if (optionsCity.length > 1) {
         /* render a component to select a city */
       } else if (optionsCity.length === 1) {
-        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, {state: {city: optionsCity[0].name, countryCode: optionsCity[0].countryCode}});
+        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode } });
       } else {
         navigate(`/`);
       }
@@ -197,11 +198,11 @@ function ResponsiveAppBar(): JSX.Element {
           }}>
 
             <Tooltip title="Open settings">
-              <IconButton onClick={isLogged ? handleOpenUserMenu : () => {navigate("/auth")}} sx={{ p: 0 }}>
+              <IconButton onClick={isLogged ? handleOpenUserMenu : () => { navigate("/auth") }} sx={{ p: 0 }}>
                 {
                   isLogged ?
                     (
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                     ) :
                     (
                       <div style={{
@@ -217,7 +218,7 @@ function ResponsiveAppBar(): JSX.Element {
                           height: '30px',
                           borderRadius: '50%',
                           margin: '7px 10px 7px'
-                        }}/>
+                        }} />
                         <span
                           style={{
                             color: 'white',
@@ -253,11 +254,11 @@ function ResponsiveAppBar(): JSX.Element {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting : any) => (
+                {settings.map((setting: any) => (
                   <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                     <Link
-                      onClick={() => {navigate(setting.path)}}
-                     >{setting.name}</Link> 
+                      onClick={() => { navigate(setting.path) }}
+                    >{setting.name}</Link>
                   </MenuItem>
                 ))}
               </Menu>)
