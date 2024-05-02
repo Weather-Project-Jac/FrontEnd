@@ -29,7 +29,7 @@ const Profile: React.FC = () => {
                 style={{ marginTop: 0, marginBottom: 30 }}
             >
                 <Grid item xs={12} sm={6} >
-                    <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%'}}>
+                    <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }}>
                         <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
                             <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
                                 <Grid item xs={12} style={{ paddingLeft: 0, paddingTop: 50, paddingBottom: 20 }}>

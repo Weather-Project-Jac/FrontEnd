@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    // const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
                     // console.log(response.data[currentDate.getHours()])
                     // TO FIX 
                     // const temperature = response.data.hourly.temperature_2m[currentDate.getHours()];
