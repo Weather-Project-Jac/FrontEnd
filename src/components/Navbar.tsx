@@ -20,15 +20,22 @@ import { UserStore } from '../store/store';
 import logo from '../assets/Logo.png';
 import user from '../assets/user.png';
 import { City, ICity } from 'country-state-city';
+import { useNavigate } from 'react-router-dom';
 
-const settings: string[] = ['Profile', 'Favourites', 'Logout'];
+const settings: object[] = [
+  { name: 'Profile', path: '/profile' },
+  { name: 'Logout', path: '/logout' },
+];
 
 function ResponsiveAppBar(): JSX.Element {
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
   const [city, setCity] = useState<string>('');
   const [optionsCity, setOptionsCity] = useState<ICity[]>([]);
+  const navigate = useNavigate();
 
   const CitiesInfo: ICity[] = City.getAllCities();
+
+  const isLogged: boolean = UserStore((state) => state.isLogged);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -39,17 +46,18 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(event.target.value);
+    setCity(event.target.value.split(',')[0]);
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(optionsCity)
     if (event.key === 'Enter') {
-      if (optionsCity.length > 0) {
+      if (optionsCity.length > 1) {
         /* render a component to select a city */
-      } else if (optionsCity.length === 0) {
-        /* render a component to show that the city is not found */
+      } else if (optionsCity.length === 1) {
+        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, {state: {city: optionsCity[0].name, countryCode: optionsCity[0].countryCode}});
       } else {
-        /* render a component to show that that city doesnt exist */
+        navigate(`/`);
       }
     }
   };
@@ -71,8 +79,6 @@ function ResponsiveAppBar(): JSX.Element {
       setOptionsCity([]);
     }
   }, [city, CitiesInfo]);
-
-  const isLogged: boolean = UserStore((state) => state.isLogged);
 
   return (
     <AppBar position="static" style={{ backgroundColor: '#132E32' }}>
@@ -97,6 +103,11 @@ function ResponsiveAppBar(): JSX.Element {
               display: { xs: 'flex', md: 'none' }
             }}
             noOptionsText=""
+            onInputChange={(event, value) => {
+              console.log(value)
+              const city = value.split(',')[0];
+              setCity(city);
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -109,7 +120,6 @@ function ResponsiveAppBar(): JSX.Element {
                   paddingRight: '10px',
                 }}
                 value={city}
-                onChange={onSearchChange}
                 InputProps={{
                   ...params.InputProps,
                   style: {
@@ -187,11 +197,11 @@ function ResponsiveAppBar(): JSX.Element {
           }}>
 
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={isLogged ? handleOpenUserMenu : () => {navigate("/auth")}} sx={{ p: 0 }}>
                 {
                   isLogged ?
                     (
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
                     ) :
                     (
                       <div style={{
@@ -201,13 +211,13 @@ function ResponsiveAppBar(): JSX.Element {
                         display: 'flex',
                         justifyContent: 'center',
                         boxShadow: '4px 4px rgba(0, 0, 0, 0.25)'
-                      }}>
+                      }} >
                         <Avatar alt="Remy Sharp" src={user} style={{
                           width: '30px',
                           height: '30px',
                           borderRadius: '50%',
                           margin: '7px 10px 7px'
-                        }} />
+                        }}/>
                         <span
                           style={{
                             color: 'white',
@@ -243,9 +253,11 @@ function ResponsiveAppBar(): JSX.Element {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {settings.map((setting : any) => (
+                  <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                    <Link
+                      onClick={() => {navigate(setting.path)}}
+                     >{setting.name}</Link> 
                   </MenuItem>
                 ))}
               </Menu>)
