@@ -14,6 +14,7 @@ dist-ssr
 
 /BackEnd
 ./BackEnd
+BackEnd
 
 # Editor directories and files
 .vscode/*
