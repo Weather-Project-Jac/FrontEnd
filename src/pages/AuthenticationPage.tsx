@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
-
+import axiosConf from "../axios/axiosConf.ts";
 interface LoginInfo {
   email: string;
   password: string;
@@ -47,10 +47,21 @@ function AuthPage() {
       setAlert({ message: "Please fill in all fields", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
     }
-    /* axios */
+    axiosConf.post('/user/login', {
+      mail: loginInfo.email,
+      psw: loginInfo.password
+    }).then((response) => {
+      console.log(response);
+      setAlert({ message: "User logged in", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+      loginInfo.email = "";
+      loginInfo.password = "";
+    }).catch((error) => {
+      console.log(error);
+      setAlert({ message: error?.response?.data || "Error logging in", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+    });
   };
 
-  const submitRegister = (e: React.FormEvent) => {
+  const submitRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(registerInfo);
     if (registerInfo.email === "" || registerInfo.username === "" || registerInfo.password === "" || registerInfo.confirmPassword === "") {
@@ -60,7 +71,26 @@ function AuthPage() {
       setAlert({ message: "Passwords do not match", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
     }
-    /* axios */
+    axiosConf.post('/user', {
+      mail: registerInfo.email,
+      usr: registerInfo.username,
+      psw: registerInfo.password,
+      dataR: new Date(),
+      profile: "https://placehold.co/600x400"
+    })
+    .then((response) => {
+      console.log(response);
+      setAlert({ message: "User registered", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+      
+      registerInfo.email = "";
+      registerInfo.username = "";
+      registerInfo.password = "";
+      registerInfo.confirmPassword = "";
+    })
+    .catch((error) => {
+      console.log(error);
+      setAlert({ message: error?.response?.data || "Error registering user", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+    });
   }
 
 
