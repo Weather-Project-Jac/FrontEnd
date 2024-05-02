@@ -12,7 +12,7 @@ export interface User {
   setUsername: () => void;
   setAvatar: () => void;
   addLastSearchedCities: (city: string) => void;
-/*   addFavouriteCities: (newCity: string) => void|boolean;
+  /*   addFavouriteCities: (newCity: string) => void|boolean;
   removeFavouriteCities: (removedCity: string) => void|boolean; */
 }
 
