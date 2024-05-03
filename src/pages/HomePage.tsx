@@ -7,7 +7,6 @@ import icons from '../assets/icons/index.ts';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
-    // const myStore = UserStore();
     // Dummy current date and position
     const currentDate = new Date();
     const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
@@ -78,16 +77,6 @@ const HomePage: React.FC = () => {
         console.error('Undefined');
         setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
     }
-
-    // useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         myStore.reset()
-    //     }, 1000 * 60 * 5);
-
-    //     return () => {
-    //         clearInterval(intervalId)
-    //     }
-    // }, [])
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
