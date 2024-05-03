@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   Container,
@@ -17,6 +17,8 @@ import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
 import axiosConf from "../axios/axiosConf.ts";
 import { UserStore } from '../store/store.ts';
 import { useNavigate } from 'react-router-dom';
+import userPng from '../assets/userx512.png';
+
 interface LoginInfo {
   email: string;
   password: string;
@@ -37,6 +39,12 @@ function AuthPage() {
   const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ email: "", password: "", passwordVisible: false });
   const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
+
+  useEffect(() => {
+    if (user.isLogged) {
+      navigate("/");
+    }
+  }, [user.isLogged, navigate]);
 
   const [alert, setAlert] = useState<CustomAlertProps>({
     message: null,
@@ -60,12 +68,10 @@ function AuthPage() {
       loginInfo.password = "";
       user.setEmail(response.data?.mail || "NOT IMPLEMENTED FROM BACKEND");
       user.setUsername(response.data?.usr || "NOT IMPLEMENTED FROM BACKEND");
-      user.setAvatar(response.data?.profile || "NOT IMPLEMENTED FROM BACKEND");
+      user.setAvatar(response.data?.profile || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
       user.setIsLogged();
-      if(user.isLogged){
-        navigate("/");
-      }
+      navigate("/");
     }).catch((error) => {
       console.log(error);
       setAlert({ message: error?.response?.data || "Error logging in", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
@@ -88,19 +94,19 @@ function AuthPage() {
       dataR: new Date(),
       profile: "https://placehold.co/600x400"
     })
-    .then((response) => {
-      console.log(response);
-      setAlert({ message: "User registered", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
-      
-      registerInfo.email = "";
-      registerInfo.username = "";
-      registerInfo.password = "";
-      registerInfo.confirmPassword = "";
-    })
-    .catch((error) => {
-      console.log(error);
-      setAlert({ message: error?.response?.data || "Error registering user", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
-    });
+      .then((response) => {
+        console.log(response);
+        setAlert({ message: "User registered", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+
+        registerInfo.email = "";
+        registerInfo.username = "";
+        registerInfo.password = "";
+        registerInfo.confirmPassword = "";
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlert({ message: error?.response?.data || "Error registering user", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+      });
   }
 
 
