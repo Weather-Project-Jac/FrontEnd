@@ -38,6 +38,7 @@ function ResponsiveAppBar(): JSX.Element {
 
   const isLogged: boolean = UserStore((state) => state.isLogged);
   const avatar: string = UserStore((state) => state.avatar);
+  const lastSearched = UserStore((state) => state.addLastSearchedCities);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -53,11 +54,14 @@ function ResponsiveAppBar(): JSX.Element {
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     console.log(optionsCity)
+
+
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
         /* render a component to select a city */
       } else if (optionsCity.length === 1) {
-        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode } });
+        lastSearched({ city: optionsCity[0].name, countryCode: optionsCity[0].countryCode });
+        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`);
       } else {
         navigate(`/`);
       }
@@ -96,7 +100,7 @@ function ResponsiveAppBar(): JSX.Element {
           </Link>
 
 
-          {/* Autocomplete is for mobile */}
+          {/* View for mobile */}
           <Autocomplete
             options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)} freeSolo
             disableClearable
@@ -148,7 +152,7 @@ function ResponsiveAppBar(): JSX.Element {
             )}
           />
 
-          {/* Box is for pc */}
+          {/* View for pc */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <Autocomplete
@@ -178,11 +182,14 @@ function ResponsiveAppBar(): JSX.Element {
                         color: 'white',
                         paddingRight: '0px',
                         boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
-                      }, endAdornment: (
+                      },
+                      onKeyDown: onEnterSearch,
+                      endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
                             style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                             aria-label="toggle password visibility"
+                            onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                           >
                             <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
                           </IconButton>

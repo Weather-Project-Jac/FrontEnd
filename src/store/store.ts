@@ -6,7 +6,7 @@ type State = {
   email: string;
   username: string;
   avatar: string;
-  lastSearchedCities: string[];
+  lastSearchedCities: object[];
   token: string;
   loginTime: number;
 };
@@ -16,7 +16,7 @@ type Actions = {
   setEmail: (email: string) => void;
   setUsername: (username: string) => void;
   setAvatar: (url: string) => void;
-  addLastSearchedCities: (city: string) => void;
+  addLastSearchedCities: (city: object) => void;
   setToken: (token: string) => void;
   reset: () => void;
 };
