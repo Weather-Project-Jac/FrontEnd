@@ -15,6 +15,8 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
 import axiosConf from "../axios/axiosConf.ts";
+import { UserStore } from '../store/store.ts';
+import { useNavigate } from 'react-router-dom';
 interface LoginInfo {
   email: string;
   password: string;
@@ -31,6 +33,8 @@ interface RegisterInfo {
 }
 
 function AuthPage() {
+  const user = UserStore();
+  const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({ email: "", password: "", passwordVisible: false });
   const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({ email: "", username: "", password: "", confirmPassword: "", passwordVisible: false, confirmPasswordVisible: false });
 
@@ -42,7 +46,6 @@ function AuthPage() {
 
   const submitLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(loginInfo);
     if (loginInfo.email === "" || loginInfo.password === "") {
       setAlert({ message: "Please fill in all fields", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
@@ -55,6 +58,14 @@ function AuthPage() {
       setAlert({ message: "User logged in", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       loginInfo.email = "";
       loginInfo.password = "";
+      user.setEmail(response.data?.mail || "NOT IMPLEMENTED FROM BACKEND");
+      user.setUsername(response.data?.usr || "NOT IMPLEMENTED FROM BACKEND");
+      user.setAvatar(response.data?.profile || "NOT IMPLEMENTED FROM BACKEND");
+      user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
+      user.setIsLogged();
+      if(user.isLogged){
+        navigate("/");
+      }
     }).catch((error) => {
       console.log(error);
       setAlert({ message: error?.response?.data || "Error logging in", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
@@ -63,7 +74,6 @@ function AuthPage() {
 
   const submitRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(registerInfo);
     if (registerInfo.email === "" || registerInfo.username === "" || registerInfo.password === "" || registerInfo.confirmPassword === "") {
       setAlert({ message: "Please fill in all fields", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) }); return;
     };

@@ -6,21 +6,21 @@ export interface User {
   username: string;
   avatar: string;
   lastSearchedCities: string[];
-  //favouriteCities: string[];
+  token: string;
   setIsLogged: () => void;
-  setEmail: () => void;
-  setUsername: () => void;
-  setAvatar: () => void;
+  setEmail: (email: string) => void;
+  setUsername: (username: string) => void;
+  setAvatar: (url: string) => void;
   addLastSearchedCities: (city: string) => void;
-/*   addFavouriteCities: (newCity: string) => void|boolean;
-  removeFavouriteCities: (removedCity: string) => void|boolean; */
+  setToken: (token: string) => void;
 }
 
 export const UserStore = create<User>((set) => ({
-  isLogged: false,
+  isLogged: true,
   email: "federico.balducci@gmail.com",
   username: "Federico",
   avatar: "https://placehold.co/600x400",
+  token: "NOT IMPLEMENTED",
   lastSearchedCities: [
     "Bergamo",
     "Milano",
@@ -29,18 +29,17 @@ export const UserStore = create<User>((set) => ({
     "Trento",
     "Parigi",
   ],
-  //favouriteCities: [],
   setIsLogged: () => {
     set((state) => ({ isLogged: !state.isLogged }));
   },
-  setEmail: () => {
-    set((state) => ({ email: state.email }));
+  setEmail: (email: string) => {
+    set((state) => ({ email: email }));
   },
-  setUsername: () => {
-    set((state) => ({ username: state.username }));
+  setUsername: (username: string) => {
+    set((state) => ({ username: username }));
   },
-  setAvatar: () => {
-    set((state) => ({ avatar: state.avatar }));
+  setAvatar: (url: string) => {
+    set((state) => ({ avatar: url }));
   },
   addLastSearchedCities: (city: string) => {
     set((state) => {
@@ -52,35 +51,7 @@ export const UserStore = create<User>((set) => ({
       return { lastSearchedCities: updatedCities };
     });
   },
-  /* addFavouriteCities: (newCity: string) => {
-    let status=false;
-    set((state) => {
-        const updatedFavouriteCities = [...state.favouriteCities];
-        console.log('Before',updatedFavouriteCities);
-        console.log(!updatedFavouriteCities.includes(newCity) && updatedFavouriteCities.length != 6)
-        if(!updatedFavouriteCities.includes(newCity) && updatedFavouriteCities.length != 6) {
-          updatedFavouriteCities.push(newCity);
-          console.log('After',updatedFavouriteCities);
-          status=true;
-        }
-        return { favouriteCities: updatedFavouriteCities };
-    });
-    return status
+  setToken: (token: string) => {
+    set((state) => ({ token: token }));
   },
-  removeFavouriteCities: (removedCity: string) => {
-    let status=false;
-    set((state) => {
-        const updatedFavouriteCities = [...state.favouriteCities];
-        console.log(`Removing ${removedCity} from `,updatedFavouriteCities);
-        const removedIndex = updatedFavouriteCities.indexOf(removedCity);
-        if (removedIndex !== -1) {
-          updatedFavouriteCities.splice(removedIndex, 1);
-          console.log("Removed", updatedFavouriteCities);
-          status=true;
-        }
-
-        return { favouriteCities: updatedFavouriteCities };
-    });
-    return status
-  } */
 }));
