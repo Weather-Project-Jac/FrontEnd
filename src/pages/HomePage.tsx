@@ -1,15 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme } from '@mui/material';
+import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
-import axios from "axios"
+import axios from "../axios/axiosConf.ts";
 import icons from '../assets/icons/index.ts';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
     const currentDate = new Date();
-    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string } | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
+    const [currentTemperature, setCurrentTemperature] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -38,27 +39,43 @@ const HomePage: React.FC = () => {
     }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city])
 
 
+
+    useEffect(() => {
+        async function fetchTemperature() {
+            if (currentPosition) {
+                try {
+                    const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const temperature = response.data[currentDate.getHours()].data.temperature80m;
+                    setCurrentTemperature(temperature);
+                } catch (error) {
+                    console.error('There was a problem with the request:', error);
+                    setCurrentTemperature(null);
+                }
+            }
+        }
+        fetchTemperature();
+    }, [currentPosition?.city && currentPosition.countrycode && currentDate.getHours()]);
+
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
         const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
         try {
             const response = await axios.get(GEOCODING);
-            console.log(response)
             const cityName = response.data?.address?.city || response.data?.address?.town || response.data?.address?.county;
-            setCurrentPosition({ latitude, longitude, city: cityName });
+            const getCountryCode = response.data?.address?.country_code;
+            setCurrentPosition({ latitude, longitude, city: cityName, countrycode: getCountryCode });
         } catch (error) {
             console.error('There was a problem with the request:', error);
-            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined" });
+            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
         }
     }
 
     function error() {
         console.error('Undefined');
-        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined" });
+        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
     }
 
     const theme = useTheme();
@@ -83,8 +100,8 @@ const HomePage: React.FC = () => {
                         <Typography style={{
                             fontSize: 30,
                             fontWeight: 600
-                        }}>24°C
-                            {/* TODO get current temp */}
+                        }}>
+                            {currentTemperature ? currentTemperature + "°C" : "Getting Data..."}
                         </Typography>
                     </Grid>
                     <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
@@ -92,7 +109,7 @@ const HomePage: React.FC = () => {
                         <Typography style={{
                             fontSize: 30,
                             fontWeight: 600
-                        }}>{currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
+                        }}>{currentPosition && currentTemperature && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
                     </Grid>
                 </Grid>
                 {lastSearchedCities.length > 0 && (
