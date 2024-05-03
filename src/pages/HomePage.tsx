@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert } from '@mui/material';
+import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
 import axios from "../axios/axiosConf.ts";
@@ -7,6 +7,7 @@ import icons from '../assets/icons/index.ts';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
+    // const myStore = UserStore();
     // Dummy current date and position
     const currentDate = new Date();
     const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
@@ -44,13 +45,9 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    console.log(currentPosition)
                     const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
-                    
-                    // console.log(response.data[currentDate.getHours()])
-                    // TO FIX 
-                    // const temperature = response.data.hourly.temperature_2m[currentDate.getHours()];
-                    // setCurrentTemperature(temperature);
+                    const temperature = response.data[currentDate.getHours()].data.temperature80m;
+                    setCurrentTemperature(temperature);
                 } catch (error) {
                     console.error('There was a problem with the request:', error);
                     setCurrentTemperature(null);
@@ -63,7 +60,6 @@ const HomePage: React.FC = () => {
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
         const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
@@ -82,6 +78,16 @@ const HomePage: React.FC = () => {
         console.error('Undefined');
         setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
     }
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         myStore.reset()
+    //     }, 1000 * 60 * 5);
+
+    //     return () => {
+    //         clearInterval(intervalId)
+    //     }
+    // }, [])
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));

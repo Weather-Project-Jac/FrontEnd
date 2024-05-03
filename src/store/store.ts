@@ -1,6 +1,67 @@
 import { create } from "zustand";
 import userPng from '../assets/userx512.png';
+import { persist } from 'zustand/middleware'
 
+
+// type State = {
+//   isLogged: boolean;
+//   email: string;
+//   username: string;
+//   avatar: string;
+//   lastSearchedCities: string[];
+// }
+
+// type Actions = {
+//   setIsLogged: () => void;
+//   setEmail: () => void;
+//   setUsername: () => void;
+//   setAvatar: () => void;
+//   addLastSearchedCities: (city: string) => void;
+//   reset: () => void;
+// }
+
+// const initialState: State = {
+//   isLogged: false,
+//   email: "",
+//   username: "",
+//   avatar: userPng,
+//   lastSearchedCities: [],
+// }
+
+// export const UserStore = create(
+//   persist<State & Actions>(
+//     (set, get) => ({
+//       ...initialState,
+//       setIsLogged: () => {
+//         set((state) => ({ isLogged: !state.isLogged }));
+//       },
+//       setEmail: () => {
+//         set((state) => ({ email: state.email }));
+//       },
+//       setUsername: () => {
+//         set((state) => ({ username: state.username }));
+//       },
+//       setAvatar: () => {
+//         set((state) => ({ avatar: state.avatar }));
+//       },
+//       addLastSearchedCities: (city: string) => {
+//         set((state) => {
+//           const updatedCities = [...state.lastSearchedCities];
+//           if (updatedCities.length == 6) {
+//             updatedCities.shift();
+//           }
+//           updatedCities.push(city);
+//           return { lastSearchedCities: updatedCities };
+//         });
+//       },
+//       reset: () => {
+//         UserStore.persist.clearStorage();
+//         set(initialState);
+//       }
+//     }), {
+//     name: 'user-storage', // Name for the persisted store
+//   }) 
+// )
 
 export interface User {
   isLogged: boolean;
@@ -18,71 +79,39 @@ export interface User {
   removeFavouriteCities: (removedCity: string) => void|boolean; */
 }
 
-export const UserStore = create<User>((set) => ({
-  isLogged: true,
-  email: "federico.balducci@gmail.com",
-  username: "Federico",
-  avatar: userPng,
-  lastSearchedCities: [
-    "Bergamo",
-    "Milano",
-    "Roma",
-    "Napoli",
-    "Trento",
-    "Parigi",
-  ],
-  //favouriteCities: [],
-  setIsLogged: () => {
-    set((state) => ({ isLogged: !state.isLogged }));
-  },
-  setEmail: () => {
-    set((state) => ({ email: state.email }));
-  },
-  setUsername: () => {
-    set((state) => ({ username: state.username }));
-  },
-  setAvatar: () => {
-    set((state) => ({ avatar: state.avatar }));
-  },
-  addLastSearchedCities: (city: string) => {
-    set((state) => {
-      const updatedCities = [...state.lastSearchedCities];
-      if (updatedCities.length == 6) {
-        updatedCities.shift();
-      }
-      updatedCities.push(city);
-      return { lastSearchedCities: updatedCities };
-    });
-  },
-  /* addFavouriteCities: (newCity: string) => {
-    let status=false;
-    set((state) => {
-        const updatedFavouriteCities = [...state.favouriteCities];
-        console.log('Before',updatedFavouriteCities);
-        console.log(!updatedFavouriteCities.includes(newCity) && updatedFavouriteCities.length != 6)
-        if(!updatedFavouriteCities.includes(newCity) && updatedFavouriteCities.length != 6) {
-          updatedFavouriteCities.push(newCity);
-          console.log('After',updatedFavouriteCities);
-          status=true;
-        }
-        return { favouriteCities: updatedFavouriteCities };
-    });
-    return status
-  },
-  removeFavouriteCities: (removedCity: string) => {
-    let status=false;
-    set((state) => {
-        const updatedFavouriteCities = [...state.favouriteCities];
-        console.log(`Removing ${removedCity} from `,updatedFavouriteCities);
-        const removedIndex = updatedFavouriteCities.indexOf(removedCity);
-        if (removedIndex !== -1) {
-          updatedFavouriteCities.splice(removedIndex, 1);
-          console.log("Removed", updatedFavouriteCities);
-          status=true;
-        }
-
-        return { favouriteCities: updatedFavouriteCities };
-    });
-    return status
-  } */
-}));
+export const UserStore = create(
+  persist<User>(
+    (set) => ({
+      isLogged: false,
+      email: "",
+      username: "",
+      avatar: userPng,
+      lastSearchedCities: [],
+      setIsLogged: () => {
+        set((state) => ({ isLogged: !state.isLogged }));
+      },
+      setEmail: () => {
+        set((state) => ({ email: state.email }));
+      },
+      setUsername: () => {
+        set((state) => ({ username: state.username }));
+      },
+      setAvatar: () => {
+        set((state) => ({ avatar: state.avatar }));
+      },
+      addLastSearchedCities: (city: string) => {
+        set((state) => {
+          const updatedCities = [...state.lastSearchedCities];
+          if (updatedCities.length == 6) {
+            updatedCities.shift();
+          }
+          updatedCities.push(city);
+          return { lastSearchedCities: updatedCities };
+        });
+      },
+    }),
+    {
+      name: 'user-storage', // Name for the persisted store
+    }
+  )
+)
