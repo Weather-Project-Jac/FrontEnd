@@ -1,5 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import CryptoJS from "crypto-js";
+
+const secretKey = "your_secret_key"; // Secret key for encryption
+
+const encryptData = (data : JSON) => {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
+};
+
+const decryptData = (encryptedData : object) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+  return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+};
+
 
 type State = {
   isLogged: boolean;
@@ -65,6 +78,27 @@ export const UserStore = create(
       },
     }), {
     name: 'user-storage', // Name for the persisted store
+    storage: {
+      getItem: (name) => {
+        const encryptedData = localStorage.getItem(name);
+        if (!encryptedData) return null;
+        try {
+          return decryptData(encryptedData);
+        } catch (error) {
+          console.error("Error decrypting data:", error);
+          return null;
+        }
+      },
+      setItem: (name, value) => {
+        try {
+          const encryptedData = encryptData(value);
+          localStorage.setItem(name, encryptedData);
+        } catch (error) {
+          console.error("Error encrypting data:", error);
+        }
+      },
+      removeItem: localStorage.removeItem.bind(localStorage),
+    },
     onRehydrateStorage: (state) => {
       console.log('hydration starts');
       // Check if user has logged in before
