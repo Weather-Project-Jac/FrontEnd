@@ -74,7 +74,7 @@ function ResponsiveAppBar(): JSX.Element {
         ).slice(0, 5);
         setOptionsCity(citiSearched);
       } else {
-        setOptionsCity([foundExact]);
+        setOptionsCity(foundExact);
       }
     } else {
       setOptionsCity([]);
