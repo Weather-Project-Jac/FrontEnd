@@ -21,10 +21,8 @@ function WeatherCityPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
-
   const getCity = location.state?.city || navigate("/");
   const getCountryCode = location.state?.countryCode || navigate("/");
-
   const [city, setCity] = React.useState(getCity);
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);

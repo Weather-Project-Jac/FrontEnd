@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
-import axiosConfig from "../axios/axiosConf.ts";
-import axios from "axios"
+import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il meteo
+import axios from "axios"; //chiamate normali (geoposition)
 import icons from '../assets/icons/index.ts';
+import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
 
 const HomePage: React.FC = () => {
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
     const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
     const [currentTemperature, setCurrentTemperature] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleResize = () => {
@@ -46,7 +48,8 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axiosConfig.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
                 } catch (error) {
@@ -79,6 +82,10 @@ const HomePage: React.FC = () => {
         console.error('Undefined');
         setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
     }
+
+    const handleCardClick = (city: { city: string, countryCode: string }) => {
+        navigate(`/weather/${city.city}/${city.countryCode}`);
+    };
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -142,11 +149,12 @@ const HomePage: React.FC = () => {
                         <Grid container spacing={2}>
                             {lastSearchedCities.map((city, index) => (
                                 <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
-                                    {/* <Link to={`/weather/${city}`} style={{ textDecoration: 'none' }}> */}
-                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}>
+                                    {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}
+                                        onClick={() => handleCardClick(city)}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                                             <Typography variant="h5" >
-                                                {city}
+                                                {(city as { city: string }).city} {/* City Name */}
                                                 <Typography variant="body1" sx={{ fontSize: 30 }}>
                                                     23°C {/* Temperatura */}
                                                 </Typography>

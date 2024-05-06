@@ -42,6 +42,7 @@ function ResponsiveAppBar(): JSX.Element {
 
   const isLogged: boolean = UserStore((state) => state.isLogged);
   const avatar: string = UserStore((state) => state.avatar);
+  const lastSearched = UserStore((state) => state.addLastSearchedCities);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -60,6 +61,7 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
@@ -114,7 +116,7 @@ function ResponsiveAppBar(): JSX.Element {
           </Link>
 
 
-          {/* Autocomplete is for mobile */}
+          {/* View for mobile */}
           <Autocomplete
             options={optionsCity.map((option: ICity) => {
               const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name
@@ -174,7 +176,7 @@ function ResponsiveAppBar(): JSX.Element {
             )}
           />
 
-          {/* Box is for pc */}
+          {/* View for pc */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <Autocomplete
@@ -224,6 +226,7 @@ function ResponsiveAppBar(): JSX.Element {
                             onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                             style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                             aria-label="toggle password visibility"
+                            onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                           >
                             <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
                           </IconButton>
