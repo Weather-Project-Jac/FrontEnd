@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
-import axios from "../axios/axiosConf.ts";
+import axiosConfig from "../axios/axiosConf.ts";
+import axios from "axios"
 import icons from '../assets/icons/index.ts';
 
 const HomePage: React.FC = () => {
@@ -44,7 +45,7 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const response = await axiosConfig.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
                 } catch (error) {
@@ -109,7 +110,7 @@ const HomePage: React.FC = () => {
                         <Typography style={{
                             fontSize: 30,
                             fontWeight: 600
-                        }}>{currentPosition && currentTemperature && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
+                        }}>{currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
                     </Grid>
                 </Grid>
                 {lastSearchedCities.length > 0 && (
