@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
 //import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
-import axios from "../axios/axiosConf.ts";
+import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il meteo
+import axios from "axios"; //chiamate normali (geoposition)
 import icons from '../assets/icons/index.ts';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,7 +47,7 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axios.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
                 } catch (error) {
@@ -115,7 +116,7 @@ const HomePage: React.FC = () => {
                         <Typography style={{
                             fontSize: 30,
                             fontWeight: 600
-                        }}>{currentPosition && currentTemperature && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
+                        }}>{currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
                     </Grid>
                 </Grid>
                 {lastSearchedCities.length > 0 && (
