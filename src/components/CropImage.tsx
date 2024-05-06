@@ -19,17 +19,7 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any, width: number, he
     width,
     height
   );
-
-  return new Promise<string>((resolve, reject) => {
-    canvas.toBlob(blob => {
-      if (!blob) {
-        reject(new Error('Canvas is empty'));
-        return;
-      }
-      console.log(blob);
-      resolve(URL.createObjectURL(blob));
-    }, 'image/jpeg');
-  });
+  return canvas.toDataURL('image/jpeg');
 };
 
 export default getCroppedImg;
