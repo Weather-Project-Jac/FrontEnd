@@ -37,7 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
 
           <Route path="/" element={<><Navbar /><HomePage /></>} />
-          <Route path="/weather/:city/:countryCode" element={<><Navbar /><WeatherCityPage /></>} />
+          <Route path="/weather/:city/:stateCode/:countryCode" element={<><Navbar /><WeatherCityPage /></>} />
           <Route path="/auth" element={<><Navbar /><AuthPage /></>} />
           <Route path="/profile" element={<><Navbar /><Profile /></>} />
           <Route path="/favourite" element={<><Navbar /><Favourite /></>} />
