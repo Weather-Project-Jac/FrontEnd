@@ -52,7 +52,6 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(optionsCity)
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
         /* render a component to select a city */
@@ -66,10 +65,10 @@ function ResponsiveAppBar(): JSX.Element {
 
   useEffect(() => {
     if (city.trim().length > 0) {
-      const foundExact = CitiesInfo.find(
+      const foundExact = CitiesInfo.filter(
         (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.trim().toLowerCase()
       );
-      if (!foundExact) {
+      if (foundExact.length === 0) {
         const citiSearched: ICity[] = CitiesInfo.filter((cityInfo: ICity) =>
           cityInfo.name.toLowerCase().startsWith(city.trim().toLowerCase())
         ).slice(0, 5);
