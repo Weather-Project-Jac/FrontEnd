@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import  secureLocalStorage  from  "react-secure-storage";
+import secureLocalStorage from "react-secure-storage";
 
 type State = {
   isLogged: boolean;
   email: string;
   username: string;
   avatar: string;
-  lastSearchedCities: string[];
+  lastSearchedCities: object[];
   token: string;
   loginTime: number;
 };
@@ -17,7 +17,7 @@ type Actions = {
   setEmail: (email: string) => void;
   setUsername: (username: string) => void;
   setAvatar: (url: string) => void;
-  addLastSearchedCities: (city: string) => void;
+  addLastSearchedCities: (city: object) => void;
   setToken: (token: string) => void;
   reset: () => void;
 };
@@ -37,7 +37,11 @@ export const UserStore = create(
     (set) => ({
       ...initialState,
       setIsLogged: () => {
-        set((state) => ({ ...state, isLogged: !state.isLogged, loginTime: Date.now() }));
+        set((state) => ({
+          ...state,
+          isLogged: !state.isLogged,
+          loginTime: Date.now(),
+        }));
       },
       setEmail: (email) => {
         set((state) => ({ ...state, email }));
@@ -64,51 +68,53 @@ export const UserStore = create(
       reset: () => {
         set(initialState);
       },
-    }), {
-    name: 'user-storage', // Name for the persisted store
-    storage: {
-      getItem: (name) => {
-        try {
-          return secureLocalStorage.getItem(name) || null;
-        } catch (error) {
-          console.error("Error decrypting data:", error);
-        }
+    }),
+    {
+      name: "user-storage", // Name for the persisted store
+      storage: {
+        getItem: (name) => {
+          try {
+            return secureLocalStorage.getItem(name) || null;
+          } catch (error) {
+            console.error("Error decrypting data:", error);
+          }
+        },
+        setItem: (name, value) => {
+          try {
+            secureLocalStorage.setItem(name, value);
+          } catch (error) {
+            console.error("Error encrypting data:", error);
+          }
+        },
+        removeItem: (name) => {
+          try {
+            secureLocalStorage.removeItem(name);
+          } catch (error) {
+            console.error("Error removing data:", error);
+          }
+        },
       },
-      setItem: (name, value) => {
-        try {
-          secureLocalStorage.setItem(name, value);
-        } catch (error) {
-          console.error("Error encrypting data:", error);
+      onRehydrateStorage: (state) => {
+        console.log("hydration starts");
+        // Check if user has logged in before
+        if (state && state.loginTime) {
+          // Calculate the time difference since login
+          const timeDifference = Date.now() - state.loginTime;
+          const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+          // If 3 days have passed since login, reset the store
+          if (timeDifference > threeDaysInMillis) {
+            state.reset(); // Reset the store
+          }
         }
-      },
-      removeItem: (name) => {
-        try {
-          secureLocalStorage.removeItem(name);
-        } catch (error) {
-          console.error("Error removing data:", error);
-        }
-      }
-    },
-    onRehydrateStorage: (state) => {
-      console.log('hydration starts');
-      // Check if user has logged in before
-      if (state && state.loginTime) {
-        // Calculate the time difference since login
-        const timeDifference = Date.now() - state.loginTime;
-        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
-        // If 3 days have passed since login, reset the store
-        if (timeDifference > threeDaysInMillis) {
-          state.reset(); // Reset the store
-        }
-      }
 
-      return (state, error) => {
-        if (error) {
-          console.log('an error happened during hydration', error);
-        } else {
-          console.log('hydration finished');
-        }
-      };
+        return (state, error) => {
+          if (error) {
+            console.log("an error happened during hydration", error);
+          } else {
+            console.log("hydration finished");
+          }
+        };
+      },
     }
-  })
+  )
 );
