@@ -30,7 +30,11 @@ const settings: object[] = [
 
 function ResponsiveAppBar(): JSX.Element {
   const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
-  const [city, setCity] = useState<string>('');
+  const [city, setCity] = useState({
+    name: '',
+    state: '',
+    countryCode: '',
+  });
   const [optionsCity, setOptionsCity] = useState<ICity[]>([]);
   const navigate = useNavigate();
 
@@ -48,13 +52,26 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(event.target.value.split(',')[0]);
+     setCity({
+      name: event.target.value.split(',')[0],
+      state: event.target.value.split(',')[1],
+      countryCode: event.target.value.split(',')[2]
+     })
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
-        /* render a component to select a city */
+        const state = State.getStatesOfCountry(city.countryCode.trim())
+        .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+        const foundExact = optionsCity.filter(
+          (cityInfo: ICity) => {
+            if(cityInfo.name.toLowerCase() === city.name.trim().toLowerCase() && cityInfo.countryCode === city.countryCode.trim() && state?.name.toLowerCase() === city.state.trim().toLowerCase()){
+              return true;
+            }
+            return false;
+         });
+         navigate(`/weather/${foundExact[0].name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode , stateCode: foundExact[0].stateCode} });
       } else if (optionsCity.length === 1) {
         navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode } });
       } else {
@@ -64,13 +81,15 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   useEffect(() => {
-    if (city.trim().length > 0) {
+    if (city.name.trim().length > 0) {
+      console.log(city.name)
       const foundExact = CitiesInfo.filter(
-        (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.trim().toLowerCase()
+        (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.name.trim().toLowerCase()
       );
+      console.log(foundExact)
       if (foundExact.length === 0) {
         const citiSearched: ICity[] = CitiesInfo.filter((cityInfo: ICity) =>
-          cityInfo.name.toLowerCase().startsWith(city.trim().toLowerCase())
+          cityInfo.name.toLowerCase().startsWith(city.name.trim().toLowerCase())
         ).slice(0, 5);
         setOptionsCity(citiSearched);
       } else {
@@ -99,7 +118,7 @@ function ResponsiveAppBar(): JSX.Element {
           <Autocomplete
             options={optionsCity.map((option: ICity) => {
               const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name
-              return option.name + " " + state + ", " + option.countryCode
+              return option.name + ", " + state + ", " + option.countryCode
             })
             }
             freeSolo
@@ -110,8 +129,12 @@ function ResponsiveAppBar(): JSX.Element {
             }}
             noOptionsText=""
             onInputChange={(event, value) => {
-              const city = value.split(',')[0];
-              setCity(city);
+              const infocity = value.split(',');
+              setCity({
+                name: infocity[0],
+                state: infocity[1],
+                countryCode: infocity[2],
+              });
             }}
             renderInput={(params) => (
               <TextField
@@ -157,7 +180,7 @@ function ResponsiveAppBar(): JSX.Element {
               <Autocomplete
                 options={optionsCity.map((option: ICity) => {
                   const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name
-                  return option.name + " " + state + ", " + option.countryCode
+                  return option.name + ", " + state + ", " + option.countryCode
                 })
                 }
                 freeSolo
@@ -167,8 +190,12 @@ function ResponsiveAppBar(): JSX.Element {
                 }}
                 noOptionsText=""
                 onInputChange={(event, value) => {
-                  const city = value.split(',')[0];
-                  setCity(city);
+                  const city = value.split(',');
+                  setCity({
+                    name: city[0],
+                    state: city[1],
+                    countryCode: city[2],
+                  });
                 }}
                 renderInput={(params) => (
                   <TextField

@@ -21,19 +21,21 @@ function WeatherCityPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
   const getCity = location.state?.city || navigate("/");
   const getCountryCode = location.state?.countryCode || navigate("/");
+
   const [city, setCity] = React.useState(getCity);
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
+  React.useEffect(() => { // Fetch weather data when city changes
     async function fetchWeather() {
       try {
         const response = await axios.get(`/weather/${city}/${getCountryCode}`);
         console.log(response);
-        /* setWeather(response.data);
-        setLoading(false); */
+        setWeather(response.data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
         //navigate("/");
@@ -41,6 +43,15 @@ function WeatherCityPage() {
     }
     fetchWeather();
   }, [city]);
+
+  React.useEffect(() => {
+    console.log(location.state)
+    if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
+      setCity(location.state?.city); // Update city state when location changes
+      console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
+    }
+  }, [location.state?.city, location.state?.countryCode, location.state?.stateCode]);
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
