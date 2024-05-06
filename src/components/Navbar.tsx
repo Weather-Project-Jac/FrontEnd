@@ -99,10 +99,10 @@ function ResponsiveAppBar(): JSX.Element {
           {/* Autocomplete is for mobile */}
           <Autocomplete
             options={optionsCity.map((option: ICity) => {
-              const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name 
+              const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name
               return option.name + " " + state + ", " + option.countryCode
             })
-            } 
+            }
             freeSolo
             disableClearable
             fullWidth
@@ -111,7 +111,6 @@ function ResponsiveAppBar(): JSX.Element {
             }}
             noOptionsText=""
             onInputChange={(event, value) => {
-              console.log(value)
               const city = value.split(',')[0];
               setCity(city);
             }}
@@ -158,16 +157,20 @@ function ResponsiveAppBar(): JSX.Element {
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <Autocomplete
                 options={optionsCity.map((option: ICity) => {
-                  const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name 
+                  const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name
                   return option.name + " " + state + ", " + option.countryCode
                 })
-                } 
+                }
                 freeSolo
                 disableClearable
                 style={{
                   width: "80%",
                 }}
                 noOptionsText=""
+                onInputChange={(event, value) => {
+                  const city = value.split(',')[0];
+                  setCity(city);
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -187,9 +190,12 @@ function ResponsiveAppBar(): JSX.Element {
                         color: 'white',
                         paddingRight: '0px',
                         boxShadow: '4px 4px rgba(0, 0, 0, 0.25)',
-                      }, endAdornment: (
+                      },
+                      onKeyDown: onEnterSearch,
+                      endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
+                            onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                             style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                             aria-label="toggle password visibility"
                           >
