@@ -59,13 +59,14 @@ const Profile: React.FC = () => {
                                     <Divider variant='middle' sx={{ backgroundColor: 'white' }} />
                                 </Grid>
                                 <Grid container justifyContent={'center'} paddingTop={5} paddingBottom={2}>
-                                    <Button style={{ fontSize: 25, color: 'white', backgroundColor: '#176087', padding: '2% 3%' }}>CHANGE PASSWORD</Button>
+                                    <Button style={{ fontSize: 25, color: 'white', backgroundColor: '#176087', padding: '2% 3%' }} onClick={() => setShowChangePassword(true)}>CHANGE PASSWORD</Button>
                                 </Grid>
                             </Grid>
                         </CardContent>
                     </Card>
                 </Grid>
             </Grid>
+            <ChangePassword open={showChangePassword} onClose={() => setShowChangePassword(false)} />
         </Container >
     );
 };

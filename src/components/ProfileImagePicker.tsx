@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './CropImage.tsx';
 import { UserStore } from '../store/store';
+
 interface AvatarPickerProps {
   setSelectedAvatar: (avatar: string) => void;
   selectedAvatar: string;
@@ -56,9 +57,8 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
   const handleSaveAvatar = async () => {
     try {
       const croppedAvatar = await getCroppedImg(croppedImage!, croppedAreaPixels, 220, 220);
-      console.log('donee', { croppedImage })
       setSelectedAvatar(croppedAvatar);
-      UserStore.setState({ avatar: croppedAvatar });
+      UserStore.setState({ avatar: croppedAvatar || "test" });
       setShowModal(false);
     } catch (error) {
       console.error('Error cropping image:', error);
@@ -91,9 +91,8 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
         </div>
       </div>
       <Modal open={showModal} onClose={() => setShowModal(false)} style={{ paddingTop: 50 }}>
-        <div style={{ paddingTop: 20, maxWidth: '90%', margin: '0 auto' }}>
-          <h2 style={{ color: 'white', paddingLeft: 50 }}>Crop Image</h2>
-          <div style={{ position: 'relative', width: '100%', height: 700 }}>
+        <div style={{ maxWidth: '70%', margin: '0 auto' }}>
+          <div style={{ position: 'relative', width: '100%', height: "75vh" }}>
             <Cropper
               image={croppedImage!}
               crop={crop}

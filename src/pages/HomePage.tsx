@@ -6,6 +6,7 @@ import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il met
 import axios from "axios"; //chiamate normali (geoposition)
 import icons from '../assets/icons/index.ts';
 import { useNavigate } from 'react-router-dom';
+import { ThreeDots } from 'react-loader-spinner';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
@@ -48,6 +49,7 @@ const HomePage: React.FC = () => {
             if (currentPosition) {
                 try {
                     const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
                 } catch (error) {
@@ -108,7 +110,16 @@ const HomePage: React.FC = () => {
                             fontSize: 30,
                             fontWeight: 600
                         }}>
-                            {currentTemperature ? currentTemperature + "°C" : "Getting Data..."}
+                            {currentTemperature ? currentTemperature + "°C" :
+                                <ThreeDots
+
+                                    visible={true}
+                                    height="45"
+                                    color="#176087"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{ display: "flex", justifyContent: "center" }}
+                                />
+                            }
                         </Typography>
                     </Grid>
                     <Grid item xs={isSmallScreen ? 12 : 4} style={{ textAlign: "center", paddingLeft: 0 }}>
@@ -116,7 +127,18 @@ const HomePage: React.FC = () => {
                         <Typography style={{
                             fontSize: 30,
                             fontWeight: 600
-                        }}>{currentPosition && currentPosition.city !== null ? currentPosition.city : "Getting Data..."}</Typography>
+                        }}>
+                            {currentPosition && currentPosition.city !== null ? currentPosition.city :
+                                <ThreeDots
+
+                                    visible={true}
+                                    height="45"
+                                    color="#176087"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{ display: "flex", justifyContent: "center" }}
+                                />
+                            }
+                        </Typography>
                     </Grid>
                 </Grid>
                 {lastSearchedCities.length > 0 && (
