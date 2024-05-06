@@ -19,7 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { UserStore } from '../store/store';
 import logo from '../assets/Logo.png';
 import user from '../assets/user.png';
-import { City, ICity } from 'country-state-city';
+import { City, ICity, State, IState } from 'country-state-city';
 import { useNavigate } from 'react-router-dom';
 
 const settings: object[] = [
@@ -98,7 +98,12 @@ function ResponsiveAppBar(): JSX.Element {
 
           {/* Autocomplete is for mobile */}
           <Autocomplete
-            options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)} freeSolo
+            options={optionsCity.map((option: ICity) => {
+              const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name 
+              return option.name + " " + state + ", " + option.countryCode
+            })
+            } 
+            freeSolo
             disableClearable
             fullWidth
             sx={{
@@ -152,7 +157,11 @@ function ResponsiveAppBar(): JSX.Element {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <Autocomplete
-                options={optionsCity.map((option: ICity) => option.name + ", " + option.countryCode)}
+                options={optionsCity.map((option: ICity) => {
+                  const state = State.getStateByCodeAndCountry(option.stateCode, option.countryCode)?.name 
+                  return option.name + " " + state + ", " + option.countryCode
+                })
+                } 
                 freeSolo
                 disableClearable
                 style={{
