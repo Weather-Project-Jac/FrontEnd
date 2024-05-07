@@ -7,13 +7,13 @@ const LogoutPage: React.FC = () => {
         logout();
 
         // Redirect to login page after logout
-        window.location.href = '/login';
+        window.location.href = '/auth';
     }, []);
 
     const exit = UserStore((state) => state.reset);
 
     const logout = () => {
-        exit()
+        exit();
     };
 
     return (
