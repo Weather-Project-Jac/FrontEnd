@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import secureLocalStorage from "react-secure-storage";
+import userImg from "../assets/userx512.png";
 
 type State = {
   isLogged: boolean;
@@ -26,7 +27,7 @@ const initialState: State = {
   isLogged: false,
   email: "",
   username: "",
-  avatar: "",
+  avatar: userImg,
   lastSearchedCities: [],
   token: "",
   loginTime: 0,

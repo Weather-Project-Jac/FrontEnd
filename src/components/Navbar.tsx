@@ -53,11 +53,11 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-     setCity({
+    setCity({
       name: event.target.value.split(',')[0],
       state: event.target.value.split(',')[1],
       countryCode: event.target.value.split(',')[2]
-     })
+    })
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -65,15 +65,15 @@ function ResponsiveAppBar(): JSX.Element {
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
-        .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+          .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
         const foundExact = optionsCity.filter(
           (cityInfo: ICity) => {
-            if(cityInfo.name.toLowerCase() === city.name.trim().toLowerCase() && cityInfo.countryCode === city.countryCode.trim() && state?.name.toLowerCase() === city.state.trim().toLowerCase()){
+            if (cityInfo.name.toLowerCase() === city.name.trim().toLowerCase() && cityInfo.countryCode === city.countryCode.trim() && state?.name.toLowerCase() === city.state.trim().toLowerCase()) {
               return true;
             }
             return false;
-         });
-         navigate(`/weather/${foundExact[0].name}/${foundExact[0].stateCode}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode , stateCode: foundExact[0].stateCode} });
+          });
+        navigate(`/weather/${foundExact[0].name}/${foundExact[0].stateCode}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: foundExact[0].stateCode } });
       } else if (optionsCity.length === 1) {
         navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].stateCode}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: optionsCity[0].stateCode } });
       } else {
@@ -226,7 +226,6 @@ function ResponsiveAppBar(): JSX.Element {
                             onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                             style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                             aria-label="toggle password visibility"
-                            onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                           >
                             <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
                           </IconButton>
