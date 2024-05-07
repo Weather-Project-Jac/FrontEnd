@@ -307,13 +307,13 @@ function ResponsiveAppBar(): JSX.Element {
 
               >
                 {settings.map((setting: any) => (
-                  <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting.name}                       onClick={() => { navigate(setting.path) }}
+                  >
                     <Link
                       style={{
                         textDecoration: "none",
                         color: "#132E32",
                       }}
-                      onClick={() => { navigate(setting.path) }}
                     >{setting.name}</Link>
                   </MenuItem>
                 ))}

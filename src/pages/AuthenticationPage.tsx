@@ -66,11 +66,13 @@ function AuthPage() {
       setAlert({ message: "User logged in", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       loginInfo.email = "";
       loginInfo.password = "";
-      user.setEmail(response.data?.mail || "NOT IMPLEMENTED FROM BACKEND");
-      user.setUsername(response.data?.usr || "NOT IMPLEMENTED FROM BACKEND");
-      user.setAvatar(response.data?.profile || userPng);
+
+      user.setEmail(response.data?.result?.email || "NOT IMPLEMENTED FROM BACKEND");
+      user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
+      user.setAvatar(response.data?.result?.profile_image_url || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
       user.setIsLogged();
+
       navigate("/");
     }).catch((error) => {
       console.log(error);
@@ -102,6 +104,12 @@ function AuthPage() {
         registerInfo.username = "";
         registerInfo.password = "";
         registerInfo.confirmPassword = "";
+
+        user.setEmail(response.data?.result?.email || "NOT IMPLEMENTED FROM BACKEND");
+        user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
+        user.setAvatar(response.data?.result?.profile_image_url || userPng);
+        user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
+        user.setIsLogged();
       })
       .catch((error) => {
         console.log(error);
