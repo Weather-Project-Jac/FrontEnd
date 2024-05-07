@@ -25,32 +25,33 @@ function WeatherCityPage() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => { // Fetch weather data when city changes
-    async function fetchWeather() {
-      try {
-        const response = await axios.get(`/weather/${city}/${location.state?.countryCode}/${location.state?.stateCode}`);
-        console.log(response);
-        setWeather(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        //navigate("/");
-      }
-    }
-    if(city)
-      fetchWeather();
+    console.log("Entro ZIO CAN")
+    // async function fetchWeather() {
+    //   try {
+    //     const response = await axios.get(`/weather/${city}/${location.state?.countryCode}/${location.state?.stateCode}`);
+    //     console.log(response);
+    //     setWeather(response.data);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     console.error(error);
+    //     //navigate("/");
+    //   }
+    // }
+    // if (city)
+    //   fetchWeather();
   }, [city]);
 
   React.useEffect(() => {
+    console.log(location)
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
-      if(location.state?.stateCode === "Trentino-South Tyrol") {
+      if (location.state?.stateCode === "Trentino-South Tyrol") {
         location.state.stateCode = "Trentino-Alto Adige";
-        //setCity("Trentino-Alto Adige")
       } else {
         setCity(location.state?.city);
       }
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
-  }, [location.state?.city, location.state?.countryCode, location.state?.stateCode]);
+  }, [location.state]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
