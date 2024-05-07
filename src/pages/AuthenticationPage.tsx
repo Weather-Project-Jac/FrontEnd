@@ -94,7 +94,7 @@ function AuthPage() {
       usr: registerInfo.username,
       psw: registerInfo.password,
       dataR: new Date(),
-      profile: "https://placehold.co/600x400"
+      profile: userPng
     })
       .then((response) => {
         console.log(response);
@@ -105,10 +105,10 @@ function AuthPage() {
         registerInfo.password = "";
         registerInfo.confirmPassword = "";
 
-        user.setEmail(response.data?.result?.email || "NOT IMPLEMENTED FROM BACKEND");
-        user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
-        user.setAvatar(response.data?.result?.profile_image_url || userPng);
-        user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
+        user.setEmail(response.data?.newUser?.email);
+        user.setUsername(response.data?.newUser?.username);
+        user.setAvatar(response.data?.newUser?.profile_image_url || userPng);
+        user.setToken(response.data?.token);
         user.setIsLogged();
       })
       .catch((error) => {
