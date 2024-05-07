@@ -73,9 +73,11 @@ function ResponsiveAppBar(): JSX.Element {
             }
             return false;
           });
-        navigate(`/weather/${foundExact[0].name}/${foundExact[0].stateCode}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: foundExact[0].stateCode } });
+        navigate(`/weather/${foundExact[0].name}/${state?.name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name } });
       } else if (optionsCity.length === 1) {
-        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].stateCode}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: optionsCity[0].stateCode } });
+        const state = State.getStatesOfCountry(city.countryCode.trim())
+          .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+        navigate(`/weather/${optionsCity[0].name}/${state?.name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name } });
       } else {
         navigate(`/`);
       }

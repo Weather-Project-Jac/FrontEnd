@@ -20,17 +20,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 function WeatherCityPage() {
 
   const location = useLocation();
-  const navigate = useNavigate();
-  const getCity = location.state?.city || navigate("/");
-  const getCountryCode = location.state?.countryCode || navigate("/");
-  const [city, setCity] = React.useState(getCity);
+  const [city, setCity] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => { // Fetch weather data when city changes
     async function fetchWeather() {
       try {
-        const response = await axios.get(`/weather/${city}/${getCountryCode}`);
+        const response = await axios.get(`/weather/${city}/${location.state?.countryCode}/${location.state?.stateCode}`);
         console.log(response);
         setWeather(response.data);
         setLoading(false);
@@ -39,14 +36,18 @@ function WeatherCityPage() {
         //navigate("/");
       }
     }
-    fetchWeather();
+    if(city)
+      fetchWeather();
   }, [city]);
 
   React.useEffect(() => {
-    console.log(location.state)
-
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
-      setCity(location.state?.city); // Update city state when location changes
+      if(location.state?.stateCode === "Trentino-South Tyrol") {
+        location.state.stateCode = "Trentino-Alto Adige";
+        //setCity("Trentino-Alto Adige")
+      } else {
+        setCity(location.state?.city);
+      }
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
   }, [location.state?.city, location.state?.countryCode, location.state?.stateCode]);
