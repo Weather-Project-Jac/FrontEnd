@@ -76,14 +76,14 @@ function ResponsiveAppBar(): JSX.Element {
           });
 
         const obj = { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name }
-        lastSearchedArray.find((element: any) => element.city === obj.city) ? console.log("Already in the list") : lastSearched(obj);
+        lastSearchedArray.find((element: any) => element.city === obj.city && element.countryCode === obj.countryCode && element.stateCode === obj.stateCode) ? console.log("Already in the list") : lastSearched(obj);
         navigate(`/weather/${foundExact[0].name}/${state?.name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name } });
       } else if (optionsCity.length === 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
           .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
 
         const obj = { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name }
-        lastSearched(obj);
+        lastSearchedArray.find((element: any) => element.city === obj.city && element.countryCode === obj.countryCode && element.stateCode === obj.stateCode) ? console.log("Already in the list") : lastSearched(obj);
         navigate(`/weather/${optionsCity[0].name}/${state?.name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name } });
       } else {
         navigate(`/`);

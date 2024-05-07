@@ -149,14 +149,14 @@ const HomePage: React.FC = () => {
                             {lastSearchedCities.map((city, index) => (
                                 <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                                     {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
-                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500, display: "flex", flexDirection: "column", justifyContent: "center"}}
                                         onClick={() => handleCardClick(city as { city: string, countryCode: string, stateCode: string })}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                                             <Typography variant="h5" >
                                                 {(city as { city: string }).city} {/* City Name */}
-                                                {(city as { countryCode: string }).countryCode} {/* City Name */}
-                                                {(city as { stateCode: string }).stateCode} {/* City Name */}
-                                                <Typography variant="body1" sx={{ fontSize: 30 }}>
+                                                {(city as { stateCode: string }).stateCode} {/* stateCode */}
+                                                {(city as { countryCode: string }).countryCode} {/* countryCode */}
+                                                <Typography variant="body1" sx={{ fontSize: 30, paddingTop: 0 }}>
                                                     23°C {/* Temperatura */}
                                                 </Typography>
                                             </Typography>
