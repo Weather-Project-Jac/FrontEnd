@@ -112,7 +112,6 @@ const HomePage: React.FC = () => {
                         }}>
                             {currentTemperature ? currentTemperature + "°C" :
                                 <ThreeDots
-
                                     visible={true}
                                     height="45"
                                     color="#176087"

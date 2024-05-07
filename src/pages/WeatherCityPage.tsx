@@ -9,13 +9,16 @@ import {
   ListItem,
   Avatar,
   ListItemText,
-  useTheme,
+  CardContent,
+  Stack,
   useMediaQuery,
+  useTheme
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation, useNavigate } from "react-router-dom";
+import GraphsCity from "../components/GraphsCity.tsx";
 
 function WeatherCityPage() {
 
@@ -81,7 +84,6 @@ function WeatherCityPage() {
                     marginRight: 0,
                   }} />
                   <ListItemText
-
                     primary={`${item} 13 June`}
                     secondary="Thunderstorm"
                     sx={{
@@ -123,6 +125,42 @@ function WeatherCityPage() {
 
             </List>
           </Card>
+        </Grid>
+        <Grid container spacing={3} justifyContent="center" p={4}>
+          <Grid item xs={12} sm={6} md={6}>
+            <Card
+              style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}
+            >
+              <CardContent style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <Stack
+                  direction="row"
+                  sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
+                >
+                    <GraphsCity />
+                </Stack>
+                <Typography variant="h5" component="h2" textAlign="center">
+                  Books Borrowed Trend (Last 7 days)
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            <Card
+              style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}
+            >
+              <CardContent style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <Stack
+                  direction="row"
+                  sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
+                >
+                    <GraphsCity />
+                </Stack>
+                <Typography variant="h5" component="h2" textAlign="center">
+                  Books Borrowed Trend (Last 7 days)
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
     </Container >
