@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { CustomAlertProps, CustomAlert } from './CustomAlert.tsx';
+import axiosConf from '../axios/axiosConf.ts';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,7 +31,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ open, onClose }) => {
     setConfirmPassword('');
   };
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       setAlert({ message: 'Please fill out all fields', severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
@@ -40,9 +41,15 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ open, onClose }) => {
       return;
     }
     /* check old password */
-    setAlert({ message: 'Password changed successfully', severity: 'success', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
 
-    handleCloseDialog();
+    const result = await axiosConf.post('/auth/change-password', { oldPassword, newPassword });
+    if(result.status === 200) {
+      setAlert({ message: 'Password changed successfully', severity: 'success', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+      handleCloseDialog();
+    } else {
+      setAlert({ message: 'An error occurred while changing the password', severity: 'error', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+      console.log(result);
+    }
   };
 
   return (
