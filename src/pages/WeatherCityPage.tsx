@@ -21,13 +21,17 @@ function WeatherCityPage() {
 
   const location = useLocation();
   const [city, setCity] = React.useState<string>("");
+  const [countryCode, setcountryCode] = React.useState<string>("");
+  const [stateCode, setstateCode] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => { // Fetch weather data when city changes
+    // console.log("Entro ZIO CAN")
+    // console.log(location.pathname)
     async function fetchWeather() {
       try {
-        const response = await axios.get(`/weather/${city}/${location.state?.countryCode}/${location.state?.stateCode}`);
+        const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
         console.log(response);
         setWeather(response.data);
         setLoading(false);
@@ -36,21 +40,26 @@ function WeatherCityPage() {
         //navigate("/");
       }
     }
-    if(city)
+    if (city)
       fetchWeather();
-  }, [city]);
+  }, [city, countryCode, stateCode]);
 
   React.useEffect(() => {
+    // console.log(location)
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
-      if(location.state?.stateCode === "Trentino-South Tyrol") {
-        location.state.stateCode = "Trentino-Alto Adige";
-        //setCity("Trentino-Alto Adige")
-      } else {
-        setCity(location.state?.city);
-      }
+
+      if (location.state?.stateCode === "Trentino-South Tyrol") {
+        setstateCode("Trentino-Alto Adige")
+      } else
+        setstateCode(location.state?.stateCode);
+
+      setCity(location.state?.city);
+      setcountryCode(location.state?.countryCode);
+
+
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
-  }, [location.state?.city, location.state?.countryCode, location.state?.stateCode]);
+  }, [location.state]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
