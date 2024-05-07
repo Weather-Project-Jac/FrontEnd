@@ -73,10 +73,13 @@ function ResponsiveAppBar(): JSX.Element {
             }
             return false;
           });
+        lastSearched({ city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name });
         navigate(`/weather/${foundExact[0].name}/${state?.name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name } });
       } else if (optionsCity.length === 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
           .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+
+        lastSearched({ city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name });
         navigate(`/weather/${optionsCity[0].name}/${state?.name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name } });
       } else {
         navigate(`/`);
@@ -86,11 +89,9 @@ function ResponsiveAppBar(): JSX.Element {
 
   useEffect(() => {
     if (city.name.trim().length > 0) {
-      console.log(city.name)
       const foundExact = CitiesInfo.filter(
         (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.name.trim().toLowerCase()
       );
-      console.log(foundExact)
       if (foundExact.length === 0) {
         const citiSearched: ICity[] = CitiesInfo.filter((cityInfo: ICity) =>
           cityInfo.name.toLowerCase().startsWith(city.name.trim().toLowerCase())
@@ -309,7 +310,7 @@ function ResponsiveAppBar(): JSX.Element {
 
               >
                 {settings.map((setting: any) => (
-                  <MenuItem key={setting.name}                       onClick={() => { navigate(setting.path) }}
+                  <MenuItem key={setting.name} onClick={() => { navigate(setting.path) }}
                   >
                     <Link
                       style={{

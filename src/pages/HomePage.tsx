@@ -64,7 +64,6 @@ const HomePage: React.FC = () => {
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
-
         const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`;
 
         try {
@@ -83,8 +82,8 @@ const HomePage: React.FC = () => {
         setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined", stateName: "Undefined" });
     }
 
-    const handleCardClick = (city: { city: string, countryCode: string, stateName: string }) => {
-        navigate(`/weather/${city.city}/${city.countryCode}/${city.stateName}`);
+    const handleCardClick = (city: { city: string, countryCode: string, stateCode: string }) => {
+        navigate(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`, { state: { city: city.city, countryCode: city.countryCode, stateCode: city.stateCode } });
     };
 
     const theme = useTheme();
@@ -151,10 +150,12 @@ const HomePage: React.FC = () => {
                                 <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                                     {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
                                     <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}
-                                        onClick={() => handleCardClick(city)}>
+                                        onClick={() => handleCardClick(city as { city: string, countryCode: string, stateCode: string })}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                                             <Typography variant="h5" >
                                                 {(city as { city: string }).city} {/* City Name */}
+                                                {(city as { countryCode: string }).countryCode} {/* City Name */}
+                                                {(city as { stateCode: string }).stateCode} {/* City Name */}
                                                 <Typography variant="body1" sx={{ fontSize: 30 }}>
                                                     23°C {/* Temperatura */}
                                                 </Typography>
