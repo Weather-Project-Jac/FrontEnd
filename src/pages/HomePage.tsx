@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
     const currentDate = new Date();
-    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string, stateName: string } | null>(null);
     const [currentTemperature, setCurrentTemperature] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
         } else {
             console.log("Geolocation not supported");
         }
-    }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city])
+    }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city && currentPosition.countrycode && currentPosition.stateName])
 
 
 
@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}/${currentPosition.stateName}`);
 
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
@@ -59,32 +59,32 @@ const HomePage: React.FC = () => {
             }
         }
         fetchTemperature();
-    }, [currentPosition?.city && currentPosition.countrycode && currentDate.getHours()]);
+    }, [currentPosition?.city && currentPosition.countrycode && currentPosition.stateName && currentDate.getHours()]);
 
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
 
-        const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+        const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`;
 
         try {
             const response = await axios.get(GEOCODING);
             const cityName = response.data?.address?.city || response.data?.address?.town || response.data?.address?.county;
             const getCountryCode = response.data?.address?.country_code;
-            setCurrentPosition({ latitude, longitude, city: cityName, countrycode: getCountryCode });
+            setCurrentPosition({ latitude, longitude, city: cityName, countrycode: getCountryCode, stateName: response.data?.address?.state });
         } catch (error) {
             console.error('There was a problem with the request:', error);
-            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
+            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined", stateName: "Undefined" });
         }
     }
 
     function error() {
         console.error('Undefined');
-        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
+        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined", stateName: "Undefined" });
     }
 
-    const handleCardClick = (city: { city: string, countryCode: string }) => {
-        navigate(`/weather/${city.city}/${city.countryCode}`);
+    const handleCardClick = (city: { city: string, countryCode: string, stateName: string }) => {
+        navigate(`/weather/${city.city}/${city.countryCode}/${city.stateName}`);
     };
 
     const theme = useTheme();
