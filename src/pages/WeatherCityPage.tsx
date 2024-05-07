@@ -16,7 +16,6 @@ import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation, useNavigate } from "react-router-dom";
-import { iso31662 } from 'iso-3166'
 
 function WeatherCityPage() {
 
@@ -27,7 +26,6 @@ function WeatherCityPage() {
   const [city, setCity] = React.useState(getCity);
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
-  const [iso, setIso] = React.useState("" as string);
 
   React.useEffect(() => { // Fetch weather data when city changes
     async function fetchWeather() {
@@ -48,9 +46,6 @@ function WeatherCityPage() {
     console.log(location.state)
 
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
-      const isoTaker = iso31662.find((item) => item.parent === location.state?.countryCode && item.code.substring(3) === location.state?.stateCode)?.name.split(", ")[0] || ""; // Provide a default value for isoTaker
-      console.log(isoTaker)
-      setIso(isoTaker);
       setCity(location.state?.city); // Update city state when location changes
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
