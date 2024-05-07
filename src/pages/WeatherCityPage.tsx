@@ -21,34 +21,42 @@ function WeatherCityPage() {
 
   const location = useLocation();
   const [city, setCity] = React.useState<string>("");
+  const [countryCode, setcountryCode] = React.useState<string>("");
+  const [stateCode, setstateCode] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => { // Fetch weather data when city changes
-    console.log("Entro ZIO CAN")
-    // async function fetchWeather() {
-    //   try {
-    //     const response = await axios.get(`/weather/${city}/${location.state?.countryCode}/${location.state?.stateCode}`);
-    //     console.log(response);
-    //     setWeather(response.data);
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error(error);
-    //     //navigate("/");
-    //   }
-    // }
-    // if (city)
-    //   fetchWeather();
-  }, [city]);
+    // console.log("Entro ZIO CAN")
+    // console.log(location.pathname)
+    async function fetchWeather() {
+      try {
+        const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
+        console.log(response);
+        setWeather(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        //navigate("/");
+      }
+    }
+    if (city)
+      fetchWeather();
+  }, [city, countryCode, stateCode]);
 
   React.useEffect(() => {
-    console.log(location)
+    // console.log(location)
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
+
       if (location.state?.stateCode === "Trentino-South Tyrol") {
-        location.state.stateCode = "Trentino-Alto Adige";
-      } else {
-        setCity(location.state?.city);
-      }
+        setstateCode("Trentino-Alto Adige")
+      } else
+        setstateCode(location.state?.stateCode);
+
+      setCity(location.state?.city);
+      setcountryCode(location.state?.countryCode);
+
+
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
   }, [location.state]);
