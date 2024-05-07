@@ -7,25 +7,37 @@ import {
 } from "@mui/material";
 import icons from '../assets/icons/index.ts';
 import React from 'react';
+import Heart from "react-animated-heart";
+
 interface LeftCardProps {
     city: string;
-    WeatherInfo : any;
+    WeatherInfo: any;
 }
 
+
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
+
+    const [isClick, setClick] = React.useState(false);
+
     return (
         <Grid item xs={12} sm={5} >
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
-                    <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"flex-end"} >
-                        <Grid item marginLeft={2} marginTop={2}>
+
+                    <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
+                        <Grid item marginLeft={3}>
                             <Typography variant="h4" gutterBottom align="left">
                                 {city}
                             </Typography>
                         </Grid>
-                        <Grid item marginRight={2}>
-                            <Typography variant="h6" gutterBottom align="right">
+                        <Grid item marginLeft={3}>
+                            <Typography variant="h6" gutterBottom align="center">
                                 {new Date().toLocaleDateString()}
+                            </Typography>
+                        </Grid>
+                        <Grid item >
+                            <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
+                                <Heart isClick={isClick} onClick={() => setClick(!isClick)} />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
