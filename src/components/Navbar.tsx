@@ -43,6 +43,7 @@ function ResponsiveAppBar(): JSX.Element {
   const isLogged: boolean = UserStore((state) => state.isLogged);
   const avatar: string = UserStore((state) => state.avatar);
   const lastSearched = UserStore((state) => state.addLastSearchedCities);
+  const lastSearchedArray = UserStore((state) => state.lastSearchedCities);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -73,13 +74,16 @@ function ResponsiveAppBar(): JSX.Element {
             }
             return false;
           });
-        lastSearched({ city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name });
+
+        const obj = { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name }
+        lastSearchedArray.find((element: any) => element.city === obj.city) ? console.log("Already in the list") : lastSearched(obj);
         navigate(`/weather/${foundExact[0].name}/${state?.name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name } });
       } else if (optionsCity.length === 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
           .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
 
-        lastSearched({ city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name });
+        const obj = { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name }
+        lastSearched(obj);
         navigate(`/weather/${optionsCity[0].name}/${state?.name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name } });
       } else {
         navigate(`/`);
