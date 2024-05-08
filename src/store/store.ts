@@ -75,11 +75,21 @@ export const UserStore = create(
           const updatedCities = [...state.favoriteCities];
           const index = updatedCities.findIndex(
             (item) =>
-              item.city === city.city && item.countryCode === city.countryCode && item.stateCode === city.stateCode
-          )
+              item.city === city.city &&
+              item.countryCode === city.countryCode &&
+              item.stateCode === city.stateCode
+          );
+
           if (index === -1) {
-            updatedCities.push(city);
+            // Add city if it doesn't exist in the list
+            if (updatedCities.length < 8) {
+              updatedCities.push(city);
+            } else {
+              // If the limit is reached, do not add the city
+              console.log("Cannot add more than 8 favorite cities.");
+            }
           } else {
+            // Remove city if it exists in the list
             updatedCities.splice(index, 1);
           }
           return { ...state, favoriteCities: updatedCities };

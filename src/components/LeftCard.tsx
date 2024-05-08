@@ -25,13 +25,14 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
 
     const handleFavourite = async(city : object) => {
         toggleFavouritesCities(city);
-        if(checkFavourite(city)){
+        if(!checkFavourite(city)){
             setClick(false);
         } else {
             setClick(true);
         }
-        console.log(isClick, favoriteCities)
+        console.log(favoriteCities)
         const result = await axiosInstance.post('/user/update', {favorites: favoriteCities, mail: UserStore.getState().email})
+        console.log(result.status)
         if(result.status !== 200){
             toggleFavouritesCities(city);
         }

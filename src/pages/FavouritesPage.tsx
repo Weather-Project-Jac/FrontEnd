@@ -5,22 +5,16 @@ import {
     Box,
     Card,
     CardContent,
-    useTheme,
-    useMediaQuery,
 } from "@mui/material";
-import LeftCard from "../components/LeftCard";
+
 import icons from "../assets/icons";
-//import { UserStore } from "../store/store";
+import { UserStore } from "../store/store";
 
 function HomePage() {
-    /*     const favouriteCities = UserStore((state) => state.addFavouriteCities);
-        const removeFavourite = UserStore((state) => state.removeFavouriteCities);
-        console.log("Added? ", favouriteCities("Ciao"))
-        console.log("Removed? ", removeFavourite("Ciao")) */
+    const favoriteCities = UserStore((state) => state.favoriteCities);
+    const toggleFavouritesCities = UserStore((state) => state.toggleFavouritesCities);
 
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+    console.log(favoriteCities)
     return (
         <Container maxWidth='xl' >
             <Grid
@@ -30,12 +24,10 @@ function HomePage() {
                 alignContent="center"
                 style={{ marginTop: 0 }}
             >
-                {/* <LeftCard /> */}
-
                 <Grid item sm={11} style={{ paddingLeft: 0 }}>
                     <Grid container spacing={10} style={{ paddingTop: 50, paddingLeft: 30 }} alignItems="center" display={'flex'} justifyContent={'center'} >
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                            <Grid item xs={12} sm={3} key={item} alignItems={"center"}>
+                        {favoriteCities.map((key, item) => (
+                            <Grid item xs={12} sm={3} key={key} alignItems={"center"}>
                                 <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}>
                                     <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center' }}>
                                         <Typography gutterBottom variant="h5" component="div" sx={{
