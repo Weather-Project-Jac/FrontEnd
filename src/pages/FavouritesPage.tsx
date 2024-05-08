@@ -14,33 +14,33 @@ import React, { useEffect } from "react";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
-
     const [weather, setWeather] = React.useState<any>([]);
 
     useEffect(() => {
-        setWeather([]);
-        const getWeather = async (city) => {
+        const fetchWeatherForCities = async () => {
             try {
-                const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
-                if (response.status !== 200) {
-                    console.log(response);
-                    return;
-                }
-                const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-                if (result) {
-                    setWeather(prevWeather => [
-                        ...prevWeather,
-                        { city, temperature: result.data.temperature80m }
-                    ]);
-                }
+                const citiesWeatherPromises = favoriteCities.map(async (city) => {
+                    const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
+                    if (response.status !== 200) {
+                        console.log(response);
+                        return null;
+                    }
+                    const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
+                    return { city, temperature: result ? result.data.temperature80m : null };
+                });
+
+                const citiesWeatherData = await Promise.all(citiesWeatherPromises);
+                const filteredWeatherData = citiesWeatherData.filter(weather => weather !== null);
+
+                setWeather(filteredWeatherData);
             } catch (error) {
                 console.error(error);
             }
         };
-        favoriteCities.forEach((city) => {
-            getWeather(city);
-        });
+
+        fetchWeatherForCities();
     }, [favoriteCities]);
+
 
     return (
         <Container maxWidth='xl' >
