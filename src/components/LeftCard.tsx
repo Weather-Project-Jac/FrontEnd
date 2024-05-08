@@ -21,11 +21,15 @@ interface LeftCardProps {
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, stateCode }) => {
     const {favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
-    const [isClick, setClick] = React.useState(checkFavourite({city, stateCode, countryCode}));
+    const [isClick, setClick] = React.useState(!checkFavourite({city, stateCode, countryCode}));
 
     const handleFavourite = async(city : object) => {
-        setClick(!isClick);
         toggleFavouritesCities(city);
+        if(checkFavourite(city)){
+            setClick(false);
+        } else {
+            setClick(true);
+        }
         console.log(isClick, favoriteCities)
         const result = await axiosInstance.post('/user/update', {favorites: favoriteCities, mail: UserStore.getState().email})
         if(result.status !== 200){
