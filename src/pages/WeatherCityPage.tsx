@@ -48,7 +48,7 @@ function WeatherCityPage() {
           console.log(response2)
           return;
         }
-        for (let i = 0; i < 7; i++) {
+        for (let i = 1; i < 7; i++) {
           /* data from response.data  "05-08"*/
           const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
           response2.data.filter((item) => {
