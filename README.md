@@ -1,4 +1,4 @@
-# 🌦️ Weather Forecast Web Application
+# 🌦️ Weather Forecast Web Application (FrontEnd)
 
 Welcome to our Weather Forecast Web Application! This application allows users to get the current weather and a 6-day forecast for any location worldwide.
 
