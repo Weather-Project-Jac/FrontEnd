@@ -42,6 +42,7 @@ function ResponsiveAppBar(): JSX.Element {
   const isLogged: boolean = UserStore((state) => state.isLogged);
   const avatar: string = UserStore((state) => state.avatar);
   const lastSearched = UserStore((state) => state.addLastSearchedCities);
+  const lastSearchedArray = UserStore((state) => state.lastSearchedCities);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -52,11 +53,11 @@ function ResponsiveAppBar(): JSX.Element {
   };
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-     setCity({
+    setCity({
       name: event.target.value.split(',')[0],
       state: event.target.value.split(',')[1],
       countryCode: event.target.value.split(',')[2]
-     })
+    })
   };
 
   const onEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,17 +65,25 @@ function ResponsiveAppBar(): JSX.Element {
     if (event.key === 'Enter') {
       if (optionsCity.length > 1) {
         const state = State.getStatesOfCountry(city.countryCode.trim())
-        .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+          .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
         const foundExact = optionsCity.filter(
           (cityInfo: ICity) => {
-            if(cityInfo.name.toLowerCase() === city.name.trim().toLowerCase() && cityInfo.countryCode === city.countryCode.trim() && state?.name.toLowerCase() === city.state.trim().toLowerCase()){
+            if (cityInfo.name.toLowerCase() === city.name.trim().toLowerCase() && cityInfo.countryCode === city.countryCode.trim() && state?.name.toLowerCase() === city.state.trim().toLowerCase()) {
               return true;
             }
             return false;
-         });
-         navigate(`/weather/${foundExact[0].name}/${foundExact[0].stateCode}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode , stateCode: foundExact[0].stateCode} });
+          });
+
+        const obj = { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name }
+        lastSearchedArray.find((element: any) => element.city === obj.city && element.countryCode === obj.countryCode && element.stateCode === obj.stateCode) ? console.log("Already in the list") : lastSearched(obj);
+        navigate(`/weather/${foundExact[0].name}/${state?.name}/${foundExact[0].countryCode}`, { state: { city: foundExact[0].name, countryCode: foundExact[0].countryCode, stateCode: state?.name } });
       } else if (optionsCity.length === 1) {
-        navigate(`/weather/${optionsCity[0].name}/${optionsCity[0].stateCode}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: optionsCity[0].stateCode } });
+        const state = State.getStatesOfCountry(city.countryCode.trim())
+          .find((state: IState) => state.name.toLowerCase() === city.state.trim().toLowerCase())
+
+        const obj = { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name }
+        lastSearchedArray.find((element: any) => element.city === obj.city && element.countryCode === obj.countryCode && element.stateCode === obj.stateCode) ? console.log("Already in the list") : lastSearched(obj);
+        navigate(`/weather/${optionsCity[0].name}/${state?.name}/${optionsCity[0].countryCode}`, { state: { city: optionsCity[0].name, countryCode: optionsCity[0].countryCode, stateCode: state?.name } });
       } else {
         navigate(`/`);
       }
@@ -83,11 +92,9 @@ function ResponsiveAppBar(): JSX.Element {
 
   useEffect(() => {
     if (city.name.trim().length > 0) {
-      console.log(city.name)
       const foundExact = CitiesInfo.filter(
         (cityInfo: ICity) => cityInfo.name.toLowerCase() === city.name.trim().toLowerCase()
       );
-      console.log(foundExact)
       if (foundExact.length === 0) {
         const citiSearched: ICity[] = CitiesInfo.filter((cityInfo: ICity) =>
           cityInfo.name.toLowerCase().startsWith(city.name.trim().toLowerCase())
@@ -107,7 +114,8 @@ function ResponsiveAppBar(): JSX.Element {
         <Toolbar disableGutters style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <Link
             onClick={() => {
-              if (window.location.pathname !== '/') window.location.href = '/';
+              if (window.location.pathname !== '/')
+                navigate("/");;
             }}
             style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
           >
@@ -225,7 +233,6 @@ function ResponsiveAppBar(): JSX.Element {
                             onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                             style={{ backgroundColor: '#176087', borderRadius: '0 25px 25px 0' }}
                             aria-label="toggle password visibility"
-                            onClick={() => onEnterSearch({ key: 'Enter' } as React.KeyboardEvent<HTMLInputElement>)}
                           >
                             <SearchIcon style={{ color: 'white', marginRight: '5px', marginLeft: '5px' }} />
                           </IconButton>
@@ -237,10 +244,7 @@ function ResponsiveAppBar(): JSX.Element {
               />
             </div>
           </Box>
-          <Box sx={{
-            flexGrow: 0, mr: 5
-          }}>
-
+          <Box>
             <Tooltip title="Open settings">
               <IconButton onClick={isLogged ? handleOpenUserMenu : () => { navigate("/auth") }} sx={{ p: 0 }}>
                 {
@@ -307,13 +311,13 @@ function ResponsiveAppBar(): JSX.Element {
 
               >
                 {settings.map((setting: any) => (
-                  <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting.name} onClick={() => { navigate(setting.path) }}
+                  >
                     <Link
                       style={{
                         textDecoration: "none",
                         color: "#132E32",
                       }}
-                      onClick={() => { navigate(setting.path) }}
                     >{setting.name}</Link>
                   </MenuItem>
                 ))}

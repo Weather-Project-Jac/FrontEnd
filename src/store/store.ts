@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import secureLocalStorage from "react-secure-storage";
+import userImg from "../assets/userx512.png";
 
 type State = {
   isLogged: boolean;
@@ -10,6 +11,7 @@ type State = {
   lastSearchedCities: object[];
   token: string;
   loginTime: number;
+  favoriteCities: object[];
 };
 
 type Actions = {
@@ -19,6 +21,8 @@ type Actions = {
   setAvatar: (url: string) => void;
   addLastSearchedCities: (city: object) => void;
   setToken: (token: string) => void;
+  toggleFavouritesCities: (city: object) => void;
+  checkFavourite: (citu: object) => boolean;
   reset: () => void;
 };
 
@@ -26,9 +30,10 @@ const initialState: State = {
   isLogged: false,
   email: "",
   username: "",
-  avatar: "",
+  avatar: userImg,
   lastSearchedCities: [],
   token: "",
+  favoriteCities: [],
   loginTime: 0,
 };
 
@@ -65,8 +70,51 @@ export const UserStore = create(
       setToken: (token) => {
         set((state) => ({ ...state, token }));
       },
+      toggleFavouritesCities: (city) => {
+        set((state) => {
+          const updatedCities = [...state.favoriteCities];
+          const index = updatedCities.findIndex(
+            (item) =>
+              item.city === city.city &&
+              item.countryCode === city.countryCode &&
+              item.stateCode === city.stateCode
+          );
+          console.log(index)
+          if (index === -1) {
+            // Add city if it doesn't exist in the list
+            if (updatedCities.length < 8) {
+              updatedCities.push(city);
+            } else {
+              // If the limit is reached, do not add the city
+              console.log("Cannot add more than 8 favorite cities.");
+            }
+          } else {
+            // Remove city if it exists in the list
+            updatedCities.splice(index, 1);
+          }
+          return { ...state, favoriteCities: updatedCities };
+        });
+      },
+      checkFavourite: (city) => {
+        const index: number = UserStore.getState().favoriteCities.findIndex(
+          (item) =>
+            item.city === city.city &&
+            item.countryCode === city.countryCode &&
+            item.stateCode === city.stateCode
+        );
+        return index !== -1;
+      },
       reset: () => {
-        set(initialState);
+        set((state) => ({
+          ...state,
+          isLogged: initialState.isLogged,
+          email: initialState.email,
+          username: initialState.username,
+          avatar: initialState.avatar,
+          token: initialState.token,
+          loginTime: initialState.loginTime,
+          favoriteCities: initialState.favoriteCities,
+        }));
       },
     }),
     {

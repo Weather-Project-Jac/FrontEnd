@@ -1,21 +1,46 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
-//import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
 import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il meteo
 import axios from "axios"; //chiamate normali (geoposition)
-import icons from '../assets/icons/index.ts';
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
+import { WeatherIcon } from '../components/WeatherIcon.tsx';
 
 const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
     const currentDate = new Date();
-    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string } | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<{ latitude: number; longitude: number, city: string, countrycode: string, stateName: string } | null>(null);
     const [currentTemperature, setCurrentTemperature] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+    const [weather, setWeather] = React.useState<any>([]);
+
+    useEffect(() => {
+        const fetchWeatherForCities = async () => {
+            try {
+                const citiesWeatherPromises = lastSearchedCities.map(async (city) => {
+                    const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
+                    if (response.status !== 200) {
+                        console.log(response);
+                        return null;
+                    }
+                    const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
+                    return { city, temperature: result ? result.data.apparentTemperature : null, weatherCode: result ? result.data.weatherCode : null };
+                });
+
+                const citiesWeatherData = await Promise.all(citiesWeatherPromises);
+                const filteredWeatherData = citiesWeatherData.filter(weather => weather !== null);
+
+                setWeather(filteredWeatherData);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchWeatherForCities();
+    }, [lastSearchedCities]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -40,7 +65,7 @@ const HomePage: React.FC = () => {
         } else {
             console.log("Geolocation not supported");
         }
-    }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city])
+    }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city && currentPosition.countrycode && currentPosition.stateName])
 
 
 
@@ -48,7 +73,7 @@ const HomePage: React.FC = () => {
         async function fetchTemperature() {
             if (currentPosition) {
                 try {
-                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}`);
+                    const response = await axiosConf.get(`/weather/${currentPosition.city}/${currentPosition.countrycode.toUpperCase()}/${currentPosition.stateName}`);
 
                     const temperature = response.data[currentDate.getHours()].data.temperature80m;
                     setCurrentTemperature(temperature);
@@ -59,32 +84,31 @@ const HomePage: React.FC = () => {
             }
         }
         fetchTemperature();
-    }, [currentPosition?.city && currentPosition.countrycode && currentDate.getHours()]);
+    }, [currentPosition?.city && currentPosition.countrycode && currentPosition.stateName && currentDate.getHours()]);
 
     async function success(position: GeolocationPosition) {
         const latitude: number = position.coords.latitude;
         const longitude: number = position.coords.longitude;
-
-        const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+        const GEOCODING = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`;
 
         try {
             const response = await axios.get(GEOCODING);
             const cityName = response.data?.address?.city || response.data?.address?.town || response.data?.address?.county;
             const getCountryCode = response.data?.address?.country_code;
-            setCurrentPosition({ latitude, longitude, city: cityName, countrycode: getCountryCode });
+            setCurrentPosition({ latitude, longitude, city: cityName, countrycode: getCountryCode, stateName: response.data?.address?.state });
         } catch (error) {
             console.error('There was a problem with the request:', error);
-            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
+            setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined", stateName: "Undefined" });
         }
     }
 
     function error() {
         console.error('Undefined');
-        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined" });
+        setCurrentPosition({ longitude: NaN, latitude: NaN, city: "Undefined", countrycode: "Undefined", stateName: "Undefined" });
     }
 
-    const handleCardClick = (city: { city: string, countryCode: string }) => {
-        navigate(`/weather/${city.city}/${city.countryCode}`);
+    const handleCardClick = (city: { city: string, countryCode: string, stateCode: string }) => {
+        navigate(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`, { state: { city: city.city, countryCode: city.countryCode, stateCode: city.stateCode } });
     };
 
     const theme = useTheme();
@@ -146,23 +170,22 @@ const HomePage: React.FC = () => {
                             Latest Searched Cities By You:
                         </Typography>
                         <Grid container spacing={2}>
-                            {lastSearchedCities.map((city, index) => (
-                                <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
-                                    {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
-                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500 }}
-                                        onClick={() => handleCardClick(city)}>
+                            {weather && weather.map((city, key) => (
+                                <Grid item xs={isSmallScreen ? 12 : 4} key={key} sx={{ display: "flex", justifyContent: "center" }}>
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500, display: "flex", flexDirection: "column", justifyContent: "center" }}
+                                        onClick={() => handleCardClick(city.city as { city: string, countryCode: string, stateCode: string })}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                                             <Typography variant="h5" >
-                                                {(city as { city: string }).city} {/* City Name */}
-                                                <Typography variant="body1" sx={{ fontSize: 30 }}>
-                                                    23°C {/* Temperatura */}
+                                                {(city.city as { city: string }).city} {/* City Name */}
+                                                {(city.city as { stateCode: string }).stateCode} {/* stateCode */}
+                                                {(city.city as { countryCode: string }).countryCode} {/* countryCode */}
+                                                <Typography variant="body1" sx={{ fontSize: 30, paddingTop: 0 }}>
+                                                    {city.temperature} °C
                                                 </Typography>
                                             </Typography>
-                                            <img src={icons.thunder} style={{ width: 70 }} />
-
+                                            <WeatherIcon weatherCode={city.weatherCode} />
                                         </CardContent>
                                     </Card>
-                                    {/* </Link> */}
                                 </Grid>
                             ))}
                         </Grid>

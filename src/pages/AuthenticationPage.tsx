@@ -11,6 +11,8 @@ import {
   Divider,
   InputAdornment,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
@@ -66,11 +68,17 @@ function AuthPage() {
       setAlert({ message: "User logged in", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       loginInfo.email = "";
       loginInfo.password = "";
-      user.setEmail(response.data?.mail || "NOT IMPLEMENTED FROM BACKEND");
-      user.setUsername(response.data?.usr || "NOT IMPLEMENTED FROM BACKEND");
-      user.setAvatar(response.data?.profile || userPng);
+
+      user.setEmail(response.data?.result?.email || "NOT IMPLEMENTED FROM BACKEND");
+      user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
+      user.setAvatar(response.data?.result?.profile_image_url || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
+      console.log(response.data?.result.favorites)
+      for (let city of response.data?.result?.favorites || []) {
+        user.toggleFavouritesCities(city);
+      }
       user.setIsLogged();
+      console.log(user.favoriteCities)
       navigate("/");
     }).catch((error) => {
       console.log(error);
@@ -92,7 +100,7 @@ function AuthPage() {
       usr: registerInfo.username,
       psw: registerInfo.password,
       dataR: new Date(),
-      profile: "https://placehold.co/600x400"
+      profile: userPng
     })
       .then((response) => {
         console.log(response);
@@ -102,6 +110,15 @@ function AuthPage() {
         registerInfo.username = "";
         registerInfo.password = "";
         registerInfo.confirmPassword = "";
+
+        user.setEmail(response.data?.newUser?.email);
+        user.setUsername(response.data?.newUser?.username);
+        user.setAvatar(response.data?.newUser?.profile_image_url || userPng);
+        user.setToken(response.data?.token);
+        for (let city of response.data?.newUser?.favourites || []) {
+          user.toggleFavouritesCities(city);
+        }
+        user.setIsLogged();
       })
       .catch((error) => {
         console.log(error);
@@ -109,6 +126,8 @@ function AuthPage() {
       });
   }
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Container maxWidth="md">
@@ -219,13 +238,14 @@ function AuthPage() {
             </Card>
           </Grid>
           <Divider
-            orientation="vertical"
+            orientation={isSmallScreen ? "horizontal" : "vertical"}
             flexItem
             style={{
               backgroundColor: "white",
               marginTop: "10px",
               marginLeft: "10px",
               marginRight: "10px",
+              width: isSmallScreen ? "94%" : "",
               //height: "600px",
             }}
           />

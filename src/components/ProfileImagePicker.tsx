@@ -1,9 +1,11 @@
-import React, { ChangeEvent, CSSProperties, useEffect, useState } from 'react';
+import React, { ChangeEvent, CSSProperties, useState } from 'react';
 import { Button, Avatar, Modal, Slider } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './CropImage.tsx';
 import { UserStore } from '../store/store';
+import axiosConf from '../axios/axiosConf.ts';
+import { CustomAlert, CustomAlertProps } from './CustomAlert.tsx';
 
 interface AvatarPickerProps {
   setSelectedAvatar: (avatar: string) => void;
@@ -16,10 +18,11 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [alert, setAlert] = useState<CustomAlertProps>({ message: '', severity: 'success', handleClose: () => { }});
 
-  useEffect(() => {
+/*   useEffect(() => {
     console.log(croppedImage);
-  }, [croppedImage]);
+  }, [croppedImage]); */
 
   const containerStyle: CSSProperties = {
     display: 'flex',
@@ -57,9 +60,19 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
   const handleSaveAvatar = async () => {
     try {
       const croppedAvatar = await getCroppedImg(croppedImage!, croppedAreaPixels, 220, 220);
-      setSelectedAvatar(croppedAvatar);
-      UserStore.setState({ avatar: croppedAvatar || "test" });
-      setShowModal(false);
+
+
+      const result = await axiosConf.post('/user/update', { profile_image_url: croppedAvatar, mail: UserStore.getState().email });
+      if(result.status === 200) {
+        console.log('Avatar updated');  
+        setSelectedAvatar(croppedAvatar);
+        UserStore.setState({ avatar: croppedAvatar || "test" });
+        setShowModal(false);
+      } else {
+        console.log('Error updating avatar');
+        setAlert({ message: 'Error updating avatar', severity: 'error', handleClose: () => setAlert({ message: '', severity: 'success', handleClose: () => { }}) });
+      }
+
     } catch (error) {
       console.error('Error cropping image:', error);
     }
@@ -119,6 +132,7 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
           </div>
         </div>
       </Modal>
+      <CustomAlert {...alert} />
     </>
   );
 };
