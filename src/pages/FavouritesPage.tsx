@@ -62,7 +62,7 @@ function HomePage() {
                         {weather && weather.map((item, key) => (
                             <Grid item xs={12} sm={3} key={key} alignItems={"center"}>
                                 <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}
-                                    onClick={() => handleCardClick(item.city)}>
+                                    onClick={() => handleCardClick(item.city as { city: string, countryCode: string, stateCode: string })}>
                                     <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center' }}>
                                         <Typography gutterBottom variant="h5" component="div" sx={{
                                             textAlign: 'center',
