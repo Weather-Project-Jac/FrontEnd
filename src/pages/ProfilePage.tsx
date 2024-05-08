@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
     const [selectedAvatar, setSelectedAvatar] = useState(user.avatar);
 
     return (
-        <Container maxWidth="xl" style={{ display: 'flex' }}>
+        <Container style={{ display: 'flex' }}>
             <Grid
                 container
                 justifyContent="space-around"
