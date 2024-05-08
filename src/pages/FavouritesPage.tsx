@@ -10,7 +10,7 @@ import { UserStore } from "../store/store";
 import axiosConf from "../axios/axiosConf";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {WeatherIcon, WeatherType} from "../components/WeatherIcon";
+import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
@@ -31,7 +31,7 @@ function HomePage() {
                         return null;
                     }
                     const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-                    return { city, temperature: result ? result.data.temperature80m : null, weatherCode: result ? result.data.weatherCode : null};
+                    return { city, temperature: result ? result.data.temperature80m : null, weatherCode: result ? result.data.weatherCode : null };
                 });
 
                 const citiesWeatherData = await Promise.all(citiesWeatherPromises);
@@ -86,7 +86,7 @@ function HomePage() {
                                             fontFamily: "Inter, sans-serif",
                                             fontWeight: 300
                                         }}>
-                                            {WeatherType[item.weatherCode]}
+                                            {WeatherNames[getStringFromNumber(item.weatherCode) as keyof typeof WeatherNames]}
                                         </Typography>
                                     </CardContent>
                                 </Card>

@@ -15,7 +15,7 @@ import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation } from "react-router-dom";
-import { WeatherIcon, WeatherType } from "../components/WeatherIcon";
+import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 
 function WeatherCityPage() {
 
@@ -30,31 +30,31 @@ function WeatherCityPage() {
     async function fetchWeather() {
       try {
         const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
-        if(response.status !== 200) {
+        if (response.status !== 200) {
           //navigate("/");
           console.log(response)
           return;
         }
         const data = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-        if(data){
+        if (data) {
           setWeather(data);
           //console.log(data);
         }
         const date = new Date().toISOString().split("T")[0];
         const weekLaterDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
         const response2 = await axios.get(`/weather/${city}/${countryCode}/${stateCode}/${date}/${weekLaterDate}`);
-        if(response2.status !== 200) {
+        if (response2.status !== 200) {
           //navigate("/");
           console.log(response2)
           return;
         }
-        for(let i = 0; i < 7; i++) {
+        for (let i = 0; i < 7; i++) {
           /* data from response.data  "05-08"*/
           const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
           response2.data.filter((item) => {
             const splitDate = date.split("-");
             const onlyDate = splitDate[1] + "-" + splitDate[2];
-            if(item.date === onlyDate) {
+            if (item.date === onlyDate) {
               console.log(item)
               setWeekWeather((prev) => [...prev, item]);
             }
@@ -80,7 +80,6 @@ function WeatherCityPage() {
 
       setCity(location.state?.city);
       setcountryCode(location.state?.countryCode);
-
 
       console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
@@ -111,7 +110,7 @@ function WeatherCityPage() {
                   <ListItemText
 
                     primary={new Date(new Date().getFullYear() + "-" + item?.date).toDateString()}
-                    secondary={WeatherType[item?.data?.weatherCode]}
+                    secondary={WeatherNames[getStringFromNumber(item?.data?.weatherCode) as keyof typeof WeatherNames]}
                     sx={{
                       '.MuiListItemText-primary': {
                         color: 'white',

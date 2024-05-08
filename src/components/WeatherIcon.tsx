@@ -6,67 +6,53 @@ const weatherRecord: Record<string, number[]> = {
     "clear": [0],
     "sunny1": [1],
     "sunny": [2],
-    "cloudy": [3, 45, 48],
+    "cloudy": [3, 45, 48, 103, 145, 148],
     "cloudy rainny": [51, 53, 55, 56, 57, 80, 81],
-    "rain": [61, 63, 65, 66, 67, 82],
+    "rain": [61, 63, 65, 66, 67, 82, 161, 163, 165, 166, 167, 182],
     "cloudy snow": [71, 73, 85],
-    "snow": [75, 77, 86],
-    "thunderstorm": [95],
+    "snow": [75, 77, 86, 175, 177, 186],
+    "thunder": [95, 195],
+    "thunderstorm": [96, 99, 196, 199],
 
-}
-type WeatherType = {
-
-
-
-    // ThunderstormSlight = 95,
-
-    // ThunderstormSlightHail = 96,
-    // ThunderstormHeavyHail = 99,
-
-    // "nigth clear" = 100
+    "nigth clear": [100],
+    "nigth": [101],
+    "nigth cloudy": [102],
+    "nigth rain": [151, 153, 155, 156, 157, 180, 181],
+    "nigth snow": [171, 173, 185],
 }
 
+export enum WeatherNames {
+    "clear" = "Clear Sky",
+    "sunny1" = "Mainly Clear",
+    "sunny" = "Partly Cloud",
+    "cloudy" = "Cloudy",
+    "cloudy rainny" = "Cloudy Rainny",
+    "rain" = "Raining",
+    "cloudy snow" = "Cloudy Snowy",
+    "snow" = "Snowing",
+    "thunder" = "Thundering",
+    "thunderstorm" = "Thunderstorm",
+    "nigth clear" = "Nigth Clear",
+    "nigth" = "Nigth",
+    "nigth cloudy" = "Nigth Cloudy",
+    "nigth rain" = "Nigth Raining",
+    "nigth snow" = "Nigth Snowing"
+}
 
-
-function WeatherIcon({ weatherCode }) {
-    const getIconFilename = (code) => {
-        switch (code) {
-            case WeatherType.ClearSky:
+export function getStringFromNumber(number: number): string | undefined {
+    const date = new Date().getHours();
+    if (date >= 18 && date < 7) {
+        number += 100;
+    }
+    for (const [key, value] of Object.entries(weatherRecord)) {
+        if (value.includes(number)) {
+            return key;
         }
-    };
-
-export enum WeatherType {
-    "a" = 0,
-    MainlyClear = 1,
-    "clear" = 2,
-    Overcast = 3,
-    Fog = 45,
-    RimeFog = 48,
-    DrizzleLight = 51,
-    DrizzleModerate = 53,
-    DrizzleDense = 55,
-    FreezingDrizzleLight = 56,
-    FreezingDrizzleDense = 57,
-    RainSlight = 61,
-    RainModerate = 63,
-    RainHeavy = 65,
-    FreezingRainLight = 66,
-    FreezingRainHeavy = 67,
-    SnowFallSlight = 71,
-    SnowFallModerate = 73,
-    SnowFallHeavy = 75,
-    SnowGrains = 77,
-    RainShowersSlight = 80,
-    RainShowersModerate = 81,
-    RainShowersViolent = 82,
-    SnowShowersSlight = 85,
-    SnowShowersHeavy = 86,
-    ThunderstormSlight = 95,
-    ThunderstormSlightHail = 96,
-    ThunderstormHeavyHail = 99
+    }
+    return undefined;
 }
 
-function WeatherIcon({ weatherCode }) {
+function WeatherIcon({ weatherCode }: { weatherCode: number }) {
     const icon = weatherCode ? (
         <Box
             component='img'
@@ -75,7 +61,8 @@ function WeatherIcon({ weatherCode }) {
                 width: '55%',
                 margin: 'auto',
             }}
-            src={icons[WeatherType[weatherCode]]} />
+            src={icons[getStringFromNumber(weatherCode) as keyof typeof icons]}
+        />
     ) : (
         <ThreeDots
             visible={true}
@@ -89,4 +76,4 @@ function WeatherIcon({ weatherCode }) {
     return icon;
 }
 
-export  {WeatherIcon};
+export { WeatherIcon };

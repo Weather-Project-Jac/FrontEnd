@@ -5,9 +5,9 @@ import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il met
 import axios from "axios"; //chiamate normali (geoposition)
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
-import {WeatherIcon} from '../components/WeatherIcon.tsx';
+import { WeatherIcon } from '../components/WeatherIcon.tsx';
 
-const HomePage: React.FC = () => {    
+const HomePage: React.FC = () => {
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
     const currentDate = new Date();
@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
                         return null;
                     }
                     const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-                    return { city, temperature: result ? result.data.apparentTemperature : null, weatherCode: result ? result.data.weatherCode : null};
+                    return { city, temperature: result ? result.data.apparentTemperature : null, weatherCode: result ? result.data.weatherCode : null };
                 });
 
                 const citiesWeatherData = await Promise.all(citiesWeatherPromises);

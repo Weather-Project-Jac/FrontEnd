@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import Heart from "react-animated-heart";
 import { UserStore } from "../store/store.ts";
 import axiosInstance from "../axios/axiosConf.ts";
-import { WeatherIcon, WeatherType } from "./WeatherIcon.tsx";
+import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 
 interface LeftCardProps {
     city: string;
@@ -67,12 +67,12 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
 
 
 
-                        <Grid item xs={12}>                      
+                        <Grid item xs={12}>
                             <WeatherIcon weatherCode={WeatherInfo?.weatherCode} />
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={300} fontSize={30} marginBottom={2}>
-                                { WeatherType[WeatherInfo?.weatherCode] }
+                                {WeatherNames[getStringFromNumber(WeatherInfo?.weatherCode) as keyof typeof WeatherNames]}
                             </Typography>
                             <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900} fontSize={60}>
                                 {WeatherInfo?.apparentTemperature} °C
