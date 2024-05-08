@@ -44,26 +44,28 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
 
-                    <Grid container rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
+                    <Grid container style={{ marginTop: isLogged ? undefined : "12px" }} rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
                         <Grid item marginLeft={3}>
                             <Typography variant="h4" gutterBottom align="left">
                                 {city}
                             </Typography>
                         </Grid>
-                        <Grid item marginLeft={3}>
-                            <Typography variant="h6" gutterBottom align="center">
+                        <Grid item style={{ marginLeft: isLogged ? "24px" : undefined, marginRight: isLogged ? undefined : "24px" }}>
+                            <Typography variant="h6" gutterBottom align={isLogged ? "right" : "center"}>
                                 {new Date().toLocaleDateString()}
                             </Typography>
                         </Grid>
-                        <Grid item >
-                            <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                                {
-                                    isLogged ?
-                                        <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
-                                        : null
-                                }
-                            </Typography>
-                        </Grid>
+                        {isLogged ?
+                            <Grid item >
+                                <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
+                                    <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
+
+                                </Typography>
+                            </Grid> : null
+                        }
+
+
+
                         <Grid item xs={12}>
                             <Box
                                 component='img'
