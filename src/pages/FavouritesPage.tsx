@@ -9,10 +9,16 @@ import {
 
 import icons from "../assets/icons";
 import { UserStore } from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
     const toggleFavouritesCities = UserStore((state) => state.toggleFavouritesCities);
+    const navigate = useNavigate();
+
+    const handleCardClick = (city: { city: string, countryCode: string, stateCode: string }) => {
+        navigate(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`, { state: { city: city.city, countryCode: city.countryCode, stateCode: city.stateCode } });
+    };
 
     console.log(favoriteCities)
     return (
@@ -26,16 +32,19 @@ function HomePage() {
             >
                 <Grid item sm={11} style={{ paddingLeft: 0 }}>
                     <Grid container spacing={10} style={{ paddingTop: 50, paddingLeft: 30 }} alignItems="center" display={'flex'} justifyContent={'center'} >
-                        {favoriteCities.map((key, item) => (
+                        {favoriteCities.map((item, key) => (
                             <Grid item xs={12} sm={3} key={key} alignItems={"center"}>
-                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}>
+                                <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}
+                                    onClick={() => handleCardClick(item as { city: string, countryCode: string, stateCode: string })}>
                                     <CardContent style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', textAlign: 'center' }}>
                                         <Typography gutterBottom variant="h5" component="div" sx={{
                                             textAlign: 'center',
                                             fontFamily: "Inter, sans-serif",
                                             fontWeight: 600
                                         }}>
-                                            Locality
+                                            {item.city + `\n`}
+                                            {item.stateCode + `\n`}
+                                            {item.countryCode}
                                         </Typography>
                                         <Box
                                             component='img'

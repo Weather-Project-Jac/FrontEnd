@@ -6,7 +6,7 @@ import {
     CardContent
 } from "@mui/material";
 import icons from '../assets/icons/index.ts';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Heart from "react-animated-heart";
 import { UserStore } from "../store/store.ts";
 import axiosInstance from "../axios/axiosConf.ts";
@@ -20,20 +20,27 @@ interface LeftCardProps {
 
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, stateCode }) => {
+    console.log(city, countryCode, stateCode)
     const { favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
-    const [isClick, setClick] = React.useState(checkFavourite({ city, stateCode, countryCode }));
+    const [isClick, setClick] = React.useState(false);
+    const isLogged = UserStore((state) => state.isLogged);
+
+    useEffect(() => {
+        setClick(checkFavourite({ city, stateCode, countryCode }));
+    }, [checkFavourite, city, countryCode, stateCode])
 
     const handleFavourite = async (city: object) => {
         toggleFavouritesCities(city);
-        if (checkFavourite(city)) {
-            setClick(false);
-        } else {
-            setClick(true);
-        }
+        // if (checkFavourite(city)) {
+        //     setClick(false);
+        // } else {
+        //     setClick(true);
+        // }
+        setClick(!isClick);
         console.log(favoriteCities)
-        const result = await axiosInstance.post('/user/update', {favorites: favoriteCities, mail: UserStore.getState().email})
+        const result = await axiosInstance.post('/user/update', { favorites: favoriteCities, mail: UserStore.getState().email })
         console.log(result.status)
-        if(result.status !== 200){
+        if (result.status !== 200) {
             toggleFavouritesCities(city);
         }
     };
@@ -55,7 +62,11 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
                         </Grid>
                         <Grid item >
                             <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                                <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
+                                {
+                                    isLogged ?
+                                        <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
+                                        : null
+                                }
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
