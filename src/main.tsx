@@ -35,7 +35,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-
           <Route path="/" element={<><Navbar /><HomePage /></>} />
           <Route path="/weather/:city/:stateCode/:countryCode" element={<><Navbar /><WeatherCityPage /></>} />
           <Route path="/auth" element={<><Navbar /><AuthPage /></>} />
