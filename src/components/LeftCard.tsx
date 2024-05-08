@@ -13,18 +13,21 @@ import axiosInstance from "../axios/axiosConf.ts";
 
 interface LeftCardProps {
     city: string;
+    stateCode: string;
+    countryCode: string;
     WeatherInfo: any;
 }
 
 
-const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
+const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, stateCode }) => {
     const {favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
-    const [isClick, setClick] = React.useState(false);
+    const [isClick, setClick] = React.useState(checkFavourite({city, stateCode, countryCode}));
 
-    const handleFavourite = async(city) => {
+    const handleFavourite = async(city : object) => {
         setClick(!isClick);
         toggleFavouritesCities(city);
-        const result = await axiosInstance.post('/user/update', {favourites: favoriteCities})
+        console.log(isClick, favoriteCities)
+        const result = await axiosInstance.post('/user/update', {favorites: favoriteCities, mail: UserStore.getState().email})
         if(result.status !== 200){
             toggleFavouritesCities(city);
         }
@@ -47,10 +50,7 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
                         </Grid>
                         <Grid item >
                             <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                                {checkFavourite(city) ? 
-                                <Heart isClick={!isClick} onClick={() => handleFavourite(city)} />
-                                : <Heart isClick={isClick} onClick={() => { handleFavourite(city) }} />
-                                }
+                            <Heart isClick={isClick} onClick={() => handleFavourite({city, stateCode, countryCode})} />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>

@@ -90,7 +90,7 @@ function WeatherCityPage() {
         alignContent="center"
         style={{ marginTop: 0, marginBottom: 30 }}
       >
-        <LeftCard city={city} WeatherInfo={weather.data} />
+        <LeftCard city={city} countryCode={countryCode} stateCode={stateCode} WeatherInfo={weather.data} />
 
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

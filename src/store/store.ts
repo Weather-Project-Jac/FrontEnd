@@ -75,7 +75,7 @@ export const UserStore = create(
           const updatedCities = [...state.favoriteCities];
           const index = updatedCities.findIndex(
             (item) =>
-              item.city === city.city && item.countryCode === city.countryCode && item.stateName === city.stateName
+              item.city === city.city && item.countryCode === city.countryCode && item.stateCode === city.stateCode
           )
           if (index === -1) {
             updatedCities.push(city);
@@ -88,7 +88,7 @@ export const UserStore = create(
       checkFavourite: (city) => {
         const index : number = UserStore.getState().favoriteCities.findIndex(
           (item) =>
-            item.city === city.city && item.countryCode === city.countryCode && item.stateName === city.stateName
+            item.city === city.city && item.countryCode === city.countryCode && item.stateCode === city.stateCode
         );
         return index !== -1;
       },   
