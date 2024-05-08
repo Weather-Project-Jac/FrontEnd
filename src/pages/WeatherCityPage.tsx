@@ -16,6 +16,7 @@ import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation, useNavigate } from "react-router-dom";
+import WeatherIcon from "../components/WeatherIcon.tsx";
 
 function WeatherCityPage() {
 
@@ -99,14 +100,15 @@ function WeatherCityPage() {
                 <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
 
-                  <Avatar src={icons.thunderstorm} sx={{
+                  {/* <Avatar src={icons.thunderstorm} sx={{
                     pr: 2,
                     width: "10%",
                     height: "10%",
                     minHeight: isSmallScreen ? "50px" : "0",
                     minWidth: isSmallScreen ? "50px" : "0",
                     marginRight: 0,
-                  }} />
+                  }} /> */}
+                  {/* <WeatherIcon weatherCode={weather.weatherCode} /> */}
                   <ListItemText
 
                     primary={`${item} 13 June`}

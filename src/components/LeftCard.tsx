@@ -10,6 +10,7 @@ import React, { useEffect } from 'react';
 import Heart from "react-animated-heart";
 import { UserStore } from "../store/store.ts";
 import axiosInstance from "../axios/axiosConf.ts";
+import WeatherIcon from "./WeatherIcon.tsx";
 
 interface LeftCardProps {
     city: string;
@@ -66,15 +67,8 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
 
 
 
-                        <Grid item xs={12}>
-                            <Box
-                                component='img'
-                                sx={{
-                                    display: 'block',
-                                    width: '55%',
-                                    margin: 'auto',
-                                }}
-                                src={icons.thunderstorm} />
+                        <Grid item xs={12}>                      
+                            <WeatherIcon weatherCode={WeatherInfo?.weatherCode} />
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={300} fontSize={70} marginBottom={0}>

@@ -7,8 +7,9 @@ import axios from "axios"; //chiamate normali (geoposition)
 import icons from '../assets/icons/index.ts';
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
+import WeatherIcon from '../components/WeatherIcon.tsx';
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {    
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);
     // Dummy current date and position
     const currentDate = new Date();
@@ -28,7 +29,7 @@ const HomePage: React.FC = () => {
                         return null;
                     }
                     const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-                    return { city, temperature: result ? result.data.apparentTemperature : null };
+                    return { city, temperature: result ? result.data.apparentTemperature : null, weatherCode: result ? result.data.weatherCode : null};
                 });
 
                 const citiesWeatherData = await Promise.all(citiesWeatherPromises);
@@ -174,7 +175,6 @@ const HomePage: React.FC = () => {
                         <Grid container spacing={2}>
                             {weather && weather.map((city, key) => (
                                 <Grid item xs={isSmallScreen ? 12 : 4} key={key} sx={{ display: "flex", justifyContent: "center" }}>
-                                    {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
                                     <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500, display: "flex", flexDirection: "column", justifyContent: "center" }}
                                         onClick={() => handleCardClick(city.city as { city: string, countryCode: string, stateCode: string })}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -186,11 +186,9 @@ const HomePage: React.FC = () => {
                                                     {city.temperature} °C
                                                 </Typography>
                                             </Typography>
-                                            <img src={icons.thunder} style={{ width: 70 }} />
-
+                                            <WeatherIcon weatherCode={city.weatherCode} />
                                         </CardContent>
                                     </Card>
-                                    {/* </Link> */}
                                 </Grid>
                             ))}
                         </Grid>

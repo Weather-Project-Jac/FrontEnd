@@ -12,6 +12,7 @@ import { UserStore } from "../store/store";
 import axiosConf from "../axios/axiosConf";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import WeatherIcon from "../components/WeatherIcon";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
@@ -32,7 +33,7 @@ function HomePage() {
                         return null;
                     }
                     const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
-                    return { city, temperature: result ? result.data.temperature80m : null };
+                    return { city, temperature: result ? result.data.temperature80m : null, weatherCode: result ? result.data.weatherCode : null};
                 });
 
                 const citiesWeatherData = await Promise.all(citiesWeatherPromises);
@@ -71,13 +72,14 @@ function HomePage() {
                                         }}>
                                             {item.city.city} - {item.city.countryCode}
                                         </Typography>
-                                        <Box
+{/*                                         <Box
                                             component='img'
                                             sx={{
                                                 width: '70%',
                                                 margin: 'auto',
                                             }}
-                                            src={icons.clear} />
+                                            src={icons.clear} /> */}
+                                        <WeatherIcon weatherCode={item.weatherCode} />
                                         <Typography variant="body1" color="white" sx={{
                                             pl: 1,
                                             textAlign: 'center',
