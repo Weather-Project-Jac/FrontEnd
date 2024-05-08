@@ -58,25 +58,26 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
 
                     <Grid container style={{ marginTop: isLogged ? undefined : "12px" }} rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
-                        <Grid item style={{ marginLeft: isSmallScreen ? 0 : 24 }}>
-                            <Typography variant="h4" gutterBottom align="left">
-                                {city}
-                            </Typography>
-                        </Grid>
-                        <Grid item style={{ marginLeft: isLogged ? "24px" : undefined, marginRight: isLogged ? '0px' : "24px" && isSmallScreen ? '0px' : "24px" }}>
-                            <Typography variant="h6" gutterBottom align={isLogged ? "right" : "center"}>
-                                {new Date().toLocaleDateString()}
-                            </Typography>
-                        </Grid>
-                        {isLogged ?
-                            <Grid item >
-                                <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                                    <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
-
+                        <Grid marginLeft={isSmallScreen ? 1.8 : 0} width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'}>
+                            <Grid item style={{ marginLeft: isSmallScreen ? 0 : 24 }}>
+                                <Typography variant="h4" gutterBottom align="left">
+                                    {city}
                                 </Typography>
-                            </Grid> : null
-                        }
+                            </Grid>
+                            <Grid item style={{ marginLeft: isLogged ? "24px" : undefined, marginRight: isLogged ? '0px' : "24px" && isSmallScreen ? '0px' : "24px" }}>
+                                <Typography variant="h6" gutterBottom align={isLogged ? "right" : "center"}>
+                                    {new Date().toLocaleDateString()}
+                                </Typography>
+                            </Grid>
+                            {isLogged ?
+                                <Grid item >
+                                    <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
+                                        <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
 
+                                    </Typography>
+                                </Grid> : null
+                            }
+                        </Grid>
 
 
                         <Grid item xs={12}>
