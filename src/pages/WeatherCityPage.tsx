@@ -32,9 +32,17 @@ function WeatherCityPage() {
     async function fetchWeather() {
       try {
         const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
-        console.log(response);
-        setWeather(response.data);
-        setLoading(false);
+        if(response.status !== 200) {
+          //navigate("/");
+          console.log(response)
+          return;
+        }
+        const data = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
+        if(data){
+          setWeather(data);
+          setLoading(false);
+          console.log(data);
+        }
       } catch (error) {
         console.error(error);
         //navigate("/");
@@ -73,7 +81,7 @@ function WeatherCityPage() {
         alignContent="center"
         style={{ marginTop: 0, marginBottom: 30 }}
       >
-        <LeftCard city={city} WeatherInfo={[]} />
+        <LeftCard city={city} WeatherInfo={weather.data} />
 
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

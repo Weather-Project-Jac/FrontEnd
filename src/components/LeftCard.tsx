@@ -52,26 +52,31 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={300} fontSize={70} marginBottom={0}>
-                                Clear
+                                { }
                             </Typography>
                             <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={900} fontSize={60}>
-                                24°
+                                {WeatherInfo?.apparentTemperature} °C
                             </Typography>
                         </Grid>
                         <Grid item xs={12} textAlign='center' >
                             <Grid container spacing={2}>
-                                {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item: string) => (
-                                    <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"center"} alignItems={"center"}>
+                                {Object.entries({
+                                    "iconThermometer": WeatherInfo?.temperature80m + " °C",
+                                    "iconWind": WeatherInfo?.windSpeed + " km/h",
+                                    "iconCloud": WeatherInfo?.precipitationProb + " %",
+                                    "iconHumidity": WeatherInfo?.relativeHumidity + " %"
+                                }).map(([item, value]) => (
+                                    <Grid item xs={6} md={6} display="flex" key={item} justifyContent="center" alignItems="center">
                                         <Box
-                                            component='img'
+                                            component="img"
                                             src={icons[item]}
                                             sx={{
                                                 maxWidth: 50,
                                                 // marginLeft: "25%",
                                             }}
                                         />
-                                        <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={500} marginBottom={0} marginLeft="10%">
-                                            30%
+                                        <Typography variant="body1" gutterBottom textAlign="center" fontFamily="Inter, sans-serif" fontWeight={500} marginBottom={0} marginLeft="10%">
+                                            {value}
                                         </Typography>
                                     </Grid>
                                 ))}
