@@ -3,8 +3,6 @@ import {
   Typography,
   Container,
   Grid,
-  CardContent,
-  Stack,
   Card,
   List,
   ListItem,
@@ -16,8 +14,7 @@ import {
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import axios from "../axios/axiosConf.ts";
-import { useLocation, useNavigate } from "react-router-dom";
-import GraphsCity from "../components/GraphsCity.tsx";
+import { useLocation } from "react-router-dom";
 import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 import { ThreeDots } from "react-loader-spinner";
 import Graph from "../components/GraphInfo.tsx";
