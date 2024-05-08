@@ -2,17 +2,15 @@ import {
     Typography,
     Container,
     Grid,
-    Box,
     Card,
     CardContent,
 } from "@mui/material";
 
-import icons from "../assets/icons";
 import { UserStore } from "../store/store";
 import axiosConf from "../axios/axiosConf";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import WeatherIcon from "../components/WeatherIcon";
+import {WeatherIcon, WeatherType} from "../components/WeatherIcon";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
@@ -72,13 +70,6 @@ function HomePage() {
                                         }}>
                                             {item.city.city} - {item.city.countryCode}
                                         </Typography>
-{/*                                         <Box
-                                            component='img'
-                                            sx={{
-                                                width: '70%',
-                                                margin: 'auto',
-                                            }}
-                                            src={icons.clear} /> */}
                                         <WeatherIcon weatherCode={item.weatherCode} />
                                         <Typography variant="body1" color="white" sx={{
                                             pl: 1,
@@ -95,7 +86,7 @@ function HomePage() {
                                             fontFamily: "Inter, sans-serif",
                                             fontWeight: 300
                                         }}>
-                                            Sunny
+                                            {WeatherType[item.weatherCode]}
                                         </Typography>
                                     </CardContent>
                                 </Card>

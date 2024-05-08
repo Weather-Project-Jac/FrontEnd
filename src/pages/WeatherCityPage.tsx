@@ -7,7 +7,6 @@ import {
   Card,
   List,
   ListItem,
-  Avatar,
   ListItemText,
   useTheme,
   useMediaQuery,
@@ -15,8 +14,8 @@ import {
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
-import { useLocation, useNavigate } from "react-router-dom";
-import WeatherIcon from "../components/WeatherIcon.tsx";
+import { useLocation } from "react-router-dom";
+import { WeatherIcon, WeatherType } from "../components/WeatherIcon";
 
 function WeatherCityPage() {
 
@@ -25,7 +24,7 @@ function WeatherCityPage() {
   const [countryCode, setcountryCode] = React.useState<string>("");
   const [stateCode, setstateCode] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
-  const [loading, setLoading] = React.useState(true);
+  const [weekWeather, setWeekWeather] = React.useState([] as any[]);
 
   React.useEffect(() => {
     async function fetchWeather() {
@@ -39,19 +38,28 @@ function WeatherCityPage() {
         const data = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
         if(data){
           setWeather(data);
-          setLoading(false);
-          console.log(data);
+          //console.log(data);
         }
         const date = new Date().toISOString().split("T")[0];
         const weekLaterDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
-        console.log(date, weekLaterDate)
         const response2 = await axios.get(`/weather/${city}/${countryCode}/${stateCode}/${date}/${weekLaterDate}`);
         if(response2.status !== 200) {
           //navigate("/");
           console.log(response2)
           return;
         }
-        console.log(response2.data);
+        for(let i = 0; i < 7; i++) {
+          /* data from response.data  "05-08"*/
+          const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+          response2.data.filter((item) => {
+            const splitDate = date.split("-");
+            const onlyDate = splitDate[1] + "-" + splitDate[2];
+            if(item.date === onlyDate) {
+              console.log(item)
+              setWeekWeather((prev) => [...prev, item]);
+            }
+          })
+        }
       } catch (error) {
         console.error(error);
         //navigate("/");
@@ -95,24 +103,15 @@ function WeatherCityPage() {
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <List sx={{ px: 2 }} >
-              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].map((item, index) => (
+              {weekWeather.map((item, index) => (
 
                 <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
-
-                  {/* <Avatar src={icons.thunderstorm} sx={{
-                    pr: 2,
-                    width: "10%",
-                    height: "10%",
-                    minHeight: isSmallScreen ? "50px" : "0",
-                    minWidth: isSmallScreen ? "50px" : "0",
-                    marginRight: 0,
-                  }} /> */}
-                  {/* <WeatherIcon weatherCode={weather.weatherCode} /> */}
+                  <WeatherIcon weatherCode={item?.data?.weatherCode} />
                   <ListItemText
 
-                    primary={`${item} 13 June`}
-                    secondary="Thunderstorm"
+                    primary={new Date(new Date().getFullYear() + "-" + item?.date).toDateString()}
+                    secondary={WeatherType[item?.data?.weatherCode]}
                     sx={{
                       '.MuiListItemText-primary': {
                         color: 'white',
@@ -128,25 +127,6 @@ function WeatherCityPage() {
                       }
                     }}
                   />
-                  <Grid item xs={7} textAlign='center'>
-                    <Grid container spacing={2}>
-                      {["iconThermometer", "iconWind", "iconCloud", "iconHumidity"].map((item: string) => (
-                        <Grid item xs={6} md={6} display={"flex"} key={item} justifyContent={"center"} alignItems={"center"}>
-                          <Box
-                            component='img'
-                            src={icons[item]}
-                            sx={{
-                              maxWidth: isSmallScreen ? 20 : 35,
-                              marginLeft: "25%",
-                            }}
-                          />
-                          <Typography variant="body1" gutterBottom textAlign={"center"} fontFamily={"Inter, sans-serif"} fontWeight={500} marginBottom={0} marginLeft="10%">
-                            30%
-                          </Typography>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Grid>
                 </ListItem>
               ))}
 
