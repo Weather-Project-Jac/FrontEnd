@@ -53,8 +53,7 @@ export function getStringFromNumber(number: number): string | undefined {
 }
 
 function WeatherIcon({ weatherCode }: { weatherCode: number }) {
-    console.log(icons[getStringFromNumber(weatherCode) as keyof typeof icons])
-    const icon = weatherCode ? (
+    const icon = typeof weatherCode == 'number' ? (
         <Box
             component='img'
             sx={{
