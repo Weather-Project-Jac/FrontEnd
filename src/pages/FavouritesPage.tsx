@@ -33,7 +33,7 @@ function HomePage() {
                 {/* <LeftCard /> */}
 
                 <Grid item sm={11} style={{ paddingLeft: 0 }}>
-                    <Grid container spacing={10} style={{ paddingTop: 50, paddingLeft: isSmallScreen ? 30 : 80 }} alignItems="center" display={'flex'} justifyContent={'center'} >
+                    <Grid container spacing={10} style={{ paddingTop: 50, paddingLeft: 30 }} alignItems="center" display={'flex'} justifyContent={'center'} >
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
                             <Grid item xs={12} sm={3} key={item} alignItems={"center"}>
                                 <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}>
