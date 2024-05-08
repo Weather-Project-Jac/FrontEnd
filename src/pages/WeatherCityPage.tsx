@@ -106,7 +106,10 @@ function WeatherCityPage() {
 
                 <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
 
-                  <WeatherIcon weatherCode={item?.data?.weatherCode} />
+                  {/* Need to implement isSmallScreen? */}
+                  <div style={{ maxHeight: 200, maxWidth: 200, marginRight: 50 }}>
+                    <WeatherIcon weatherCode={item?.data?.weatherCode} />
+                  </div>
                   <ListItemText
 
                     primary={new Date(new Date().getFullYear() + "-" + item?.date).toDateString()}
