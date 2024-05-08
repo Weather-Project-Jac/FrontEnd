@@ -1,13 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Typography, Container, Card, CardContent, Grid, Box, Paper, useMediaQuery, useTheme, Alert, Button } from '@mui/material';
-//import { Link } from 'react-router-dom';
 import { UserStore } from '../store/store.ts';
 import axiosConf from "../axios/axiosConf.ts"; //chiamate configurate per il meteo
 import axios from "axios"; //chiamate normali (geoposition)
-import icons from '../assets/icons/index.ts';
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
-import WeatherIcon from '../components/WeatherIcon.tsx';
+import {WeatherIcon} from '../components/WeatherIcon.tsx';
 
 const HomePage: React.FC = () => {    
     const lastSearchedCities = UserStore((state) => state.lastSearchedCities);

@@ -3,7 +3,7 @@ import icons from "../assets/icons/index.ts";
 import { Box } from "@mui/material";
 
 export enum WeatherType {
-    ClearSky = 0,
+    "clear" = 0,
     MainlyClear = 1,
     PartlyCloudy = 2,
     Overcast = 3,
@@ -33,56 +33,7 @@ export enum WeatherType {
     ThunderstormHeavyHail = 99
 }
 
-export enum WeatherTranslation {
-    Sole = "Clear",
-    SoleConNuvoleEPioggia = "Mainly clear, partly cloudy, and overcast",
-    SoloNuvole = "Mainly clear, partly cloudy, and overcast",
-    LunaPiena = "Full Moon",
-    LunaConNuvole = "Night Cloudy",
-    SoloMezzaLuna = "Nigth Clear",
-    LunaConNuvoleEPioggia = "Nigth Rain",
-    MezzaLunaConNuvola = "Nigth",
-    NuvoleConPioggia = "Rain",
-    SoleConNuvole = "Sunny",
-    SoleConNuvola = "Sunny1",
-    NuvolaConFulmine = "Thunder",
-    NuvoleConPioggiaEFulmine = "Thunderstorm"
-}
-
 function WeatherIcon({ weatherCode }) {
-    const getIconFilename = (weather) => {
-        switch (weather) {
-            case WeatherTranslation.Sole:
-                return icons.clear;
-            case WeatherTranslation.SoleConNuvoleEPioggia:
-                return icons.cloudrain;
-            case WeatherTranslation.SoloNuvole:
-                return icons.cloudy;
-            case WeatherTranslation.LunaPiena:
-                return icons.fullmoon;
-            case WeatherTranslation.LunaConNuvole:
-                return icons.iconCloud; // Assuming this is a generic cloudy night icon
-            case WeatherTranslation.SoloMezzaLuna:
-                return icons.nigthclear;
-            case WeatherTranslation.LunaConNuvoleEPioggia:
-                return icons.nigthrain;
-            case WeatherTranslation.MezzaLunaConNuvola:
-                return icons.nigth;
-            case WeatherTranslation.NuvoleConPioggia:
-                return icons.rain;
-            case WeatherTranslation.SoleConNuvole:
-                return icons.sunny;
-            case WeatherTranslation.SoleConNuvola:
-                return icons.sunny1;
-            case WeatherTranslation.NuvolaConFulmine:
-                return icons.thunder;
-            case WeatherTranslation.NuvoleConPioggiaEFulmine:
-                return icons.thunderstorm;
-            default:
-                return icons.clear; // Default icon
-        }
-    };
-
     const icon = weatherCode ? (
         <Box
             component='img'
@@ -91,7 +42,7 @@ function WeatherIcon({ weatherCode }) {
                 width: '55%',
                 margin: 'auto',
             }}
-            src={getIconFilename(weatherCode)} />
+            src={icons[WeatherType[weatherCode]]} />
     ) : (
         <ThreeDots
             visible={true}
@@ -105,4 +56,4 @@ function WeatherIcon({ weatherCode }) {
     return icon;
 }
 
-export default WeatherIcon;
+export  {WeatherIcon};

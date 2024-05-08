@@ -7,7 +7,6 @@ import {
   Card,
   List,
   ListItem,
-  Avatar,
   ListItemText,
   useTheme,
   useMediaQuery,
@@ -15,8 +14,7 @@ import {
 import LeftCard from "../components/LeftCard";
 import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
-import { useLocation, useNavigate } from "react-router-dom";
-import WeatherIcon from "../components/WeatherIcon.tsx";
+import { useLocation } from "react-router-dom";
 
 function WeatherCityPage() {
 
@@ -25,7 +23,6 @@ function WeatherCityPage() {
   const [countryCode, setcountryCode] = React.useState<string>("");
   const [stateCode, setstateCode] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function fetchWeather() {
