@@ -16,6 +16,32 @@ const HomePage: React.FC = () => {
     const [currentTemperature, setCurrentTemperature] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+    const [weather, setWeather] = React.useState<any>([]);
+
+    useEffect(() => {
+        const fetchWeatherForCities = async () => {
+            try {
+                const citiesWeatherPromises = lastSearchedCities.map(async (city) => {
+                    const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
+                    if (response.status !== 200) {
+                        console.log(response);
+                        return null;
+                    }
+                    const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
+                    return { city, temperature: result ? result.data.apparentTemperature : null };
+                });
+
+                const citiesWeatherData = await Promise.all(citiesWeatherPromises);
+                const filteredWeatherData = citiesWeatherData.filter(weather => weather !== null);
+
+                setWeather(filteredWeatherData);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchWeatherForCities();
+    }, [lastSearchedCities]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -146,18 +172,18 @@ const HomePage: React.FC = () => {
                             Latest Searched Cities By You:
                         </Typography>
                         <Grid container spacing={2}>
-                            {lastSearchedCities.map((city, index) => (
-                                <Grid item xs={isSmallScreen ? 12 : 4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
+                            {weather && weather.map((city, key) => (
+                                <Grid item xs={isSmallScreen ? 12 : 4} key={key} sx={{ display: "flex", justifyContent: "center" }}>
                                     {/* <Link to={`/weather/${(city as { city: string }).city}/${(city as { countryCode: string }).countryCode}`} > */}
-                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500, display: "flex", flexDirection: "column", justifyContent: "center"}}
-                                        onClick={() => handleCardClick(city as { city: string, countryCode: string, stateCode: string })}>
+                                    <Card style={{ backgroundColor: '#1d2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .2)', cursor: 'pointer', width: 500, display: "flex", flexDirection: "column", justifyContent: "center" }}
+                                        onClick={() => handleCardClick(city.city as { city: string, countryCode: string, stateCode: string })}>
                                         <CardContent style={{ paddingBottom: 16 }} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
                                             <Typography variant="h5" >
-                                                {(city as { city: string }).city} {/* City Name */}
-                                                {(city as { stateCode: string }).stateCode} {/* stateCode */}
-                                                {(city as { countryCode: string }).countryCode} {/* countryCode */}
+                                                {(city.city as { city: string }).city} {/* City Name */}
+                                                {(city.city as { stateCode: string }).stateCode} {/* stateCode */}
+                                                {(city.city as { countryCode: string }).countryCode} {/* countryCode */}
                                                 <Typography variant="body1" sx={{ fontSize: 30, paddingTop: 0 }}>
-                                                    23°C {/* Temperatura */}
+                                                    {city.temperature} °C
                                                 </Typography>
                                             </Typography>
                                             <img src={icons.thunder} style={{ width: 70 }} />
