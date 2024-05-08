@@ -20,10 +20,6 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [alert, setAlert] = useState<CustomAlertProps>({ message: '', severity: 'success', handleClose: () => { }});
 
-/*   useEffect(() => {
-    console.log(croppedImage);
-  }, [croppedImage]); */
-
   const containerStyle: CSSProperties = {
     display: 'flex',
     justifyContent: 'center',
@@ -45,7 +41,6 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
 
   const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file)
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -64,12 +59,10 @@ const AvatarPicker: React.FC<AvatarPickerProps> = ({ setSelectedAvatar, selected
 
       const result = await axiosConf.post('/user/update', { profile_image_url: croppedAvatar, mail: UserStore.getState().email });
       if(result.status === 200) {
-        console.log('Avatar updated');  
         setSelectedAvatar(croppedAvatar);
         UserStore.setState({ avatar: croppedAvatar || "test" });
         setShowModal(false);
       } else {
-        console.log('Error updating avatar');
         setAlert({ message: 'Error updating avatar', severity: 'error', handleClose: () => setAlert({ message: '', severity: 'success', handleClose: () => { }}) });
       }
 

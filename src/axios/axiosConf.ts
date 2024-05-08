@@ -13,7 +13,6 @@ axiosInstance.interceptors.request.use(
     const token = UserStore.getState().token;
     if (token) {
       config.headers['token'] = token;
-      console.log(token)
     }
     return config;
   },

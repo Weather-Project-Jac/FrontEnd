@@ -79,14 +79,13 @@ export const UserStore = create(
               item.countryCode === city.countryCode &&
               item.stateCode === city.stateCode
           );
-          console.log(index)
           if (index === -1) {
             // Add city if it doesn't exist in the list
             if (updatedCities.length < 8) {
               updatedCities.push(city);
             } else {
               // If the limit is reached, do not add the city
-              console.log("Cannot add more than 8 favorite cities.");
+
             }
           } else {
             // Remove city if it exists in the list
@@ -143,7 +142,6 @@ export const UserStore = create(
         },
       },
       onRehydrateStorage: (state) => {
-        console.log("hydration starts");
         // Check if user has logged in before
         if (state && state.loginTime) {
           // Calculate the time difference since login
@@ -157,9 +155,8 @@ export const UserStore = create(
 
         return (state, error) => {
           if (error) {
-            console.log("an error happened during hydration", error);
+            console.error("an error happened during hydration", error);
           } else {
-            console.log("hydration finished");
           }
         };
       },

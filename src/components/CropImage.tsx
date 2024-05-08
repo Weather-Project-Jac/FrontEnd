@@ -1,7 +1,6 @@
 const getCroppedImg = async (imageSrc: string, pixelCrop: any, width: number, height: number) => {
   const image = new Image();
   image.src = imageSrc;
-  console.log(image)
 
   const canvas = document.createElement('canvas');
   canvas.width = width;

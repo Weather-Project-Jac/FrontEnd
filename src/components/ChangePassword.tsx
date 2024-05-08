@@ -38,16 +38,6 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ open, onClose }) => {
       setAlert({ message: 'The new Passwords do not match', severity: 'error', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       return;
     }
-    /* check old password */
-
-    /* const result = await axiosConf.post('/user/update', { password: newPassword });
-    if(result.status === 200) {
-      setAlert({ message: 'Password changed successfully', severity: 'success', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
-      handleCloseDialog();
-    } else {
-      setAlert({ message: 'An error occurred while changing the password', severity: 'error', handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
-      console.log(result);
-    } */
   };
 
   return (

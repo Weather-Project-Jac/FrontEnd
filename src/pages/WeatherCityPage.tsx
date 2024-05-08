@@ -35,26 +35,20 @@ function WeatherCityPage() {
       try {
         const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
         if (response.status !== 200) {
-          //navigate("/");
-          console.log(response)
           return;
         }
         setTodayWeather(response.data);
         const data = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
         if (data) {
           setWeather(data);
-          //console.log(data);
         }
         const date = new Date().toISOString().split("T")[0];
         const weekLaterDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
         const response2 = await axios.get(`/weather/${city}/${countryCode}/${stateCode}/${date}/${weekLaterDate}`);
         if (response2.status !== 200) {
-          //navigate("/");
-          console.log(response2)
           return;
         }
         for (let i = 0; i < 7; i++) {
-          /* data from response.data  "05-08"*/
           const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
           response2.data.filter((item) => {
             const splitDate = date.split("-");
@@ -66,7 +60,6 @@ function WeatherCityPage() {
         }
       } catch (error) {
         console.error(error);
-        //navigate("/");
       }
     }
     if (city)
@@ -74,7 +67,6 @@ function WeatherCityPage() {
   }, [city, countryCode, stateCode, setWeekWeather]);
 
   React.useEffect(() => {
-    // console.log(location)
     if (location.state?.city && location.state?.countryCode && location.state?.stateCode) {
 
       if (location.state?.stateCode === "Trentino-South Tyrol") {
@@ -85,7 +77,6 @@ function WeatherCityPage() {
       setCity(location.state?.city);
       setcountryCode(location.state?.countryCode);
 
-      console.log(location.state?.city, location.state?.countryCode, location.state?.stateCode)
     }
   }, [location.state]);
 
@@ -182,7 +173,6 @@ function WeatherCityPage() {
           )}
           {todayWeather.length > 0 && (
             <Grid item xs={12} sm={6} md={6}>
-              {console.log(getUniqueValues(todayWeather))}
 
               <Card
                 style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}

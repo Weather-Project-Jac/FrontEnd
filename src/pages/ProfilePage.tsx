@@ -6,7 +6,6 @@ import AvatarPicker from '../components/ProfileImagePicker.tsx';
 
 const Profile: React.FC = () => {
     const user = UserStore((state) => state);
-    console.log(user);
 
     if (!user.isLogged) {
         return (

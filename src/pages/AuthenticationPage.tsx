@@ -64,7 +64,6 @@ function AuthPage() {
       mail: loginInfo.email,
       psw: loginInfo.password
     }).then((response) => {
-      console.log(response);
       setAlert({ message: "User logged in", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       loginInfo.email = "";
       loginInfo.password = "";
@@ -73,15 +72,12 @@ function AuthPage() {
       user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
       user.setAvatar(response.data?.result?.profile_image_url || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
-      console.log(response.data?.result.favorites)
       for (let city of response.data?.result?.favorites || []) {
         user.toggleFavouritesCities(city);
       }
       user.setIsLogged();
-      console.log(user.favoriteCities)
       navigate("/");
     }).catch((error) => {
-      console.log(error);
       setAlert({ message: error?.response?.data || "Error logging in", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
     });
   };
@@ -103,7 +99,6 @@ function AuthPage() {
       profile: userPng
     })
       .then((response) => {
-        console.log(response);
         setAlert({ message: "User registered", severity: "success", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
 
         registerInfo.email = "";
@@ -121,7 +116,6 @@ function AuthPage() {
         user.setIsLogged();
       })
       .catch((error) => {
-        console.log(error);
         setAlert({ message: error?.response?.data || "Error registering user", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
       });
   }
@@ -246,7 +240,6 @@ function AuthPage() {
               marginLeft: "10px",
               marginRight: "10px",
               width: isSmallScreen ? "94%" : "",
-              //height: "600px",
             }}
           />
           <Grid item xs={12} sm={5.5}>

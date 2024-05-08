@@ -23,7 +23,6 @@ const HomePage: React.FC = () => {
                 const citiesWeatherPromises = lastSearchedCities.map(async (city) => {
                     const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
                     if (response.status !== 200) {
-                        console.log(response);
                         return null;
                     }
                     const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
@@ -63,7 +62,7 @@ const HomePage: React.FC = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error);
         } else {
-            console.log("Geolocation not supported");
+            console.error('Geolocation is not supported by this browser.');
         }
     }, [currentPosition?.latitude && currentPosition.longitude && currentPosition.city && currentPosition.countrycode && currentPosition.stateName])
 

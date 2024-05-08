@@ -23,7 +23,6 @@ interface LeftCardProps {
 
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, stateCode }) => {
-    console.log(city, countryCode, stateCode)
     const { favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
     const [isClick, setClick] = React.useState(false);
     const isLogged = UserStore((state) => state.isLogged);
@@ -36,7 +35,6 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
     useEffect(() => {
         const fetchData = async () => {
             const result = await axiosInstance.post('/user/update', { favorites: favoriteCities, mail: UserStore.getState().email })
-            console.log(result.status)
             if (result.status !== 200) {
                 toggleFavouritesCities({ city, stateCode, countryCode });
             }
@@ -105,7 +103,6 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
                                             src={icons[item]}
                                             sx={{
                                                 maxWidth: 50,
-                                                // marginLeft: "25%",
                                             }}
                                         />
                                         <Typography variant="body1" gutterBottom textAlign="center" fontFamily="Inter, sans-serif" fontWeight={500} marginBottom={0} marginLeft="10%">
