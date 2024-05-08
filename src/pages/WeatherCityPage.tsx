@@ -26,9 +26,7 @@ function WeatherCityPage() {
   const [weather, setWeather] = React.useState({} as any);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => { // Fetch weather data when city changes
-    // console.log("Entro ZIO CAN")
-    // console.log(location.pathname)
+  React.useEffect(() => {
     async function fetchWeather() {
       try {
         const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
@@ -43,8 +41,9 @@ function WeatherCityPage() {
           setLoading(false);
           console.log(data);
         }
-        /* const date = new Date().toISOString().split("T")[0];
+       /*  const date = new Date().toISOString().split("T")[0];
         const weekLaterDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+        console.log(date, weekLaterDate)
         const response2 = await axios.get(`/weather/${city}/${countryCode}/${stateCode}/${date}/${weekLaterDate}`);
         if(response2.status !== 200) {
           //navigate("/");
