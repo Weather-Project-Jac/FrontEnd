@@ -20,12 +20,12 @@ interface LeftCardProps {
 
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, stateCode }) => {
-    const {favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
-    const [isClick, setClick] = React.useState(!checkFavourite({city, stateCode, countryCode}));
+    const { favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
+    const [isClick, setClick] = React.useState(checkFavourite({ city, stateCode, countryCode }));
 
-    const handleFavourite = async(city : object) => {
+    const handleFavourite = async (city: object) => {
         toggleFavouritesCities(city);
-        if(!checkFavourite(city)){
+        if (checkFavourite(city)) {
             setClick(false);
         } else {
             setClick(true);
@@ -55,7 +55,7 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
                         </Grid>
                         <Grid item >
                             <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                            <Heart isClick={isClick} onClick={() => handleFavourite({city, stateCode, countryCode})} />
+                                <Heart isClick={isClick} onClick={() => handleFavourite({ city, stateCode, countryCode })} />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
