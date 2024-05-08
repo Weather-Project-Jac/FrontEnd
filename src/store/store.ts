@@ -94,16 +94,27 @@ export const UserStore = create(
           }
           return { ...state, favoriteCities: updatedCities };
         });
-      },   
+      },
       checkFavourite: (city) => {
-        const index : number = UserStore.getState().favoriteCities.findIndex(
+        const index: number = UserStore.getState().favoriteCities.findIndex(
           (item) =>
-            item.city === city.city && item.countryCode === city.countryCode && item.stateCode === city.stateCode
+            item.city === city.city &&
+            item.countryCode === city.countryCode &&
+            item.stateCode === city.stateCode
         );
         return index !== -1;
-      },   
+      },
       reset: () => {
-        set(initialState);
+        set((state) => ({
+          ...state,
+          isLogged: initialState.isLogged,
+          email: initialState.email,
+          username: initialState.username,
+          avatar: initialState.avatar,
+          token: initialState.token,
+          loginTime: initialState.loginTime,
+          favoriteCities: initialState.favoriteCities,
+        }));
       },
     }),
     {
