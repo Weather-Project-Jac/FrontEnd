@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 
 function HomePage() {
     const favoriteCities = UserStore((state) => state.favoriteCities);
-    const toggleFavouritesCities = UserStore((state) => state.toggleFavouritesCities);
     const navigate = useNavigate();
 
     const handleCardClick = (city: { city: string, countryCode: string, stateCode: string }) => {
