@@ -11,6 +11,7 @@ type State = {
   lastSearchedCities: object[];
   token: string;
   loginTime: number;
+  favoriteCities: object[];
 };
 
 type Actions = {
@@ -20,6 +21,8 @@ type Actions = {
   setAvatar: (url: string) => void;
   addLastSearchedCities: (city: object) => void;
   setToken: (token: string) => void;
+  toggleFavouritesCities: (city: object) => void;
+  checkFavourite: (citu: object) => boolean;
   reset: () => void;
 };
 
@@ -30,6 +33,7 @@ const initialState: State = {
   avatar: userImg,
   lastSearchedCities: [],
   token: "",
+  favoriteCities: [],
   loginTime: 0,
 };
 
@@ -66,6 +70,28 @@ export const UserStore = create(
       setToken: (token) => {
         set((state) => ({ ...state, token }));
       },
+      toggleFavouritesCities: (city) => {
+        set((state) => {
+          const updatedCities = [...state.favoriteCities];
+          const index = updatedCities.findIndex(
+            (item) =>
+              item.city === city.city && item.countryCode === city.countryCode && item.stateName === city.stateName
+          )
+          if (index === -1) {
+            updatedCities.push(city);
+          } else {
+            updatedCities.splice(index, 1);
+          }
+          return { ...state, favoriteCities: updatedCities };
+        });
+      },   
+      checkFavourite: (city) => {
+        const index : number = UserStore.getState().favoriteCities.findIndex(
+          (item) =>
+            item.city === city.city && item.countryCode === city.countryCode && item.stateName === city.stateName
+        );
+        return index !== -1;
+      },   
       reset: () => {
         set(initialState);
       },

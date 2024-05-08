@@ -43,6 +43,15 @@ function WeatherCityPage() {
           setLoading(false);
           console.log(data);
         }
+        /* const date = new Date().toISOString().split("T")[0];
+        const weekLaterDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+        const response2 = await axios.get(`/weather/${city}/${countryCode}/${stateCode}/${date}/${weekLaterDate}`);
+        if(response2.status !== 200) {
+          //navigate("/");
+          console.log(response2)
+          return;
+        }
+        console.log(response2.data); */
       } catch (error) {
         console.error(error);
         //navigate("/");

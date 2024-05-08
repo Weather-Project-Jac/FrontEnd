@@ -11,9 +11,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = UserStore.getState().token;
-    console.log(token)
     if (token) {
       config.headers['token'] = token;
+      console.log(token)
     }
     return config;
   },

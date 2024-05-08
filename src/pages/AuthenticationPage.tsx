@@ -71,8 +71,11 @@ function AuthPage() {
       user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
       user.setAvatar(response.data?.result?.profile_image_url || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
+      for (let city of response.data?.result?.favourites || []) {
+        user.toggleFavouritesCities(city);
+      }
       user.setIsLogged();
-
+      console.log(user.favoriteCities)
       navigate("/");
     }).catch((error) => {
       console.log(error);
@@ -109,6 +112,9 @@ function AuthPage() {
         user.setUsername(response.data?.newUser?.username);
         user.setAvatar(response.data?.newUser?.profile_image_url || userPng);
         user.setToken(response.data?.token);
+        for (let city of response.data?.newUser?.favourites || []) {
+          user.toggleFavouritesCities(city);
+        }
         user.setIsLogged();
       })
       .catch((error) => {

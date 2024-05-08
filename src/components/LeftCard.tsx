@@ -8,6 +8,8 @@ import {
 import icons from '../assets/icons/index.ts';
 import React from 'react';
 import Heart from "react-animated-heart";
+import { UserStore } from "../store/store.ts";
+import axiosInstance from "../axios/axiosConf.ts";
 
 interface LeftCardProps {
     city: string;
@@ -16,9 +18,17 @@ interface LeftCardProps {
 
 
 const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
-
+    const {favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
     const [isClick, setClick] = React.useState(false);
 
+    const handleFavourite = async(city) => {
+        setClick(!isClick);
+        toggleFavouritesCities(city);
+        const result = await axiosInstance.post('/user/update', {favourites: favoriteCities})
+        if(result.status !== 200){
+            toggleFavouritesCities(city);
+        }
+    };
     return (
         <Grid item xs={12} sm={5} >
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
@@ -37,7 +47,10 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo }) => {
                         </Grid>
                         <Grid item >
                             <Typography style={{ padding: 0, margin: 0 }} variant="h6" gutterBottom align="center">
-                                <Heart isClick={isClick} onClick={() => setClick(!isClick)} />
+                                {checkFavourite(city) ? 
+                                <Heart isClick={!isClick} onClick={() => handleFavourite(city)} />
+                                : <Heart isClick={isClick} onClick={() => { handleFavourite(city) }} />
+                                }
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
