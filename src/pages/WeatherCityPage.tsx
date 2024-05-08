@@ -93,10 +93,14 @@ function WeatherCityPage() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   function getUniqueValues(array) {
-    let setObj = new Set(array.map(JSON.stringify));
+    let setObj = new Set(array.map(item => {
+      let { _id, ...rest } = item; // Destructure the object, excluding _id
+      return JSON.stringify(rest); // Convert the object to a string without _id
+    }));
+    // Convert the Set back to an array of objects
     return Array.from(setObj).map(JSON.parse);
   }
-  
+
 
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
@@ -167,7 +171,7 @@ function WeatherCityPage() {
                     direction="row"
                     sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
                   >
-                      <Graph data={getUniqueValues(weekWeather).map(item => ((item?.data?.temperatureMin + item?.data?.temperatureMax) / 2).toFixed(2))} />
+                    <Graph data={getUniqueValues(weekWeather).map(item => ((item?.data?.temperatureMin + item?.data?.temperatureMax) / 2).toFixed(2))} />
                   </Stack>
                   <Typography variant="h5" component="h2" textAlign="center">
                     Temperature Trend (Last 7 days)
@@ -178,7 +182,7 @@ function WeatherCityPage() {
           )}
           {todayWeather.length > 0 && (
             <Grid item xs={12} sm={6} md={6}>
-                {console.log(getUniqueValues(todayWeather))}
+              {console.log(getUniqueValues(todayWeather))}
 
               <Card
                 style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}
@@ -188,7 +192,7 @@ function WeatherCityPage() {
                     direction="row"
                     sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
                   >
-                     <Graph data={getUniqueValues(todayWeather).map(item => item?.data?.apparentTemperature)}/>
+                    <Graph data={getUniqueValues(todayWeather).map(item => item?.data?.apparentTemperature)} />
                   </Stack>
                   <Typography variant="h5" component="h2" textAlign="center">
                     Temperature Trend (Today)
