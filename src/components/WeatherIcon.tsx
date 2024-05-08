@@ -3,9 +3,9 @@ import icons from "../assets/icons/index.ts";
 import { Box } from "@mui/material";
 
 export enum WeatherType {
-    "clear" = 0,
+    "a" = 0,
     MainlyClear = 1,
-    PartlyCloudy = 2,
+    "clear" = 2,
     Overcast = 3,
     Fog = 45,
     RimeFog = 48,
