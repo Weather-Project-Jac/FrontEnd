@@ -91,7 +91,7 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
                                 {WeatherInfo?.apparentTemperature} °C
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} textAlign='center' >
+                        <Grid item xs={12} textAlign='center'>
                             <Grid container spacing={2}>
                                 {Object.entries({
                                     "iconThermometer": WeatherInfo?.temperature80m + " °C",

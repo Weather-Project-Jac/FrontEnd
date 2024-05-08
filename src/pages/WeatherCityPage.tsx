@@ -9,12 +9,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  useTheme,
+  CardContent,
+  Stack,
   useMediaQuery,
+  useTheme
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
 import axios from "../axios/axiosConf.ts";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import GraphsCity from "../components/GraphsCity.tsx";
 import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 import { ThreeDots } from "react-loader-spinner";
 import Graph from "../components/GraphInfo.tsx";
@@ -31,6 +34,7 @@ function WeatherCityPage() {
 
   React.useEffect(() => {
     async function fetchWeather() {
+      setWeekWeather([]);
       try {
         const response = await axios.get(`/weather/${city}/${countryCode}/${stateCode}`);
         if (response.status !== 200) {
@@ -70,7 +74,7 @@ function WeatherCityPage() {
     }
     if (city)
       fetchWeather();
-  }, [city, countryCode, stateCode]);
+  }, [city, countryCode, stateCode, setWeekWeather]);
 
   React.useEffect(() => {
     // console.log(location)
