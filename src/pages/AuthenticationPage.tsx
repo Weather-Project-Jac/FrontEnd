@@ -11,6 +11,8 @@ import {
   Divider,
   InputAdornment,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CustomAlertProps, CustomAlert } from "../components/CustomAlert.tsx";
@@ -71,7 +73,8 @@ function AuthPage() {
       user.setUsername(response.data?.result?.username || "NOT IMPLEMENTED FROM BACKEND");
       user.setAvatar(response.data?.result?.profile_image_url || userPng);
       user.setToken(response.data?.token || "NOT IMPLEMENTED FROM BACKEND");
-      for (let city of response.data?.result?.favourites || []) {
+      console.log(response.data?.result.favorites)
+      for (let city of response.data?.result?.favorites || []) {
         user.toggleFavouritesCities(city);
       }
       user.setIsLogged();
@@ -123,6 +126,8 @@ function AuthPage() {
       });
   }
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <Container maxWidth="md">
@@ -233,13 +238,14 @@ function AuthPage() {
             </Card>
           </Grid>
           <Divider
-            orientation="vertical"
+            orientation={isSmallScreen ? "horizontal" : "vertical"}
             flexItem
             style={{
               backgroundColor: "white",
               marginTop: "10px",
               marginLeft: "10px",
               marginRight: "10px",
+              width: isSmallScreen ? "94%" : "",
               //height: "600px",
             }}
           />

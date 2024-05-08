@@ -16,6 +16,7 @@ import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation } from "react-router-dom";
 import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
+import { ThreeDots } from "react-loader-spinner";
 
 function WeatherCityPage() {
 
@@ -102,35 +103,46 @@ function WeatherCityPage() {
         <Grid item xs={12} sm={7} >
           <Card style={{ backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <List sx={{ px: 2 }} >
-              {weekWeather.map((item, index) => (
+              {weekWeather.length == 0 ?
+                <ThreeDots
 
-                <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)' }} sx={{ my: 2 }}>
+                  visible={true}
+                  height="45"
+                  color="#176087"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{ display: "flex", justifyContent: "center" }}
+                />
+                : <>
+                  {weekWeather.map((item, index) => (
 
-                  {/* Need to implement isSmallScreen? */}
-                  <div style={{ maxHeight: 200, maxWidth: 200, marginRight: 50 }}>
-                    <WeatherIcon weatherCode={item?.data?.weatherCode} />
-                  </div>
-                  <ListItemText
+                    <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)', alignItems: 'center' }} sx={{ my: 2 }}>
 
-                    primary={new Date(new Date().getFullYear() + "-" + item?.date).toDateString()}
-                    secondary={WeatherNames[getStringFromNumber(item?.data?.weatherCode) as keyof typeof WeatherNames]}
-                    sx={{
-                      '.MuiListItemText-primary': {
-                        color: 'white',
-                        fontSize: 20,
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 600
-                      },
-                      '.MuiListItemText-secondary': {
-                        color: 'white',
-                        fontSize: 15,
-                        fontFamily: "Inter, sans-serif",
-                        fontWeight: 300
-                      }
-                    }}
-                  />
-                </ListItem>
-              ))}
+                      <div style={{ maxHeight: 200, maxWidth: 200, marginRight: isSmallScreen ? '0' : "20%", marginLeft: isSmallScreen ? '-20%' : 'auto' }}>
+                        <WeatherIcon weatherCode={item?.data?.weatherCode} />
+                      </div>
+                      <ListItemText
+
+                        primary={new Date(new Date().getFullYear() + "-" + item?.date).toDateString()}
+                        secondary={WeatherNames[getStringFromNumber(item?.data?.weatherCode) as keyof typeof WeatherNames]}
+                        sx={{
+                          '.MuiListItemText-primary': {
+                            color: 'white',
+                            fontSize: 20,
+                            fontFamily: "Inter, sans-serif",
+                            fontWeight: 600
+                          },
+                          '.MuiListItemText-secondary': {
+                            color: 'white',
+                            fontSize: 15,
+                            fontFamily: "Inter, sans-serif",
+                            fontWeight: 300
+                          }
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </>
+              }
 
             </List>
           </Card>

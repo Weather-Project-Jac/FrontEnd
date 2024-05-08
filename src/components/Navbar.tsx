@@ -115,7 +115,8 @@ function ResponsiveAppBar(): JSX.Element {
         <Toolbar disableGutters style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <Link
             onClick={() => {
-              if (window.location.pathname !== '/') window.location.href = '/';
+              if (window.location.pathname !== '/')
+                navigate("/");;
             }}
             style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
           >
@@ -244,10 +245,7 @@ function ResponsiveAppBar(): JSX.Element {
               />
             </div>
           </Box>
-          <Box sx={{
-            flexGrow: 0, mr: 5
-          }}>
-
+          <Box>
             <Tooltip title="Open settings">
               <IconButton onClick={isLogged ? handleOpenUserMenu : () => { navigate("/auth") }} sx={{ p: 0 }}>
                 {

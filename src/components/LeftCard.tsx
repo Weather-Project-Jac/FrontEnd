@@ -3,7 +3,9 @@ import {
     Grid,
     Box,
     Card,
-    CardContent
+    CardContent,
+    useTheme,
+    useMediaQuery
 } from "@mui/material";
 import icons from '../assets/icons/index.ts';
 import React, { useEffect } from 'react';
@@ -30,28 +32,38 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
         setClick(checkFavourite({ city, stateCode, countryCode }));
     }, [checkFavourite, city, countryCode, stateCode])
 
-    const handleFavourite = async (city: object) => {
-        toggleFavouritesCities(city);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await axiosInstance.post('/user/update', { favorites: favoriteCities, mail: UserStore.getState().email })
+            console.log(result.status)
+            if (result.status !== 200) {
+                toggleFavouritesCities({ city, stateCode, countryCode });
+            }
+        };
+        fetchData();
+    }, [favoriteCities])
+
+    const handleFavourite = async (city2: object) => {
+        toggleFavouritesCities(city2);
         setClick(!isClick);
-        console.log(favoriteCities)
-        const result = await axiosInstance.post('/user/update', { favorites: favoriteCities, mail: UserStore.getState().email })
-        console.log(result.status)
-        if (result.status !== 200) {
-            toggleFavouritesCities(city);
-        }
     };
+
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     return (
         <Grid item xs={12} sm={5} >
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
 
                     <Grid container style={{ marginTop: isLogged ? undefined : "12px" }} rowSpacing={2} display={"flex"} justifyContent={"space-between"} alignItems={"center"} >
-                        <Grid item marginLeft={3}>
+                        <Grid item style={{ marginLeft: isSmallScreen ? 0 : 24 }}>
                             <Typography variant="h4" gutterBottom align="left">
                                 {city}
                             </Typography>
                         </Grid>
-                        <Grid item style={{ marginLeft: isLogged ? "24px" : undefined, marginRight: isLogged ? undefined : "24px" }}>
+                        <Grid item style={{ marginLeft: isLogged ? "24px" : undefined, marginRight: isLogged ? '0px' : "24px" && isSmallScreen ? '0px' : "24px" }}>
                             <Typography variant="h6" gutterBottom align={isLogged ? "right" : "center"}>
                                 {new Date().toLocaleDateString()}
                             </Typography>

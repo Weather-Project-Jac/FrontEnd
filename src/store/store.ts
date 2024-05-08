@@ -79,7 +79,7 @@ export const UserStore = create(
               item.countryCode === city.countryCode &&
               item.stateCode === city.stateCode
           );
-
+          console.log(index)
           if (index === -1) {
             // Add city if it doesn't exist in the list
             if (updatedCities.length < 8) {
