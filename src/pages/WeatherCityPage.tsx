@@ -3,7 +3,8 @@ import {
   Typography,
   Container,
   Grid,
-  Box,
+  CardContent,
+  Stack,
   Card,
   List,
   ListItem,
@@ -12,11 +13,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import LeftCard from "../components/LeftCard";
-import icons from "../assets/icons/index.ts";
 import axios from "../axios/axiosConf.ts";
 import { useLocation } from "react-router-dom";
 import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 import { ThreeDots } from "react-loader-spinner";
+import Graph from "../components/GraphInfo.tsx";
 
 function WeatherCityPage() {
 
@@ -25,6 +26,7 @@ function WeatherCityPage() {
   const [countryCode, setcountryCode] = React.useState<string>("");
   const [stateCode, setstateCode] = React.useState<string>("");
   const [weather, setWeather] = React.useState({} as any);
+  const [todayWeather, setTodayWeather] = React.useState([] as any[]);
   const [weekWeather, setWeekWeather] = React.useState([] as any[]);
 
   React.useEffect(() => {
@@ -36,6 +38,7 @@ function WeatherCityPage() {
           console.log(response)
           return;
         }
+        setTodayWeather(response.data);
         const data = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
         if (data) {
           setWeather(data);
@@ -49,14 +52,13 @@ function WeatherCityPage() {
           console.log(response2)
           return;
         }
-        for (let i = 1; i < 7; i++) {
+        for (let i = 0; i < 7; i++) {
           /* data from response.data  "05-08"*/
           const date = new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
           response2.data.filter((item) => {
             const splitDate = date.split("-");
             const onlyDate = splitDate[1] + "-" + splitDate[2];
             if (item.date === onlyDate) {
-              console.log(item)
               setWeekWeather((prev) => [...prev, item]);
             }
           })
@@ -89,6 +91,12 @@ function WeatherCityPage() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+  function getUniqueValues(array) {
+    let setObj = new Set(array.map(JSON.stringify));
+    return Array.from(setObj).map(JSON.parse);
+  }
+  
+
   return (
     <Container maxWidth="xl" style={{ display: 'flex' }}>
       <Grid
@@ -113,7 +121,7 @@ function WeatherCityPage() {
                   wrapperStyle={{ display: "flex", justifyContent: "center" }}
                 />
                 : <>
-                  {weekWeather.map((item, index) => (
+                  {weekWeather.slice(1).map((item, index) => (
 
                     <ListItem key={index} alignItems="flex-start" style={{ width: '100%', backgroundColor: 'rgba(158, 220, 243, .25)', borderRadius: '15px', boxShadow: '2px 2px 2px rgba(225, 135, 0, .5)', alignItems: 'center' }} sx={{ my: 2 }}>
 
@@ -147,7 +155,50 @@ function WeatherCityPage() {
             </List>
           </Card>
         </Grid>
+        <Grid container spacing={3} justifyContent="center" p={4}>
+          {weekWeather.length > 0 && (
+            <Grid item xs={12} sm={6} md={6}>
+              <Card
+                style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}
+              >
+                <CardContent style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                  <Stack
+                    direction="row"
+                    sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
+                  >
+                      <Graph data={getUniqueValues(weekWeather).map(item => ((item?.data?.temperatureMin + item?.data?.temperatureMax) / 2).toFixed(2))} />
+                  </Stack>
+                  <Typography variant="h5" component="h2" textAlign="center">
+                    Temperature Trend (Last 7 days)
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+          {todayWeather.length > 0 && (
+            <Grid item xs={12} sm={6} md={6}>
+                {console.log(getUniqueValues(todayWeather))}
+
+              <Card
+                style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: '#1D2837', color: 'white', boxShadow: '12px 10px 10px rgba(0,0,0, .5)' }}
+              >
+                <CardContent style={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                  <Stack
+                    direction="row"
+                    sx={{ width: "100%", marginBottom: "10px", justifyContent: "center" }}
+                  >
+                     <Graph data={getUniqueValues(todayWeather).map(item => item?.data?.apparentTemperature)}/>
+                  </Stack>
+                  <Typography variant="h5" component="h2" textAlign="center">
+                    Temperature Trend (Today)
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
+
     </Container >
   );
 }
