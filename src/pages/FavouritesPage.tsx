@@ -9,6 +9,8 @@ import {
 
 import icons from "../assets/icons";
 import { UserStore } from "../store/store";
+import axiosConf from "../axios/axiosConf";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function HomePage() {
@@ -20,7 +22,33 @@ function HomePage() {
         navigate(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`, { state: { city: city.city, countryCode: city.countryCode, stateCode: city.stateCode } });
     };
 
-    console.log(favoriteCities)
+    const [weather, setWeather] = React.useState<any>([]);
+
+    useEffect(() => {
+        setWeather([]);
+        const getWeather = async (city) => {
+            try {
+                const response = await axiosConf.get(`/weather/${city.city}/${city.countryCode}/${city.stateCode}`);
+                if (response.status !== 200) {
+                    console.log(response);
+                    return;
+                }
+                const result = response.data.filter((item) => item.hour.split(":")[0] === new Date().getHours().toString().padStart(2, "0"))[0];
+                if (result) {
+                    setWeather(prevWeather => [
+                        ...prevWeather,
+                        { city, temperature: result.data.temperature80m }
+                    ]);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        favoriteCities.forEach((city) => {
+            getWeather(city);
+        });
+    }, [favoriteCities]);
+
     return (
         <Container maxWidth='xl' >
             <Grid
@@ -32,7 +60,7 @@ function HomePage() {
             >
                 <Grid item sm={11} style={{ paddingLeft: 0 }}>
                     <Grid container spacing={10} style={{ paddingTop: 50, paddingLeft: 30 }} alignItems="center" display={'flex'} justifyContent={'center'} >
-                        {favoriteCities.map((item, key) => (
+                        {weather && weather.map((item, key) => (
                             <Grid item xs={12} sm={3} key={key} alignItems={"center"}>
                                 <Card style={{ color: 'white', backgroundColor: '#1D2837', borderRadius: '15px', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', cursor: 'pointer' }}
                                     onClick={() => handleCardClick(item as { city: string, countryCode: string, stateCode: string })}>
@@ -42,14 +70,11 @@ function HomePage() {
                                             fontFamily: "Inter, sans-serif",
                                             fontWeight: 600
                                         }}>
-                                            {item.city + `\n`}
-                                            {item.stateCode + `\n`}
-                                            {item.countryCode}
+                                            {item.city.city} - {item.city.countryCode}
                                         </Typography>
                                         <Box
                                             component='img'
                                             sx={{
-                                                // display: 'block',
                                                 width: '70%',
                                                 margin: 'auto',
                                             }}
@@ -61,7 +86,7 @@ function HomePage() {
                                             fontFamily: "Inter, sans-serif",
                                             fontWeight: 600
                                         }}>
-                                            24°
+                                            {item.temperature} °C
                                         </Typography>
                                         <Typography variant="body1" color="white" sx={{
                                             textAlign: 'center',
