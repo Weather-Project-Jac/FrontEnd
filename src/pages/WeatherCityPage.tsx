@@ -160,7 +160,7 @@ function WeatherCityPage() {
             </List>
           </Card>
         </Grid>
-        <Grid container spacing={3} justifyContent="center" p={4}>
+        <Grid container spacing={3} justifyContent="center" p={4} pr={0}>
           {weekWeather.length > 0 && (
             <Grid item xs={12} sm={6} md={6}>
               <Card
