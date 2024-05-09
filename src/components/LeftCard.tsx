@@ -27,7 +27,7 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
     const { favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
     const [isClick, setClick] = React.useState(false);
     const isLogged = UserStore((state) => state.isLogged);
-    
+
     const [alert, setAlert] = useState<CustomAlertProps>({
         message: null,
         severity: null,
@@ -65,6 +65,11 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
 
     return (
         <Grid item xs={12} sm={5} >
+            <CustomAlert
+                message={alert.message}
+                severity={alert.severity}
+                handleClose={alert.handleClose}
+            />
             <Card style={{ backgroundColor: '#1D2837', color: 'white', margin: '0 auto', boxShadow: '12px 10px 10px rgba(0,0,0, .5)', height: '100%' }} >
                 <CardContent style={{ display: 'flex', flexDirection: 'column' }}>
 
