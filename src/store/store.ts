@@ -85,7 +85,7 @@ export const UserStore = create(
               updatedCities.push(city);
             } else {
               // If the limit is reached, do not add the city
-
+              
             }
           } else {
             // Remove city if it exists in the list

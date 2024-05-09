@@ -8,10 +8,11 @@ import {
     useMediaQuery
 } from "@mui/material";
 import icons from '../assets/icons/index.ts';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Heart from "react-animated-heart";
 import { UserStore } from "../store/store.ts";
 import axiosInstance from "../axios/axiosConf.ts";
+import { CustomAlertProps, CustomAlert } from "./CustomAlert.tsx";
 import { WeatherIcon, getStringFromNumber, WeatherNames } from "../components/WeatherIcon";
 
 interface LeftCardProps {
@@ -26,6 +27,12 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
     const { favoriteCities, toggleFavouritesCities, checkFavourite } = UserStore();
     const [isClick, setClick] = React.useState(false);
     const isLogged = UserStore((state) => state.isLogged);
+    
+    const [alert, setAlert] = useState<CustomAlertProps>({
+        message: null,
+        severity: null,
+        handleClose: () => { }
+    });
 
     useEffect(() => {
         setClick(checkFavourite({ city, stateCode, countryCode }));
@@ -43,8 +50,14 @@ const LeftCard: React.FC<LeftCardProps> = ({ city, WeatherInfo, countryCode, sta
     }, [favoriteCities])
 
     const handleFavourite = async (city2: object) => {
-        toggleFavouritesCities(city2);
-        setClick(!isClick);
+        if (favoriteCities.length < 8) {
+            toggleFavouritesCities(city2);
+            setClick(!isClick);
+        }
+        else {
+            setAlert({ message: "You already have 8 favourites, remove one for adding more", severity: "error", handleClose: () => setAlert({ message: null, severity: null, handleClose: () => { } }) });
+            return;
+        }
     };
 
     const theme = useTheme();
